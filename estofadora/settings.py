@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     #My apps
     'estofadora.core',
+    'estofadora.client',
 )
 
 MIDDLEWARE_CLASSES = (

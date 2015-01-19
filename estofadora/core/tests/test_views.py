@@ -3,7 +3,7 @@ from django.core.urlresolvers import reverse
 from . import TestCase
 
 
-class HomeGetTest(TestCase):
+class HomeViewTest(TestCase):
 
 	def setUp(self):
 		self.response = self.client.get(reverse('core:home'))
