@@ -7,5 +7,6 @@ urlpatterns = patterns('',
     # url(r'^$', 'estofadora.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
     url(r'^home/', include('estofadora.core.urls', namespace='core')),
+    url(r'^cliente/', include('estofadora.client.urls', namespace='client')),
     url(r'^admin/', include(admin.site.urls)),
 )
