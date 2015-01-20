@@ -55,20 +55,20 @@ class AddInvalidPostTest(TestCase):
 
 	def test_post_name_required(self):
 		data = create_client(name='')
-		self.response = self.client.post(reverse('client:add'), data)
-		self.assertTrue(self.response.context['form'].errors)
+		self._test_if_got_errors(data)
 
 	def test_post_adress_required(self):
 		data = create_client(adress='')
-		self.response = self.client.post(reverse('client:add'), data)
-		self.assertTrue(self.response.context['form'].errors)
+		self._test_if_got_errors(data)
 
 	def test_post_telephone1_required(self):
 		data = create_client(telephone1='')
-		self.response = self.client.post(reverse('client:add'), data)
-		self.assertTrue(self.response.context['form'].errors)
+		self._test_if_got_errors(data)
 
 	def test_post_wrong_email(self):
 		data = create_client(email='a')
+		self._test_if_got_errors(data)
+
+	def _test_if_got_errors(self, data):
 		self.response = self.client.post(reverse('client:add'), data)
 		self.assertTrue(self.response.context['form'].errors)
