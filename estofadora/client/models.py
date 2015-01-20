@@ -10,3 +10,8 @@ class Client(models.Model):
 	telephone2 = models.CharField('Telefone 2', max_length=15, blank=True)
 	is_active = models.BooleanField(u'Está ativo?', default=True)
 	date_join = models.DateTimeField('Data de cadastro', auto_now_add=True)
+
+	class Meta:
+		ordering = ['date_join']
+		verbose_name = ('cliente')
+		verbose_name_plural = ('clientes')
