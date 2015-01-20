@@ -1,8 +1,6 @@
 from django.core.urlresolvers import reverse
-from estofadora.client.forms import ClientForm
-from estofadora.client.models import Client
-from . import TestCase
-from . import create_client
+
+from . import TestCase, create_client, ClientForm, Client
 
 
 class AddViewTest(TestCase):

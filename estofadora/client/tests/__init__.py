@@ -1,7 +1,8 @@
 from django.test import TestCase
-from django.test.client import Client
+#from django.test.client import Client
 
 from estofadora.client.forms import ClientForm
+from estofadora.client.models import Client
 
 
 def create_client(**kwargs):
