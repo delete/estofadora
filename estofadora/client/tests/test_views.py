@@ -1,3 +1,4 @@
+#conding: utf-8
 from django.core.urlresolvers import reverse
 
 from . import TestCase, create_client, ClientForm, Client
