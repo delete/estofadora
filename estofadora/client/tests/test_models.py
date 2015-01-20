@@ -6,9 +6,8 @@ from . import TestCase, Client, create_client
 
 class ClientModelTest(TestCase):
 
-	def setUp(self):
-		data = create_client()
-		self.client = Client.objects.create(**data)
+	def setUp(self):		
+		self.client = create_client(commit=True)
 		
 	def tearDown(self):
 		Client.objects.all().delete()

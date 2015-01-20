@@ -6,7 +6,7 @@ from estofadora.client.forms import ClientForm
 from estofadora.client.models import Client
 
 
-def create_client(**kwargs):
+def create_client(commit=False, **kwargs):
 	data = {
 		'name': 'Fellipe',
 		'email': 'email@email.com',
@@ -15,6 +15,8 @@ def create_client(**kwargs):
 		'telephone2': '321',
 	}
 	data.update(kwargs)	
+	if commit:
+		return Client.objects.create(**data)
 	
 	return data
 
