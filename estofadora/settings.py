@@ -19,6 +19,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'sw=o-z2wh&!z40pmr8whsii++ud^1etdz&)f*@2)t@bgpzb2qg'
 
+#For tests
+PASSWORD_HASHERS = (
+    'django.contrib.auth.hashers.MD5PasswordHasher',
+)
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -39,6 +44,7 @@ INSTALLED_APPS = (
     #My apps
     'estofadora.core',
     'estofadora.client',
+    'estofadora.login',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -84,3 +90,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# Auth
+LOGIN_URL = 'login:login'
+LOGOUT_URL = 'login:logout'
+LOGIN_REDIRECT_URL = 'core:home'

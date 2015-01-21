@@ -2,5 +2,6 @@
 from django.conf.urls import patterns, url, include
 
 urlpatterns = patterns('estofadora.core.views',
-    url(r'^$', 'home', name='home'),
+    url(r'^inicio/$', 'home', name='home'),
+    url(r'^$', 'site', name='site'),
 )
