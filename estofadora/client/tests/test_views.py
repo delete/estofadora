@@ -1,19 +1,21 @@
 #conding: utf-8
 from django.core.urlresolvers import reverse
 
-from . import TestCase, create_client, ClientForm, Client
+from . import create_client, ClientForm, ModelClient, TestBase
 
 
-class AddViewTest(TestCase):
+class AddViewTest(TestBase):
 
 	def setUp(self):
-		self.response = self.client.get(reverse('client:add'))
-
-	def tearDown(self):
-		pass	
+		self.login()
+		self.url = reverse('client:add')
+		self.response = self.client.get(self.url)
 
 	def test_get(self):
 		self.assertEqual(self.response.status_code, 200)
+
+	def test_get_logout(self):
+		self._test_get_logout(self.url)
 
 	def test_template(self):		
 		self.assertTemplateUsed(self.response, 'client/add.html')
@@ -32,29 +34,25 @@ class AddViewTest(TestCase):
 		self.assertContains(self.response, 'csrfmiddlewaretoken')
 
 
-class AddPostTest(TestCase):
+class AddPostTest(TestBase):
 
 	def setUp(self):
+		self.login()
 		data = create_client()
 		self.response = self.client.post(reverse('client:add'), data)
-
-	def tearDown(self):
-		Client.objects.all().delete()
 
 	def test_message(self):
 		self.assertContains(self.response, 'Cliente cadastrado com sucesso!')
 
 	def test_save(self):
-		self.assertTrue(Client.objects.exists())
+		self.assertTrue(ModelClient.objects.exists())
 
 
-class AddInvalidPostTest(TestCase):
+class AddInvalidPostTest(TestBase):
 
 	def setUp(self):
-		pass
-
-	def tearDown(self):
-		pass
+		self.login()
+		self.url = reverse('client:add')
 
 	def test_post_name_required(self):
 		data = create_client(name='')
@@ -73,84 +71,83 @@ class AddInvalidPostTest(TestCase):
 		self._test_if_got_errors(data)
 
 	def _test_if_got_errors(self, data):
-		self.response = self.client.post(reverse('client:add'), data)
+		self.response = self.client.post(self.url, data)
 		self.assertTrue(self.response.context['form'].errors)
 
 
 class EditViewTest(AddViewTest):
 
 	def setUp(self):
+		self.login()
 		self.cli = create_client(commit=True)
-		self.response = self.client.get(reverse('client:edit', args=[self.cli.pk]))
+		self.url = reverse('client:edit', args=[self.cli.pk])
+		self.response = self.client.get(self.url)
 
 	def tearDown(self):
-		Client.objects.all().delete()
+		ModelClient.objects.all().delete()
 
 	def test_template(self):
 		self.assertTemplateUsed(self.response, 'client/edit.html')
 
 
-class EditPostTest(TestCase):
+class EditPostTest(TestBase):
 
 	def setUp(self):
+		self.login()
 		self.cli = create_client(commit=True)
-
-	def tearDown(self):
-		Client.objects.all().delete()
 
 	def test_post_name(self):
 		self.cli.name = 'Fellipe'
 		self.cli.save()
 		self.response = self.client.post(reverse('client:edit', args=[self.cli.pk]))
-		self.assertEqual(Client.objects.first().name, 'Fellipe')
+		self.assertEqual(ModelClient.objects.first().name, 'Fellipe')
 
 	def test_post_adress(self):
 		self.cli.adress = 'Rua b'
 		self.cli.save()
 		self.response = self.client.post(reverse('client:edit', args=[self.cli.pk]))
-		self.assertEqual(Client.objects.first().adress, 'Rua b')
+		self.assertEqual(ModelClient.objects.first().adress, 'Rua b')
 
 	def test_post_email(self):
 		self.cli.email = 'fe@email.com'
 		self.cli.save()
 		self.response = self.client.post(reverse('client:edit', args=[self.cli.pk]))
-		self.assertEqual(Client.objects.first().email, 'fe@email.com')
+		self.assertEqual(ModelClient.objects.first().email, 'fe@email.com')
 
 	def test_post_telephone1(self):
 		self.cli.telephone1 = '456'
 		self.cli.save()
 		self.response = self.client.post(reverse('client:edit', args=[self.cli.pk]))
-		self.assertEqual(Client.objects.first().telephone1, '456')
+		self.assertEqual(ModelClient.objects.first().telephone1, '456')
 
 	def test_post_telephone2(self):
 		self.cli.telephone2 = '678'
 		self.cli.save()
 		self.response = self.client.post(reverse('client:edit', args=[self.cli.pk]))
-		self.assertEqual(Client.objects.first().telephone2, '678')
+		self.assertEqual(ModelClient.objects.first().telephone2, '678')
 
 	def test_post_is_active(self):
 		self.cli.is_active = False
 		self.cli.save()
 		self.response = self.client.post(reverse('client:edit', args=[self.cli.pk]))
-		self.assertEqual(Client.objects.first().is_active, False)
+		self.assertEqual(ModelClient.objects.first().is_active, False)
 
 
 class EditInvalidPostTest(AddInvalidPostTest):
 
 	def setUp(self):
+		self.login()
 		self.cli = create_client(commit=True)
-
-	def tearDown(self):
-		Client.objects.all().delete()
 
 	def _test_if_got_errors(self, data):
 		self.response = self.client.post(reverse('client:edit', args=[self.cli.pk]))
 		self.assertTrue(self.response.context['form'].errors)
 
 
-class ListViewTest(TestCase):
+class ListViewTest(TestBase):
 
 	def setUp(self):
+		self.login()
 		self.client1 = create_client(commit=True)
 		self.client2 = create_client(commit=True, name='Andre', email='a@email.com')
 
@@ -167,16 +164,14 @@ class ListViewTest(TestCase):
 		self.assertContains(self.response, self.client2.name)
 
 
-class DeleteViewTest(TestCase):
+class DeleteViewTest(TestBase):
 
 	def setUp(self):
+		self.login()
 		self.client1 = create_client(commit=True)
 		self.client2 = create_client(commit=True, name='Andre', email='a@email.com')
 
-		self.response = self.client.post(reverse('client:delete', args=[self.client1.pk]), follow=True)
-	
-	def tearDown(self):
-		Client.objects.all().delete()
+		self.response = self.client.post(reverse('client:delete', args=[self.client1.pk]), follow=True)	
 
 	def test_redirected(self):
 		expected_url = reverse('client:list')
@@ -184,9 +179,7 @@ class DeleteViewTest(TestCase):
 		self.assertRedirects(self.response, expected_url, status_code=302, target_status_code=200)
 
 	def test_if_deleted(self):
-		self.assertEqual(len(Client.objects.all()), 1)
+		self.assertEqual(len(ModelClient.objects.all()), 1)
 
 	def test_message(self):
 		self.assertContains(self.response, 'Cliente removido com sucesso!')
-
-

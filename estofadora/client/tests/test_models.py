@@ -1,7 +1,7 @@
 # coding: utf-8
 from django.db import IntegrityError, transaction
 
-from . import TestCase, Client, create_client
+from . import TestCase, ModelClient, create_client
 
 
 class ClientModelTest(TestCase):
@@ -10,7 +10,7 @@ class ClientModelTest(TestCase):
 		self.client = create_client(commit=True)
 		
 	def tearDown(self):
-		Client.objects.all().delete()
+		ModelClient.objects.all().delete()
 
 	def test_if_client_is_active(self):
 		self.assertTrue(self.client.is_active)
@@ -18,7 +18,7 @@ class ClientModelTest(TestCase):
 	def test_duplicate_email(self):
 		with transaction.atomic():
 			data = create_client(name='Andre')
-			c = Client(**data)
+			c = ModelClient(**data)
 			self.assertRaises(IntegrityError, c.save)
 
-		self.assertEqual(len(Client.objects.all()), 1)
+		self.assertEqual(len(ModelClient.objects.all()), 1)

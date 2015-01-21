@@ -2,11 +2,13 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.urlresolvers import reverse
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 from estofadora.client.forms import ClientForm
 from estofadora.client.models import Client
 
 
+@login_required
 def add(request):
 	context = {}
 
@@ -23,6 +25,7 @@ def add(request):
 	return render(request, 'client/add.html', context)
 
 
+@login_required
 def edit(request, pk):
 	context = {}
 	client = get_object_or_404(Client, pk=pk)
@@ -39,6 +42,7 @@ def edit(request, pk):
 	return render(request, 'client/edit.html', context)
 
 
+#@login_required
 def list(request):
 	context = {}
 
@@ -46,6 +50,7 @@ def list(request):
 	return render(request, 'client/list.html', context)
 
 
+#@login_required
 def delete(request, pk):
 	client = get_object_or_404(Client, pk=pk)
 	client.delete()
