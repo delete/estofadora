@@ -9,7 +9,7 @@ class ClientFormTest(TestCase):
 		form = ClientForm()
 		existing_fields = list(form.fields.keys())
 
-		expected_field = ['name', 'adress', 'email', 'telephone1', 'telephone2']
+		expected_field = ['name', 'adress', 'email', 'telephone1', 'telephone2', 'is_active']
 
 		self.assertEqual(existing_fields, expected_field)
 
