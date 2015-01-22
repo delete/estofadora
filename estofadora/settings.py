@@ -45,6 +45,7 @@ INSTALLED_APPS = (
     'estofadora.core',
     'estofadora.client',
     'estofadora.login',
+    'estofadora.item',
 )
 
 MIDDLEWARE_CLASSES = (
