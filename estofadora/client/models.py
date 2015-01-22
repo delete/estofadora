@@ -16,3 +16,9 @@ class Client(models.Model):
 		ordering = ['date_join']
 		verbose_name = ('cliente')
 		verbose_name_plural = ('clientes')
+
+	def __str__(self):
+		return self.name
+
+	def __unicode__():
+		return self.name
