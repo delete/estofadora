@@ -44,7 +44,7 @@ class AddPostTest(TestBase):
 	def test_message(self):
 		self.assertContains(self.response, 'Cliente cadastrado com sucesso!')
 
-	def test_save(self):
+	def test_if_saved(self):
 		self.assertTrue(ModelClient.objects.exists())
 
 
