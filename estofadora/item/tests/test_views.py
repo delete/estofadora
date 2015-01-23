@@ -69,6 +69,10 @@ class AddInvalidPostTest(TestBase):
 		data = make_validated_form(delivery_date='2015/01/21 22:00', commit=False)
 		self._test_if_got_errors(data)
 
+	def test_post_client_required(self):
+		data = make_validated_form(client='', commit=False)
+		self._test_if_got_errors(data)
+
 	def _test_if_got_errors(self, data):
 		self.response = self.client.post(self.url, data)
 		self.assertTrue(self.response.context['form'].errors)
