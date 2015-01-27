@@ -201,6 +201,11 @@ class DeleteViewTest(TestBase):
 		
 		self.response = self.client.post(reverse('item:delete', args=[self.item2.pk]), follow=True)
 	
+	def test_redirect(self):
+		expected_url = reverse('item:list')
+
+		self.assertRedirects(self.response, expected_url, status_code=302, target_status_code=200)
+
 	def test_if_deleted(self):
 		self.assertEqual(len(Item.objects.all()), 1)
 
