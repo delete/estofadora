@@ -95,52 +95,85 @@ class EditPostTest(TestBase):
 	def setUp(self):
 		self.login()
 		self.cli = create_client(commit=True)
+		self.url = reverse('client:edit', args=[self.cli.pk])
+		self.response = self.client.get(self.url)
+
+		self.form = self.response.context['form']
+		self.data = self.form.initial
 
 	def test_post_name(self):
-		self.cli.name = 'Fellipe'
-		self.cli.save()
-		self.response = self.client.post(reverse('client:edit', args=[self.cli.pk]))
-		self.assertEqual(ModelClient.objects.first().name, 'Fellipe')
+		self.data['name'] = 'Fellipe Pinheiro'
+
+		self.response = self.client.post(self.url, self.data)
+		self.assertEqual(ModelClient.objects.first().name, 'Fellipe Pinheiro')
 
 	def test_post_adress(self):
-		self.cli.adress = 'Rua b'
-		self.cli.save()
-		self.response = self.client.post(reverse('client:edit', args=[self.cli.pk]))
+		self.data['adress'] = 'Rua b'
+
+		self.response = self.client.post(self.url, self.data)
 		self.assertEqual(ModelClient.objects.first().adress, 'Rua b')
 
 	def test_post_email(self):
-		self.cli.email = 'fe@email.com'
-		self.cli.save()
-		self.response = self.client.post(reverse('client:edit', args=[self.cli.pk]))
+		self.data['email'] = 'fe@email.com'
+		
+		self.response = self.client.post(self.url, self.data)
 		self.assertEqual(ModelClient.objects.first().email, 'fe@email.com')
 
 	def test_post_telephone1(self):
-		self.cli.telephone1 = '456'
-		self.cli.save()
-		self.response = self.client.post(reverse('client:edit', args=[self.cli.pk]))
+		self.data['telephone1'] = '456'
+		
+		self.response = self.client.post(self.url, self.data)
 		self.assertEqual(ModelClient.objects.first().telephone1, '456')
 
 	def test_post_telephone2(self):
-		self.cli.telephone2 = '678'
-		self.cli.save()
-		self.response = self.client.post(reverse('client:edit', args=[self.cli.pk]))
+		self.data['telephone2'] = '678'
+		
+		self.response = self.client.post(self.url, self.data)
 		self.assertEqual(ModelClient.objects.first().telephone2, '678')
 
 	def test_post_is_active(self):
-		self.cli.is_active = False
-		self.cli.save()
-		self.response = self.client.post(reverse('client:edit', args=[self.cli.pk]))
+		self.data['is_active'] = False
+		
+		self.response = self.client.post(self.url, self.data)
 		self.assertEqual(ModelClient.objects.first().is_active, False)
 
 
-class EditInvalidPostTest(AddInvalidPostTest):
+class EditInvalidPostTest(TestBase):
 
 	def setUp(self):
 		self.login()
 		self.cli = create_client(commit=True)
+		self.url = reverse('client:edit', args=[self.cli.pk])
+		self.response = self.client.get(self.url)
 
-	def _test_if_got_errors(self, data):
-		self.response = self.client.post(reverse('client:edit', args=[self.cli.pk]))
+		self.form = self.response.context['form']
+		self.data = self.form.initial	
+
+	def test_post_name_required(self):
+		self.data['name'] = ''
+
+	def test_post_adress_required(self):
+		self.data['adress'] = ''
+		
+		self._test_if_got_errors()
+
+	def test_post_email_required(self):
+		self.data['email'] = 'a'
+		
+		self._test_if_got_errors()
+
+	def test_post_telephone1_required(self):
+		self.data['telephone1'] = ''
+		
+		self._test_if_got_errors()
+
+	def test_post_telephone2_is_not_required(self):
+		self.data['telephone1'] = ''
+		
+		self._test_if_got_errors()	
+
+	def _test_if_got_errors(self):
+		self.response = self.client.post(self.url, self.data)
 		self.assertTrue(self.response.context['form'].errors)
 
 
