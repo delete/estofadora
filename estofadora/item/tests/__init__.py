@@ -24,8 +24,8 @@ class TestBase(TestCase):
 
 	def tearDown(self):
 		self.logout()
-		ModelClient.objects.all().delete()
 		Item.objects.all().delete()
+		ModelClient.objects.all().delete()
 		User.objects.all().delete()
 
 	def _test_get_logout(self, url):
@@ -41,8 +41,8 @@ def create_item(commit=False, client=None, **kwargs):
 	data = {
 		'client': client,
 		'name': 'Sofa',
-		'description': 'Was bad, but now, is good.',		
-		'delivery_date': '2016-01-17T22:40:26.567881+00:00',
+		'description': 'Was bad, but now, is good.',
+		'delivery_date': '2016-01-17 22:40',
 		'total_value': '1000',
 		'total_paid': '500',
 	}

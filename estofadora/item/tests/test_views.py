@@ -51,7 +51,7 @@ class AddInvalidPostTest(TestBase):
 
 	def setUp(self):
 		self.login()
-		self.url = reverse('client:add')
+		self.url = reverse('item:add')
 
 	def test_post_name_required(self):
 		data = make_validated_form(name='', commit=False)
@@ -66,13 +66,109 @@ class AddInvalidPostTest(TestBase):
 		self._test_if_got_errors(data)
 
 	def test_post_fail_delivery_date(self):
-		data = make_validated_form(delivery_date='2015/01/21 22:00', commit=False)
-		self._test_if_got_errors(data)
-
-	def test_post_client_required(self):
-		data = make_validated_form(client='', commit=False)
+		data = make_validated_form(delivery_date='2015/01/21 22:00:00', commit=False)
 		self._test_if_got_errors(data)
 
 	def _test_if_got_errors(self, data):
 		self.response = self.client.post(self.url, data)
+		self.assertTrue(self.response.context['form'].errors)
+
+
+class EditViewTest(AddViewTest):
+
+	def setUp(self):
+		self.login()
+		self.item = create_item(commit=True)
+		self.url = reverse('item:edit', args=[self.item.pk])
+		self.response = self.client.get(self.url)
+
+	def test_template(self):
+		self.assertTemplateUsed(self.response, 'item/edit.html')
+
+
+class EditPostTest(TestBase):
+	
+	def setUp(self):
+		self.login()
+		self.item = create_item(commit=True)
+		self.url = reverse('item:edit', args=[self.item.pk])
+		self.response = self.client.get(self.url)
+
+		self.form = self.response.context['form']
+		self.data = self.form.initial		
+
+	def test_post_name(self):
+		self.data['name'] = 'Chair'
+		
+		self._post_and_test_response()
+		self.assertEqual(Item.objects.first().name, 'Chair')
+
+	def test_post_description(self):
+		self.data['description'] = 'For sale!'
+		
+		self._post_and_test_response()
+		self.assertEqual(Item.objects.first().description, 'For sale!')
+
+	def test_post_concluded(self):
+		self.data['concluded'] = True
+		
+		self._post_and_test_response()
+		self.assertEqual(Item.objects.first().concluded, True)
+
+	def test_post_total_value(self):
+		self.data['total_value'] = 2000
+		
+		self._post_and_test_response()
+		self.assertEqual(Item.objects.first().total_value, 2000)
+
+	def test_post_total_paid(self):
+		self.data['total_paid'] = 1000
+		
+		self._post_and_test_response()
+		self.assertEqual(Item.objects.first().total_paid, 1000)
+
+	def test_post_delivery_date(self):
+		self.data['delivery_date'] = '19/01/2020 22:00:00'
+		
+		self._post_and_test_response()
+		
+		expected_date = '19/01/2020 22:00:00'
+		saved_date = Item.objects.first().delivery_date.strftime("%d/%m/%Y %H:%M:%S")
+		
+		self.assertEqual(saved_date, expected_date)
+
+	def _post_and_test_response(self):
+		
+		self.response = self.client.post(self.url, self.data)
+		self.assertContains(self.response, 'Item alterado com sucesso!')
+
+
+class EditInvalidPostTest(TestBase):
+
+	def setUp(self):
+		self.login()
+		self.item = create_item(commit=True)
+		self.url = reverse('item:edit', args=[self.item.pk])
+		self.response = self.client.get(self.url)
+
+		self.form = self.response.context['form']
+		self.data = self.form.initial	
+
+	def test_post_name_required(self):
+		self.data['name'] = ''
+		
+		self._test_if_got_errors()
+
+	def test_post_description_required(self):
+		self.data['description'] = ''
+		
+		self._test_if_got_errors()
+
+	def test_post_delivery_date_required(self):
+		self.data['delivery_date'] = ''
+		
+		self._test_if_got_errors()	
+
+	def _test_if_got_errors(self):
+		self.response = self.client.post(self.url, self.data)
 		self.assertTrue(self.response.context['form'].errors)
