@@ -204,6 +204,8 @@ class DeleteViewTest(TestBase):
 		self.client1 = create_client(commit=True)
 		self.client2 = create_client(commit=True, name='Andre', email='a@email.com')
 
+		self.assertEqual(len(ModelClient.objects.all()), 2)
+		
 		self.response = self.client.post(reverse('client:delete', args=[self.client1.pk]), follow=True)	
 
 	def test_redirected(self):

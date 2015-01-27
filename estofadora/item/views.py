@@ -1,4 +1,5 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
@@ -40,3 +41,15 @@ def edit(request, pk):
 
 	context['form'] =  form
 	return render(request, 'item/edit.html', context)
+
+
+@login_required
+def list(request):
+	return render(request, 'item/list.html')
+
+@login_required
+def delete(request, pk):
+	item = get_object_or_404(Item, pk=pk)
+	item.delete()
+	messages.success(request, 'Item removido com sucesso!')
+	return redirect(reverse('item:list'))

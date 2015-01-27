@@ -1,5 +1,5 @@
 from django.core.urlresolvers import reverse
-
+from estofadora.client.tests import create_client
 from . import TestBase, ItemForm, create_item, Item, make_validated_form
 
 
@@ -172,3 +172,37 @@ class EditInvalidPostTest(TestBase):
 	def _test_if_got_errors(self):
 		self.response = self.client.post(self.url, self.data)
 		self.assertTrue(self.response.context['form'].errors)
+
+
+class ListViewTest(TestBase):
+
+	def setUp(self):
+		self.login()
+
+		self.response = self.client.get(reverse('item:list'))
+
+	def test_get(self):
+		self.assertEqual(self.response.status_code, 200)
+
+	def test_template(self):
+		self.assertTemplateUsed(self.response, 'item/list.html')
+
+
+class DeleteViewTest(TestBase):
+
+	def setUp(self):
+		self.login()
+		self.item1 = create_item(commit=True)
+
+		self.client2 = create_client(commit=True, name='Andre', email='a@email.com')
+		self.item2 = create_item(client=self.client2, commit=True)
+
+		self.assertEqual(len(Item.objects.all()), 2)
+		
+		self.response = self.client.post(reverse('item:delete', args=[self.item2.pk]), follow=True)
+	
+	def test_if_deleted(self):
+		self.assertEqual(len(Item.objects.all()), 1)
+
+	def test_message(self):
+		self.assertContains(self.response, 'Item removido com sucesso!')
