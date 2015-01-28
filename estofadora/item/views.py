@@ -24,7 +24,6 @@ def add(request):
 	return render(request, 'item/add.html', context)
 
 
-
 @login_required
 def edit(request, pk):
 	context = {}
@@ -45,7 +44,12 @@ def edit(request, pk):
 
 @login_required
 def list(request):
-	return render(request, 'item/list.html')
+	context = {}
+	items = Item.objects.all()
+
+	context['items'] = items
+	return render(request, 'item/list.html', context)
+
 
 @login_required
 def delete(request, pk):

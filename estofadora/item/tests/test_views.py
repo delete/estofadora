@@ -178,6 +178,10 @@ class ListViewTest(TestBase):
 
 	def setUp(self):
 		self.login()
+		self.item1 = create_item(commit=True)
+
+		self.client2 = create_client(commit=True, name='Andre', email='a@email.com')
+		self.item2 = create_item(client=self.client2, commit=True)
 
 		self.response = self.client.get(reverse('item:list'))
 
@@ -186,6 +190,12 @@ class ListViewTest(TestBase):
 
 	def test_template(self):
 		self.assertTemplateUsed(self.response, 'item/list.html')
+
+	def test_if_contains_items(self):
+		self.assertContains(self.response, self.item1.name)
+		self.assertContains(self.response, self.item1.client.name)
+		self.assertContains(self.response, self.item2.name)
+		self.assertContains(self.response, self.item2.client.name)
 
 
 class DeleteViewTest(TestBase):
