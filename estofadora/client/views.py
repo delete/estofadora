@@ -42,7 +42,7 @@ def edit(request, pk):
 	return render(request, 'client/edit.html', context)
 
 
-#@login_required
+@login_required
 def list(request):
 	context = {}
 
@@ -50,7 +50,7 @@ def list(request):
 	return render(request, 'client/list.html', context)
 
 
-#@login_required
+@login_required
 def delete(request, pk):
 	client = get_object_or_404(Client, pk=pk)
 	client.delete()
