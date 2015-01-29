@@ -49,10 +49,13 @@ def list(request):
 	if request.method == 'POST':
 		client_name = request.POST.get('name')
 		items = Item.objects.filter(client__name__icontains=client_name)
+
 		if not items:
 			messages.warning(request, 'Nenhum item cadastrado para esse cliente!')
+
 	else:
 		items = Item.objects.all()
+
 		if not items:
 			messages.warning(request, 'Nenhum item cadastrado!')
 
@@ -65,4 +68,5 @@ def delete(request, pk):
 	item = get_object_or_404(Item, pk=pk)
 	item.delete()
 	messages.success(request, 'Item removido com sucesso!')
+	
 	return redirect(reverse('item:list'))
