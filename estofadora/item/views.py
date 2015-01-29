@@ -45,7 +45,16 @@ def edit(request, pk):
 @login_required
 def list(request):
 	context = {}
-	items = Item.objects.all()
+
+	if request.method == 'POST':
+		client_name = request.POST.get('name')
+		items = Item.objects.filter(client__name__icontains=client_name)
+		if not items:
+			messages.warning(request, 'Nenhum item cadastrado para esse cliente!')
+	else:
+		items = Item.objects.all()
+		if not items:
+			messages.warning(request, 'Nenhum item cadastrado!')
 
 	context['items'] = items
 	return render(request, 'item/list.html', context)

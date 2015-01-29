@@ -181,7 +181,9 @@ class ListViewTest(TestBase):
 		self.item1 = create_item(commit=True)
 
 		self.client2 = create_client(commit=True, name='Andre', email='a@email.com')
-		self.item2 = create_item(client=self.client2, commit=True)
+		self.item2 = create_item(client=self.client2, commit=True, name='Box')
+		self.item3 = create_item(client=self.client2, commit=True, name='Chair')
+		self.item4 = create_item(client=self.client2, commit=True, name='Table')
 
 		self.response = self.client.get(reverse('item:list'))
 
@@ -196,6 +198,27 @@ class ListViewTest(TestBase):
 		self.assertContains(self.response, self.item1.client.name)
 		self.assertContains(self.response, self.item2.name)
 		self.assertContains(self.response, self.item2.client.name)
+
+	def test_if_contains_search_field(self):
+		self.assertContains(self.response, '<form')
+		self.assertContains(self.response, 'type="submit"')
+
+	def test_post(self):
+		data = {'name':'Andre'}
+		self.response = self.client.post(reverse('item:list'), data)
+		self.assertContains(self.response, self.client2.name)
+		self.assertContains(self.response, self.item2.name)
+		self.assertContains(self.response, self.item3.name)
+		self.assertContains(self.response, self.item4.name)
+
+		#client1 items should not appear
+		self.assertNotContains(self.response, self.item1.client.name)
+		self.assertNotContains(self.response, self.item1.name)
+
+	def test_massage_when_view_is_empty(self):
+		Item.objects.all().delete()
+		self.response = self.client.get(reverse('item:list'))
+		self.assertContains(self.response, 'Nenhum item cadastrado!')
 
 
 class DeleteViewTest(TestBase):

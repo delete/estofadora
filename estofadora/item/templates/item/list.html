@@ -1,8 +1,23 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+
+<div>
+    <form method="POST">
+        {% csrf_token %}
+        <div>
+            <input type="text" name="name" placeholder='Nome do cliente'>
+            <span>
+                <button type="submit" name="seach" id="search-btn">Pesquisar</button>
+            </span>
+        </div>
+    </form>
+</div>
+
 {% for item in items %}
 	<p>{{item.name}}</p>
 	<p>{{item.client.name}}</p>
 {% endfor %}
+
 {% endblock %}
