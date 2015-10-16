@@ -1,20 +1,27 @@
 {% extends "base.html" %}
 
 {% block content %}
-<form  method="POST" enctype="multipart/form-data" role="form">
-{% csrf_token %}
+<div class="panel panel-default">
+	<div class="panel-body">
+		<h3><p class="text-center">Cadastrar cliente</p></h3>
+	</div>
+</div>
+<div class="marketing">
+	<form  method="POST" enctype="multipart/form-data" role="form">
+		{% csrf_token %}
 
-    {{ form.non_field_errors}}
+	    {{ form.non_field_errors}}
 
-    {% for field in form %}
-    <div class="form-group">
-    {{ field.label_tag }}
-    {{ field }}
-    {{ field.errors }}
-    </div>
-    {% endfor %}
+	    {% for field in form %}
+		    <div class="form-group">
+			    {{ field.label_tag }}
+			    {{ field }}
+			    {{ field.errors }}
+		    </div>
+	    {% endfor %}
 
-    <button type="submit">Cadastrar</button>
+	    <button class="btn btn-primary form-control" type="submit">Cadastrar</button>
 
-</form>
+	</form>
+</div>
 {% endblock %}

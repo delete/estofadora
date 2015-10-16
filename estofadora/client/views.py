@@ -39,6 +39,7 @@ def edit(request, pk):
 		form = ClientForm(instance=client)
 
 	context['form'] = form
+	context['client'] = client
 	return render(request, 'client/edit.html', context)
 
 

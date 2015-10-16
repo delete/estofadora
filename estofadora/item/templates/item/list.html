@@ -1,23 +1,51 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="panel panel-default">
+    <div class="panel-body">
+        <h3><p class="text-center">Itens</p></h3>
+    </div>
+</div>
 
+<div class="well well-sm">
+    <a class="btn btn-primary form-control" 
+        href="{% url 'item:add' %}" role="button">Cadastrar item</a>
+</div>
 
 <div>
     <form method="POST">
         {% csrf_token %}
-        <div>
-            <input type="text" name="name" placeholder='Nome do cliente'>
+        <div class="form-inline">
+            <input class="form-control" type="text" name="name" placeholder='Nome do cliente'>
             <span>
-                <button type="submit" name="seach" id="search-btn">Pesquisar</button>
+                <button class="btn btn-default form-control" type="submit" name="seach" id="search-btn">Pesquisar</button>
             </span>
         </div>
     </form>
 </div>
 
-{% for item in items %}
-	<p>{{item.name}}</p>
-	<p>{{item.client.name}}</p>
-{% endfor %}
-
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Data chegada</th>
+            <th>Data entrega</th>
+            <th>Valor pago/total</th>
+            <td>Detalhes / Editar</td>
+            <td>Fotos</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in items %}
+            <tr>
+                <td>{{item.name}}</td>
+                <td>{{item.arrived_date}}</td>
+                <td>{{item.delivery_date }}</td>
+                <td>{{item.total_paid }} / {{item.total_value}}</td>
+                <th><p class="text-center"><a href="{% url 'item:edit' item.pk %}"><i class="fa fa-pencil"></a></i></p></th>
+                <th><a href=""><i class="fa fa-picture-o"></a></i></th>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
 {% endblock %}

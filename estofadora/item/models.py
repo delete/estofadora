@@ -9,7 +9,7 @@ class Item(models.Model):
 	name = models.CharField('Nome', max_length=256, blank=False, null=False)
 	description = models.TextField('', blank=False, null=False)
 	concluded = models.BooleanField('Concluido', default=False)
-	arrived_date = models.DateTimeField('Chegou', auto_now_add=True)	
+	arrived_date = models.DateTimeField('Chegou', auto_now_add=True)
 	delivery_date = models.DateTimeField('Entrega')
 	total_value = models.DecimalField('Valor total', max_digits=20, decimal_places=2, default=0.0)
 	total_paid = models.DecimalField('Valor pago', max_digits=20, decimal_places=2, default=0.0)

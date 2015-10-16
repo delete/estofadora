@@ -1,7 +1,43 @@
 {% extends "base.html" %}
 
 {% block content %}
-{% for client in clients %}
-	<p>{{client.name}}</p>
-{% endfor %}
+<div class="panel panel-default">
+	<div class="panel-body">
+		<h3><p class="text-center">Clientes</p></h3>
+	</div>
+</div>
+
+<div class="well well-sm">
+	<a class="btn btn-primary form-control" 
+		href="{% url 'client:add' %}" role="button">Cadastrar cliente</a>
+</div>
+
+<div class="well well-sm">
+	<input class="form-control" 
+		placeholder="Filtrar..."
+	</input>
+</div>
+
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Nome</th>
+			<th>Email</th>
+			<th>Telefone 1</th>
+			<td>Editar</td>
+			<td>Itens</td>
+		</tr>
+	</thead>
+	<tbody>
+		{% for client in clients %}		
+			<tr>
+				<td>{{client.name}}</td>
+				<td>{{client.email}}</td>
+				<td>{{client.telephone1}}</td>
+				<th><a href="{% url 'client:edit' client.pk %}"><i class="fa fa-pencil"></a></i></th>
+				<th><a href=""><i class="fa fa-list"></a></i></th>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
 {% endblock %}

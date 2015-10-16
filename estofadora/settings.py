@@ -25,9 +25,9 @@ PASSWORD_HASHERS = (
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-TEMPLATE_DEBUG = True
+TEMPLATE_DEBUG = DEBUG
 
 ALLOWED_HOSTS = []
 
@@ -91,9 +91,19 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = 'staticfiles'
+
+MEDIA_ROOT = 'estofadora/media'
+MEDIA_URL = '/media/'
 
 
 # Auth
 LOGIN_URL = 'login:login'
 LOGOUT_URL = 'login:logout'
 LOGIN_REDIRECT_URL = 'core:home'
+
+
+try:
+    from estofadora.local_settings import *
+except ImportError:
+    pass

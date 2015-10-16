@@ -1,20 +1,39 @@
 {% extends "base.html" %}
 
 {% block content %}
-<form  method="POST" enctype="multipart/form-data" role="form">
-{% csrf_token %}
+<div class="panel panel-default">
+	<div class="panel-body">
+		<h3><p class="text-center">Editar Item</p></h3>
+	</div>
+</div>
 
-    {{ form.non_field_errors}}
+<div class="marketing">
+	<a class="btn btn-danger pull-right" 
+		href="{% url 'item:delete' item.pk %}" role="button">Remover</a>
+	<br>
+	<form  method="POST" enctype="multipart/form-data" role="form">
+	{% csrf_token %}
 
-    {% for field in form %}
-    <div>
-    {{ field.label_tag }}
-    {{ field }}
-    {{ field.errors }}
-    </div>
-    {% endfor %}
+	    {{ form.non_field_errors}}
 
-    <button type="submit">Salvar</button>
+	    {% for field in form %}
+		    <div class="form-group">
+			    {{ field.label_tag }}
+			    {{ field }}
+			    {{ field.errors }}
+		    </div>
+	    {% endfor %}
 
-</form>
+	    <div class="form-inline">
+		    <button class="btn btn-primary form-control" 
+		    	type="submit">Alterar</button>
+		    <div class="form-group">
+		    <a class="btn btn-default form-control" 
+				href="{% url 'item:list'%}" 
+				role="button">Cancelar
+			</a>
+	    </div>
+
+	</form>
+</div>
 {% endblock %}

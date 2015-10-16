@@ -39,6 +39,7 @@ def edit(request, pk):
 		form = ItemForm(instance=item)
 
 	context['form'] =  form
+	context['item'] = item
 	return render(request, 'item/edit.html', context)
 
 
