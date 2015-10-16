@@ -9,8 +9,9 @@ class ItemFormTest(TestCase):
 		existing_fields = list(form.fields.keys())
 
 		expected_fields = [
-			'client', 'name', 'description', 'concluded',
-			'delivery_date', 'total_value', 'total_paid'
+			'client', 'name', 'delivery_date', 'total_value',
+			'total_paid', 'description', 'concluded',
+			  
 		]
 
 		self.assertEqual(existing_fields, expected_fields)

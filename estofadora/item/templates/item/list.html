@@ -27,6 +27,7 @@
 <table class="table table-striped">
     <thead>
         <tr>
+            <th>Cliente</th>
             <th>Nome</th>
             <th>Data chegada</th>
             <th>Data entrega</th>
@@ -38,6 +39,7 @@
     <tbody>
         {% for item in items %}
             <tr>
+                <td>{{item.client.name}}</td>
                 <td>{{item.name}}</td>
                 <td>{{item.arrived_date}}</td>
                 <td>{{item.delivery_date }}</td>
