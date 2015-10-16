@@ -66,3 +66,5 @@ target/
 
 #Database
 *.db
+
+local_settings.py

@@ -1,0 +1,1 @@
+web: gunicorn estofadora.wsgi --log-file -

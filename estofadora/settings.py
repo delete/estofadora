@@ -41,6 +41,9 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    'opbeat.contrib.django',
+
     #My apps
     'estofadora.core',
     'estofadora.client',
@@ -49,6 +52,8 @@ INSTALLED_APPS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'opbeat.contrib.django.middleware.OpbeatAPMMiddleware',
+
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -57,6 +62,12 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
+
+OPBEAT = {
+    'ORGANIZATION_ID': '6409f61f82ab4ee58bf78923b1645a29',
+    'APP_ID': '8ee0dafc3e',
+    'SECRET_TOKEN': 'bbedc0141783b774e7ba5061d7a8ed6328bc148e',
+}
 
 ROOT_URLCONF = 'estofadora.urls'
 
@@ -102,6 +113,24 @@ LOGIN_URL = 'login:login'
 LOGOUT_URL = 'login:logout'
 LOGIN_REDIRECT_URL = 'core:home'
 
+# HEROKU CONFIGS
+
+# Parse database configuration from $DATABASE_URL
+import dj_database_url
+DATABASES['default'] =  dj_database_url.config()
+
+# Honor the 'X-Forwarded-Proto' header for request.is_secure()
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Allow all host headers
+ALLOWED_HOSTS = ['*']
+
+# Static asset configuration
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
 
 try:
     from estofadora.local_settings import *
