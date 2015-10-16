@@ -34,6 +34,12 @@ class LoginPostTest(TestCase):
 	def tearDown(self):
 		self.client.logout()
 
+	def test_already_logged(self):
+		'If already logged, will have a redirect, so, must return code 302'
+		self.response = self.client.post(reverse('login:login'), self.make_validated_data())
+		self.response = self.client.get(reverse('login:login'))
+		self.assertEqual(self.response.status_code, 302)
+
 	def test_valid_login(self):
 		'With valid login, will have a redirect, so, must return code 302'
 		self.response = self.client.post(reverse('login:login'), self.make_validated_data())
