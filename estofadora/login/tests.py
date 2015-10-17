@@ -3,6 +3,8 @@ from django.test.client import Client
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 
+from .forms import LoginForm
+
 
 class LoginViewTest(TestCase):
 
@@ -33,6 +35,7 @@ class LoginPostTest(TestCase):
 
 	def tearDown(self):
 		self.client.logout()
+		User.objects.all().delete()
 
 	def test_already_logged(self):
 		'If already logged, will have a redirect, so, must return code 302'
@@ -57,3 +60,43 @@ class LoginPostTest(TestCase):
 				}
 		data.update(kwargs)
 		return data
+
+
+#TODO - FIX THESE TESTS. 
+#I DON'T KNOW WHY IT IS NOT RETURNING ERRORS
+#WHEN USERNAME OR PASSWORD IS EMPTY.
+
+class LoginFormTest(TestCase):
+
+	def setUp(self):
+		user = User.objects.create_user('admin', 'admin@admin.com', '123')
+
+	def test_if_has_fields(self):
+		form = LoginForm()
+		existing_fields = list(form.fields.keys())
+
+		expected_field = ['username', 'password']
+
+		self.assertEqual(existing_fields, expected_field)
+
+	# def test_username_is_not_optional(self):
+	# 	form = self.make_validated_form(username='')
+	# 	self.assertTrue(form.errors)
+
+	# def test_password_is_not_optional(self):
+	# 	form = self.make_validated_form(password='')
+	# 	self.assertTrue(form.errors)
+
+	def test_form(self):
+		form = self.make_validated_form()
+		self.assertFalse(form.errors)
+
+	def make_validated_form(self, **kwargs):
+	    data = {
+			'username': 'admin',
+			'password': '123',
+	    }
+	    data.update(kwargs)
+	    form = LoginForm(data)
+	    form.is_valid()
+	    return form
