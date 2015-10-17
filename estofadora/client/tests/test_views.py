@@ -1,5 +1,8 @@
 #conding: utf-8
 from django.core.urlresolvers import reverse
+from django.db.models.query import QuerySet
+
+from estofadora.item.tests import create_item
 
 from . import create_client, ClientForm, ModelClient, TestBase
 
@@ -218,3 +221,52 @@ class DeleteViewTest(TestBase):
 
 	def test_message(self):
 		self.assertContains(self.response, 'Cliente removido com sucesso!')
+
+
+class ListItemsViewTest(TestBase):
+	
+	def setUp(self):
+		self.login()
+		self.client1 = create_client(commit=True)
+
+		#creating items to the client
+		self.item1 = create_item(client=self.client1, commit=True)
+		self.item2 = create_item(client=self.client1, commit=True,
+		 name='Chair')
+		self.item3 =  create_item(client=self.client1, commit=True,
+		 name='Table')
+		
+		self.url = reverse('client:list_items', args=[self.client1.pk])
+		self.response = self.client.get(self.url)
+
+	def test_get(self):
+		self.assertEqual(self.response.status_code, 200)
+
+	def test_get_logout(self):
+		self._test_get_logout(self.url)
+
+	def test_template(self):
+		self.assertTemplateUsed(self.response, 'client/list_items.html')
+
+	def test_context(self):
+		items = self.response.context['items']
+		self.assertIsInstance(items, QuerySet)
+		
+		amount = self.response.context['amount']
+		self.assertEqual(amount, 3)
+
+		total = self.response.context['total']
+		self.assertEqual(total, 3000,00)
+
+		received = self.response.context['received']
+		self.assertEqual(received, 1500,00)
+
+		owing = self.response.context['owing']
+		self.assertTrue(owing)
+
+	def test_html(self):
+		self.assertContains(self.response, self.client1.name)
+		self.assertContains(self.response, self.item1.name)
+		self.assertContains(self.response, self.item2.name)
+		self.assertContains(self.response, self.item3.name)
+	

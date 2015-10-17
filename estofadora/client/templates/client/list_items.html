@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="panel panel-default">
+    <div class="panel-body">
+        <h3><p class="text-center">Itens de {{ client.name }}</p></h3>
+    </div>
+</div>
+
+<div class="well well-sm">
+    <a class="btn btn-primary form-control" 
+        href="{% url 'item:add' %}" role="button">Cadastrar item</a>
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Data chegada</th>
+            <th>Data entrega</th>
+            <th>Valor pago/total</th>
+            <td>Detalhes / Editar</td>
+            <td>Fotos</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in items %}
+            <tr>
+                <td>{{item.name}}</td>
+                <td>{{item.arrived_date}}</td>
+                <td>{{item.delivery_date }}</td>
+                <td>{{item.total_paid }} / {{item.total_value}}</td>
+                <th><p class="text-center"><a href="{% url 'item:edit' item.pk %}"><i class="fa fa-pencil"></a></i></p></th>
+                <th><a href=""><i class="fa fa-picture-o"></a></i></th>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<div class="amount">
+	<p class="text-center">
+		Quantidade: {{ amount }}
+	</p> 
+</div>
+
+<div class="total_value">
+	<p class="text-right text-primary">
+	Valor total: R$ {{ total }}
+	</p>
+</div>
+
+	<div class="total_paid">
+		{% if owing %}
+		<p class="text-right text-danger">
+		{% else %}	
+		<p class="text-right text-success">
+		{% endif %}
+		Valor recebido: R$ {{ received }}
+		</p>
+		
+		</p>
+	</div>
+
+{% endblock %}

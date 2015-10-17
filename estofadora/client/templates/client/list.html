@@ -35,7 +35,7 @@
 				<td>{{client.email}}</td>
 				<td>{{client.telephone1}}</td>
 				<th><a href="{% url 'client:edit' client.pk %}"><i class="fa fa-pencil"></a></i></th>
-				<th><a href=""><i class="fa fa-list"></a></i></th>
+				<th><a href="{% url 'client:list_items' client.pk %}"><i class="fa fa-list"></a></i></th>
 			</tr>
 		{% endfor %}
 	</tbody>

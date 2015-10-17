@@ -4,8 +4,10 @@ from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
-from estofadora.client.forms import ClientForm
-from estofadora.client.models import Client
+from estofadora.item.models import Item
+
+from .forms import ClientForm
+from .models import Client
 
 
 @login_required
@@ -57,3 +59,19 @@ def delete(request, pk):
 	client.delete()
 	messages.success(request, 'Cliente removido com sucesso!')
 	return redirect(reverse('client:list'))
+
+
+@login_required
+def list_items(request, pk):
+	context = {}
+
+	client = get_object_or_404(Client, pk=pk)
+	items = Item.objects.filter(client=client)
+
+	context['items'] = items
+	context['client'] = client
+	context['amount'] = len(items)
+	context['total'] = sum(item.total_value for item in items)
+	context['received'] = sum(item.total_paid for item in items)
+	context['owing'] = True if context['received']<context['total'] else False
+	return render(request, 'client/list_items.html', context)

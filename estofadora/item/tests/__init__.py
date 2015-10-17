@@ -43,8 +43,8 @@ def create_item(commit=False, client=None, **kwargs):
 		'name': 'Sofa',
 		'description': 'Was bad, but now, is good.',
 		'delivery_date': '2016-01-17 22:40',
-		'total_value': '1000',
-		'total_paid': '500',
+		'total_value': 1000,
+		'total_paid': 500,
 	}
 	data.update(kwargs)	
 	if commit:
