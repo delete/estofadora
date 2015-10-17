@@ -10,6 +10,7 @@ urlpatterns = patterns('',
     url(r'^cliente/', include('estofadora.client.urls', namespace='client')),
     url(r'^item/', include('estofadora.item.urls', namespace='item')),
     url(r'^login/', include('estofadora.login.urls', namespace='login')),
+    url(r'^relatorios/', include('estofadora.statement.urls', namespace='statement')),
     url(r'^admin/', include(admin.site.urls)),
 )
 
