@@ -39,7 +39,7 @@
 	                <td>{{item.income}}</td>
 	                <td>{{item.expenses }}</td>
 	                <td>{{item.total }}</td>
-	                <th><p class="text-center"><a href="{% url 'item:edit' item.pk %}"><i class="fa fa-pencil"></a></i></p></th>
+	                <th><p class="text-center"><a href=""><i class="fa fa-pencil"></a></i></p></th>
 	                <th><a href="{% url 'statement:delete' item.pk %}"><i class="fa fa-trash-o"></a></i></th>
 	            </tr>        
 	        {% endfor %}
@@ -55,7 +55,7 @@
 {% else %}
 	<div class="alert alert-warning" role="alert">
 		<p class="text-center">
-			Nenhum registro encontrado na data {{ choose_date }}!
+			Nenhum registro encontrado na data: {{ choose_date }}!
 		</p>
 		
 	</div>

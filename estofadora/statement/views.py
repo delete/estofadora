@@ -17,10 +17,10 @@ def home(request):
 @login_required
 def cash(request):
 	context = {}
-	now = datetime.datetime.now().date()
+	date = datetime.datetime.now().date()
 	
-	content = Cash.objects.filter(date=now)
-	total_value = Cash.total_value_by_date(date=now)
+	content = Cash.objects.filter(date=date)
+	total_value = Cash.total_value_by_date(date=date)
 
 	form = CashForm()
 
@@ -28,11 +28,13 @@ def cash(request):
 		
 		if 'search_form' in request.POST:
 			date = request.POST.get('search_date')
-			date = datetime.datetime.strptime(date, '%d/%m/%Y').date()
+			try:
+				date = datetime.datetime.strptime(date, '%d/%m/%Y').date()
+			except ValueError:
+				date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
 			
 			content = Cash.objects.filter(date=date)
 			total_value = Cash.total_value_by_date(date=date)
-			context['choose_date'] = date
 
 		else:
 		
@@ -46,6 +48,7 @@ def cash(request):
 	context['form'] = form
 	context['content'] = content
 	context['total_value'] = total_value
+	context['choose_date'] = date
 	return render(request, 'statement/cash.html', context)
 
 
