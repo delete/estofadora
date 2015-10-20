@@ -1,4 +1,6 @@
 #conding: utf-8
+import datetime
+
 from django.core.urlresolvers import reverse
 
 from . import TestBase, CashForm, Cash, make_validated_form, create_cash
@@ -49,18 +51,16 @@ class FinancialStatementViewTest(TestBase):
 		self.assertContains(self.response, '<input', 7)
 		self.assertContains(self.response, 'submit', 2)
 
-	def test_post(self):
-		data = make_validated_form(commit=False)
-		self.response = self.client.post(reverse('statement:cash'), data)
+	def test_data_after_post(self):
+		today = datetime.datetime.now().date()
+		cash = create_cash(commit=True, date=today)
 
 		self.response = self.client.get(self.url)
 
-		self.assertContains(self.response, data['history'])
-		self.assertContains(self.response, data['income'])
-		self.assertContains(self.response, data['expenses'])
-		
-		total = data['income'] - data['expenses']
-		self.assertContains(self.response, total)
+		self.assertContains(self.response, cash.history)
+		self.assertContains(self.response, cash.expenses)
+		self.assertContains(self.response, cash.income)
+		self.assertContains(self.response, cash.total)
 
 
 class FinancialStatementSavePostTest(TestBase):
@@ -105,22 +105,8 @@ class FinancialStatementInvalidPostTest(TestBase):
 
 
 class FinancialStatementSearchPostTest(TestBase):
-
-	def setUp(self):
-		self.login()
-		self.url = reverse('statement:cash')
-		
-		data = create_cash(commit=True)
-
-	def test_post(self):
-		data = {
-			'search_date': '2015-10-16'
-		}
-		self.response = self.client.post(self.url, data)		
-		self.assertContains(self.response, 'Valor total: R$ 500,00')
-
-	def test_if_saved(self):
-		self.assertTrue(Cash.objects.exists())
+	#TODO
+	pass
 
 
 class DeleteViewTest(TestBase):
