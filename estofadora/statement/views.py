@@ -58,3 +58,23 @@ def delete(request, pk):
 	cash.delete()
 	messages.success(request, 'Registro removido com sucesso!')
 	return redirect(reverse('statement:cash'))
+
+
+@login_required
+def edit(request, pk):
+	context = {}
+	cash = get_object_or_404(Cash, pk=pk)
+
+	if request.method == 'POST':
+		form = CashForm(request.POST, instance=cash)
+		if form.is_valid():
+			form.save()
+			return render(request, 'statement/item_edit_form_success.html', {'item': cash})
+		else:
+			context['form_error'] = True
+	else:
+		form = CashForm(instance=cash)
+
+	context['form'] = form
+	context['item'] = cash
+	return render(request, 'statement/item_edit_form.html', context)

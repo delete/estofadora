@@ -155,6 +155,8 @@ class EditInvalidPostTest(TestBase):
 	def test_post_name_required(self):
 		self.data['name'] = ''
 
+		self._test_if_got_errors()
+		
 	def test_post_adress_required(self):
 		self.data['adress'] = ''
 		
