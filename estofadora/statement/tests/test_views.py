@@ -68,13 +68,18 @@ class FinancialStatementSavePostTest(TestBase):
 	def setUp(self):
 		self.login()
 		data = make_validated_form(commit=False)
-		self.response = self.client.post(reverse('statement:cash'), data)
+		self.response = self.client.post(reverse('statement:cash'), data, follow=True)
 
 	def test_message(self):
 		self.assertContains(self.response, 'Registrado com sucesso!')
 
 	def test_if_saved(self):
 		self.assertTrue(Cash.objects.exists())
+
+	def test_redirected(self):
+		expected_url = reverse('statement:cash')
+		
+		self.assertRedirects(self.response, expected_url, status_code=302, target_status_code=200)
 
 
 class FinancialStatementInvalidPostTest(TestBase):

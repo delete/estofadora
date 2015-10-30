@@ -44,6 +44,7 @@ def cash(request):
 				form.save()
 				messages.success(request, 'Registrado com sucesso!')
 				form = CashForm()
+				return redirect(reverse('statement:cash'))
 
 	context['form'] = form
 	context['content'] = content
