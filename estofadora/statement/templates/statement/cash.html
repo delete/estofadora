@@ -67,7 +67,11 @@
 	</table>
 
 	<div class="total_value">
+		{% if total_value > 0 %}
 		<p class="text-right text-success">
+		{% else %}
+		<p class="text-right text-danger">
+		{% endif %}
 			Valor total: R$ {{ total_value }}
 		</p>
 	</div>
