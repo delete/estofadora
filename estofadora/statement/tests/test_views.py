@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse
 from . import TestBase, CashForm, Cash, make_validated_form, create_cash
 
 
-class StatementViewTest(TestBase):
+class HomeViewTest(TestBase):
 
 	def setUp(self):
 		self.login()
@@ -26,7 +26,7 @@ class StatementViewTest(TestBase):
 		self.assertContains(self.response, 'Caixa diário')
 
 
-class FinancialStatementViewTest(TestBase):
+class CashViewTest(TestBase):
 
 	def setUp(self):
 		self.login()
@@ -63,7 +63,7 @@ class FinancialStatementViewTest(TestBase):
 		self.assertContains(self.response, cash.total)
 
 
-class FinancialStatementSavePostTest(TestBase):
+class CashSavePostTest(TestBase):
 
 	def setUp(self):
 		self.login()
@@ -82,7 +82,7 @@ class FinancialStatementSavePostTest(TestBase):
 		self.assertRedirects(self.response, expected_url, status_code=302, target_status_code=200)
 
 
-class FinancialStatementInvalidPostTest(TestBase):
+class CashInvalidPostTest(TestBase):
 
 	def setUp(self):
 		self.login()
@@ -109,7 +109,7 @@ class FinancialStatementInvalidPostTest(TestBase):
 		self.assertTrue(self.response.context['form'].errors)
 
 
-class FinancialStatementSearchPostTest(TestBase):
+class CashSearchPostTest(TestBase):
 	#TODO
 	pass
 
@@ -262,3 +262,91 @@ class EditInvalidPostTest(TestBase):
 		self.response = self.client.post(self.url, self.data)
 		self.assertTrue(self.response.context['form'].errors)
 		self.assertTrue(self.response.context['form_error'])
+
+
+class CashMonthViewTest(TestBase):
+
+	def setUp(self):
+		self.login()
+
+		self.today = datetime.datetime.now().date()
+		self.url = reverse('statement:cash_month')
+		self.response = self.client.get(self.url)
+
+	def test_get(self):
+		self.assertEqual(self.response.status_code, 200)
+
+	def test_template(self):		
+		self.assertTemplateUsed(self.response, 'statement/cash_month.html')
+	
+	def test_get_logout(self):
+		self._test_get_logout(self.url)
+
+	def test_html(self):
+		# + csrf input
+		self.assertContains(self.response, '<input', 2)
+		self.assertContains(self.response, 'submit', 1)
+
+	def test_message_when_is_empty(self):
+		'Must return a warning message when there are not any registry'
+		self.assertContains(self.response, 'Nenhum registro encontrado na data:')
+
+	def test_date_in_context(self):
+		'When was not choose a specific date, the default date is "today"'
+		self.assertEqual(self.response.context['choose_date'], self.today)
+
+
+class CashMonthSeachPostTest(TestBase):
+
+	def setUp(self):
+		self.login()
+		
+		september = datetime.datetime(2015, 9, 10)
+
+		october = datetime.datetime(2015, 10, 10)
+
+		self.cash1 = create_cash(
+			commit=True, history='Cash1', date=september.date(),
+			expenses=100, income=100
+		)
+		self.cash2 = create_cash(
+			commit=True, history='Cash2', date=september.date(),
+			expenses=200, income=200
+		)
+		self.cash3 = create_cash(
+			commit=True, history='Cash3', date=october.date(),
+			expenses=300, income=300
+		)
+
+		data = {
+			'search_month': september.date()
+		}
+
+		self.response = self.client.post(reverse('statement:cash_month'), data,
+			follow=True)
+
+	def test_data_after_post(self):
+		'The response must have the data of cash1 and cash2, only'
+		self.assertContains(self.response, self.cash1.history)
+		self.assertContains(self.response, self.cash1.income)
+		self.assertContains(self.response, self.cash1.expenses)
+
+		self.assertContains(self.response, self.cash2.history)
+		self.assertContains(self.response, self.cash2.income)
+		self.assertContains(self.response, self.cash2.expenses)		
+
+		self.assertNotContains(self.response, self.cash3.history)
+		self.assertNotContains(self.response, self.cash3.income)
+		self.assertNotContains(self.response, self.cash3.expenses)
+
+	def test_in_another_date(self):
+		'If there are not registries, must return a warning message'
+		
+		data = {
+			'search_month': '2014-01-01'
+		}
+
+		self.response = self.client.post(reverse('statement:cash_month'), data,
+			follow=True)
+
+		self.assertContains(self.response, 'Nenhum registro encontrado na data:')

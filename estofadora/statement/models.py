@@ -25,6 +25,16 @@ class Cash(models.Model):
 		expenses = sum(item.expenses for item in Cash.objects.filter(date=date))
 		return incomes - expenses
 
+	@staticmethod
+	def total_value_by_month(date):
+		incomes = sum(item.income for item in Cash.objects.filter(date__month=date.month))
+		expenses = sum(item.expenses for item in Cash.objects.filter(date__month=date.month))
+		return incomes - expenses
+
+	@staticmethod
+	def filter_by_month(date):
+		return Cash.objects.filter(date__month=date.month)
+
 	class Meta:
 		ordering = ['date']
 		verbose_name = ('Cash')

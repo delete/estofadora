@@ -79,3 +79,27 @@ def edit(request, pk):
 	context['form'] = form
 	context['item'] = cash
 	return render(request, 'statement/item_edit_form.html', context)
+
+
+@login_required
+def cash_month(request):
+	context = {}
+	date = datetime.datetime.now().date()
+
+	content = Cash.filter_by_month(date)
+	total_value = Cash.total_value_by_month(date)
+
+	if request.method == 'POST':
+		date = request.POST.get('search_month')
+		try:
+			date = datetime.datetime.strptime(date, '%d/%m/%Y').date()
+		except ValueError:
+			date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
+
+		content = Cash.filter_by_month(date)
+		total_value = Cash.total_value_by_month(date)
+
+	context['content'] = content
+	context['total_value'] = total_value
+	context['choose_date'] = date
+	return render(request, 'statement/cash_month.html', context)

@@ -1,0 +1,64 @@
+{% extends "base.html" %}	
+
+{% block content %}
+<div class="panel panel-default">
+	<div class="panel-body">
+		<h3><p class="text-center">Caixa mensal</p></h3>
+	</div>
+</div>
+
+<div class="well well-sm">
+	<form method="POST" role="form">
+        {% csrf_token %}
+        <div class="form-inline">
+            <input class="form-control" type="date" name="search_month" placeholder='Data para listar'>
+            <span>
+                <button class="btn btn-default form-control" type="submit" name="search_form" id="search-btn">Listar</button>
+            </span>
+        </div>
+    </form>
+</div>
+
+{% if content %}
+
+	<table class="table table-striped">
+	    <thead>
+	        <tr>
+	            <th>Data</th>
+	            <th>Histórico</th>
+	            <th>Entrada</th>
+	            <th>Saida</th>	            
+	        </tr>
+	    </thead>
+	    <tbody>
+	        {% for item in content %}
+	            <tr>
+	                <td>{{item.date}}</td>
+	                <td>{{item.history}}</td>
+	                <td>{{item.income}}</td>
+	                <td>{{item.expenses }}</td>
+	            </tr>
+	        {% endfor %}
+	    </tbody>
+	</table>
+
+	<div class="total_value">
+		{% if total_value > 0 %}
+		<p class="text-right text-success">
+		{% else %}
+		<p class="text-right text-danger">
+		{% endif %}
+			Valor total: R$ {{ total_value }}
+		</p>
+	</div>
+
+{% else %}
+	<div class="alert alert-warning" role="alert">
+		<p class="text-center">
+			Nenhum registro encontrado na data: {{ choose_date }}!
+		</p>
+		
+	</div>
+{% endif %}
+
+{% endblock %}
