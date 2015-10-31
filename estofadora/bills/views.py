@@ -17,7 +17,7 @@ def new(request):
 		if form.is_valid():
 			form.save()
 			messages.success(request, 'Cadastrada com sucesso!')
-			#return redirect(reverse('bills:new'))
+			return redirect(reverse('bills:new'))
 	else:
 		form = BillForm()
 

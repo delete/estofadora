@@ -37,7 +37,8 @@ class NewSavePostTest(TestBase):
 	def setUp(self):
 		self.login()
 		data = make_validated_form(commit=False)
-		self.response = self.client.post(reverse('bills:new'), data)
+		self.response = self.client.post(reverse('bills:new'), data,
+			follow=True)
 
 	def test_message(self):
 		self.assertContains(self.response, 'Cadastrada com sucesso!')
