@@ -23,7 +23,7 @@ class StatementViewTest(TestBase):
 		self._test_get_logout(self.url)
 
 	def test_html(self):
-		self.assertContains(self.response, 'Financeiro')
+		self.assertContains(self.response, 'Caixa diário')
 
 
 class FinancialStatementViewTest(TestBase):

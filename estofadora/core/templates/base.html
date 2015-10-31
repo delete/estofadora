@@ -41,7 +41,14 @@
               <li><a href="{% url 'client:list' %}">Clientes</a> </li>
               <li><a href="{% url 'item:add' %}">Cadastrar item</a> </li>
               <li><a href="{% url 'bills:new' %}">Cadastrar conta</a> </li>
-              <li><a href="{% url 'statement:home' %}">Relatórios</a> </li>
+              <li class="dropdown">
+                <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="{% url 'statement:home' %}">Relatórios <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href="{% url 'statement:cash' %}">Caixa diário</a>
+                  </li>
+                </ul>
+              </li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li><a href="{% url 'login:logout' %}">Sair</a></li>
