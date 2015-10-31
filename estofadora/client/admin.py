@@ -12,7 +12,7 @@ class ClientAdmin(admin.ModelAdmin):
 	def subscribed_today(self, obj):
 		return obj.date_join.date() == datetime.today().date()
 
-	subscribed_today.short_description = (u'Cadsatrado hoje?')
+	subscribed_today.short_description = (u'Cadastrado hoje?')
 	subscribed_today.boolean = True
 
 	def mark_as_active(self, request, queryset):
