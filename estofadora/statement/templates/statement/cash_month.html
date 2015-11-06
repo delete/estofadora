@@ -11,7 +11,22 @@
 	<form method="POST" role="form">
         {% csrf_token %}
         <div class="form-inline">
-            <input class="form-control" type="date" name="search_month" placeholder='Data para listar'>
+        	<select name="selectmonth" class="form-control">
+        		{% for number, name in months %}
+	        		<option value="{{number}}"
+	        			{% if number == choose_date|date:'m' %}selected{% endif %}>
+						{{name}}
+					</option>
+        		{% endfor %}
+			</select>
+        	<select name="selectyear" class="form-control">
+        		{% for year in years %}
+					<option value="{{year}}"
+						{% if year == choose_date.year %}selected{% endif %}>
+						{{year}}
+					</option> 
+        		{% endfor %}
+			</select>
             <span>
                 <button class="btn btn-default form-control" type="submit" name="search_form" id="search-btn">Listar</button>
             </span>
@@ -55,7 +70,7 @@
 {% else %}
 	<div class="alert alert-warning" role="alert">
 		<p class="text-center">
-			Nenhum registro encontrado na data: {{ choose_date }}!
+			Nenhum registro encontrado em: {{ choose_date|date:'F Y' }}!
 		</p>
 		
 	</div>

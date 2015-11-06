@@ -22,7 +22,12 @@ class CashModelTest(TestCase):
 		self.cash3 = create_cash(
 			commit=True, history='Cash3', date=self.october.date(),
 			expenses=300, income=150
-		)		
+		)
+
+		self.cash4 = create_cash(
+			commit=True, history='Cash4', date=datetime.datetime(2014, 10, 10),
+			expenses=400, income=200
+		)
 		
 		
 	def tearDown(self):
@@ -39,7 +44,8 @@ class CashModelTest(TestCase):
 		self.assertEqual(self.cash3.total, expected_total)
 
 	def test_total_value(self):
-		expected_total = self.cash1.total + self.cash2.total + self.cash3.total
+		expected_total = (self.cash1.total + self.cash2.total + 
+			self.cash3.total + self.cash4.total)
 
 		self.assertEqual(Cash.total_value(), expected_total)
 
@@ -50,14 +56,22 @@ class CashModelTest(TestCase):
 		date = self.september.date()
 		self.assertEqual(Cash.total_value_by_date(date), expected_total)
 
-	def test_total_value_by_month(self):
+	def test_total_value_by_month_year(self):
 		expected_total = self.cash1.total + self.cash2.total
 
 		date = self.september.date()
-		self.assertEqual(Cash.total_value_by_month(date), expected_total)
+		self.assertEqual(Cash.total_value_by_month_year(date), expected_total)
 
-	def test_filter_by_month(self):
+	def test_filter_by_month_year(self):
 		expected_items = 2
 
 		date = self.september.date()
-		self.assertEqual(len(Cash.filter_by_month(date)), expected_items)
+		self.assertEqual(
+			len(Cash.filter_by_month_year(date)), expected_items
+		)
+
+	def test_list_years(self):
+		expected_items = [2014, 2015]
+
+		self.assertEqual(Cash.list_years(), expected_items)
+

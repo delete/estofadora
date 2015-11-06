@@ -26,14 +26,28 @@ class Cash(models.Model):
 		return incomes - expenses
 
 	@staticmethod
-	def total_value_by_month(date):
-		incomes = sum(item.income for item in Cash.objects.filter(date__month=date.month))
-		expenses = sum(item.expenses for item in Cash.objects.filter(date__month=date.month))
+	def total_value_by_month_year(date):
+		incomes = sum(item.income for item in Cash.objects.filter(date__month=date.month, date__year=date.year))
+		expenses = sum(item.expenses for item in Cash.objects.filter(date__month=date.month, date__year=date.year))
 		return incomes - expenses
 
 	@staticmethod
-	def filter_by_month(date):
-		return Cash.objects.filter(date__month=date.month)
+	def filter_by_month_year(date):
+		return Cash.objects.filter(
+			date__month=date.month, date__year=date.year
+		)
+
+	@staticmethod
+	def list_years():
+		'Get a list of years that there object cash saved.'
+		cashs = Cash.objects.all()
+		years = [c.date.year for c in cashs]
+
+		dicio = {}
+		for year in years:
+			dicio[year] = 1
+
+		return list(dicio.keys())
 
 	class Meta:
 		ordering = ['date']

@@ -284,8 +284,9 @@ class CashMonthViewTest(TestBase):
 
 	def test_html(self):
 		# + csrf input
-		self.assertContains(self.response, '<input', 2)
+		self.assertContains(self.response, '<input', 1)
 		self.assertContains(self.response, 'submit', 1)
+		self.assertContains(self.response, '<select', 2)
 
 	def test_message_when_is_empty(self):
 		'Must return a warning message when there are not any registry'
@@ -319,7 +320,8 @@ class CashMonthSeachPostTest(TestBase):
 		)
 
 		data = {
-			'search_month': september.date()
+			'selectmonth': september.date().month,
+			'selectyear': september.date().year
 		}
 
 		self.response = self.client.post(reverse('statement:cash_month'), data,
@@ -343,7 +345,8 @@ class CashMonthSeachPostTest(TestBase):
 		'If there are not registries, must return a warning message'
 		
 		data = {
-			'search_month': '2014-01-01'
+			'selectmonth': '01',
+			'selectyear': '2014'
 		}
 
 		self.response = self.client.post(reverse('statement:cash_month'), data,
