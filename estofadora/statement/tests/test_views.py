@@ -290,7 +290,7 @@ class CashMonthViewTest(TestBase):
 
 	def test_message_when_is_empty(self):
 		'Must return a warning message when there are not any registry'
-		self.assertContains(self.response, 'Nenhum registro encontrado na data:')
+		self.assertContains(self.response, 'Nenhum registro encontrado em:')
 
 	def test_date_in_context(self):
 		'When was not choose a specific date, the default date is "today"'
@@ -352,4 +352,4 @@ class CashMonthSeachPostTest(TestBase):
 		self.response = self.client.post(reverse('statement:cash_month'), data,
 			follow=True)
 
-		self.assertContains(self.response, 'Nenhum registro encontrado na data:')
+		self.assertContains(self.response, 'Nenhum registro encontrado em:')
