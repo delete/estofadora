@@ -2,8 +2,11 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
 from django.test.client import Client
+from django.core.files.uploadedfile import SimpleUploadedFile
+
+from estofadora.settings import BASE_DIR, PATH_TO_IMAGE_TEST
 from estofadora.item.forms import ItemForm
-from estofadora.item.models import Item
+from estofadora.item.models import Item, Picture
 from estofadora.client.models import Client as ModelClient
 from estofadora.client.tests import create_client
 
@@ -27,6 +30,7 @@ class TestBase(TestCase):
 		Item.objects.all().delete()
 		ModelClient.objects.all().delete()
 		User.objects.all().delete()
+		Picture.objects.all().delete()
 
 	def _test_get_logout(self, url):
 		self.logout()
@@ -71,3 +75,13 @@ def make_validated_form(client=None, commit=True, **kwargs):
 		return form
 	else:
 		return data
+
+
+def create_picture(item):
+	image_file = SimpleUploadedFile(
+		'test.png',
+		open(PATH_TO_IMAGE_TEST, 'rb').read()
+	)
+
+	picture = Picture.objects.create(item=item, image=image_file)
+	return picture

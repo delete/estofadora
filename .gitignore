@@ -7,6 +7,7 @@
 __pycache__/
 local_settings.py
 staticfiles/
+media/
 
 ### Python ###
 # Byte-compiled / optimized / DLL files

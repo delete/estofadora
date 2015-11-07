@@ -1,6 +1,12 @@
+import os
+
 from django.db import models
 from django.utils.datetime_safe import datetime
+from django.db.models.signals import post_delete
+from django.dispatch.dispatcher import receiver
+
 from estofadora.client.models import Client
+
 
 class Item(models.Model):
 
@@ -26,3 +32,33 @@ class Item(models.Model):
 
 	def __unicode__():
 		return self.name
+
+
+def image_path(data, filename):
+    "Returns the filepath where the image is store"
+    extension = data.image.path[data.image.path.find('.'):]
+    return os.path.join('items/images/{0}/{0}{1}'.format(data.item.name, extension))
+
+
+class Picture(models.Model):
+
+	item = models.ForeignKey(Item, blank=False, null=False, related_name='pictures')
+	created_at = models.DateField('Criado em', auto_now_add=True)
+	image = models.ImageField(
+		upload_to=image_path, verbose_name="Imagem",
+		null=False, blank=False
+	)
+
+	class Meta:
+		verbose_name = 'Imagem'
+		verbose_name_plural = 'Imagens'
+
+	def __str__(self):
+		return '{0} - {1}'.format(self.item.name, self.created_at.isoformat())
+
+
+# Delete the file associated with the model instance
+@receiver(post_delete, sender=Picture)
+def mymodel_delete(sender, instance, **kwargs):
+	if instance.image:
+		instance.image.delete(False)

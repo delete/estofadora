@@ -24,6 +24,9 @@ PASSWORD_HASHERS = (
     'django.contrib.auth.hashers.MD5PasswordHasher',
 )
 
+PATH_TO_IMAGE_TEST = os.path.join(
+    BASE_DIR, 'estofadora', 'core', 'static', 'img') + '/test.jpg'
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
