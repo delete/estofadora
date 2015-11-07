@@ -1,7 +1,7 @@
 #coding: utf-8
 from django.utils.datetime_safe import datetime
 from django.contrib import admin
-from estofadora.item.models import Item
+from estofadora.item.models import Item, Picture
 
 class ItemAdmin(admin.ModelAdmin):
 	list_display = ('name', 'arrived_date', 'delivery_date', 'total_paid', 'total_value')
@@ -24,4 +24,11 @@ class ItemAdmin(admin.ModelAdmin):
 
 	mark_as_concluded.short_description = ('Marcar como concluido')
 
+
+class PictureAdmin(admin.ModelAdmin):
+	list_display = ('item', 'created_at',)
+	search_fields = ('item',)
+
+
 admin.site.register(Item, ItemAdmin)
+admin.site.register(Picture, PictureAdmin)
