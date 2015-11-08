@@ -5,7 +5,7 @@ from django.test.client import Client
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 from estofadora.settings import BASE_DIR, PATH_TO_IMAGE_TEST
-from estofadora.item.forms import ItemForm
+from estofadora.item.forms import ItemForm, PictureForm
 from estofadora.item.models import Item, Picture
 from estofadora.client.models import Client as ModelClient
 from estofadora.client.tests import create_client
