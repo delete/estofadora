@@ -83,7 +83,7 @@ def delete(request, pk):
 
 
 @login_required
-def list_images(request, pk):
+def image_list(request, pk):
 	context = {}
 	item = get_object_or_404(Item, pk=pk)
 
@@ -104,4 +104,4 @@ def image_delete(request, pk):
 	picture.delete()
 	messages.success(request, 'Imagem removida com sucesso!')
 	
-	return redirect(reverse('item:list_images', args=[item.pk]))
+	return redirect(reverse('item:image_list', args=[item.pk]))

@@ -45,7 +45,7 @@
                 <td>{{item.delivery_date }}</td>
                 <td>{{item.total_paid }} / {{item.total_value}}</td>
                 <th><p class="text-center"><a href="{% url 'item:edit' item.pk %}"><i class="fa fa-pencil"></a></i></p></th>
-                <th><a href="{% url 'item:list_images' item.pk %}"><i class="fa fa-picture-o"></a></i></th>
+                <th><a href="{% url 'item:image_list' item.pk %}"><i class="fa fa-picture-o"></a></i></th>
             </tr>
         {% endfor %}
     </tbody>

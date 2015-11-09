@@ -314,14 +314,14 @@ class DeleteViewTest(TestBase):
 		self.assertContains(self.response, 'Item removido com sucesso!')
 
 
-class ListImagesViewTest(TestBase):
+class ImageListViewTest(TestBase):
 
 	def setUp(self):
 		self.login()
 		self.item1 = create_item(commit=True)
 		self.picture = create_picture(self.item1)
 
-		self.url = reverse('item:list_images', args=[self.item1.pk])
+		self.url = reverse('item:image_list', args=[self.item1.pk])
 		self.response = self.client.get(self.url)
 
 	def test_get(self):
@@ -358,7 +358,7 @@ class ImageDeleteViewTest(TestBase):
 		self.response = self.client.post(reverse('item:image_delete', args=[self.picture1.pk]), follow=True)
 	
 	def test_redirect(self):
-		expected_url = reverse('item:list_images', args=[self.item1.pk])
+		expected_url = reverse('item:image_list', args=[self.item1.pk])
 
 		self.assertRedirects(self.response, expected_url, status_code=302, target_status_code=200)
 
