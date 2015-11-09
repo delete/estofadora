@@ -7,7 +7,7 @@ from django.utils.decorators import method_decorator
 from django.forms.formsets import formset_factory, BaseFormSet
 
 from .forms import ItemForm, PictureFormSet
-from .models import Item
+from .models import Item, Picture
 
 
 @login_required
@@ -80,3 +80,28 @@ def delete(request, pk):
 	messages.success(request, 'Item removido com sucesso!')
 	
 	return redirect(reverse('item:list'))
+
+
+@login_required
+def list_images(request, pk):
+	context = {}
+	item = get_object_or_404(Item, pk=pk)
+
+	pictures = Picture.objects.filter(item=item)
+
+	if not pictures:
+			messages.warning(request, 'Nenhuma imagem adicionada!')
+
+	context['item'] = item
+	context['pictures'] = pictures
+	return render(request, 'item/list_images.html', context)
+
+
+@login_required
+def image_delete(request, pk):
+	picture = get_object_or_404(Picture, pk=pk)
+	item = picture.item
+	picture.delete()
+	messages.success(request, 'Imagem removida com sucesso!')
+	
+	return redirect(reverse('item:list_images', args=[item.pk]))

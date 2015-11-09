@@ -6,4 +6,7 @@ urlpatterns = patterns('estofadora.item.views',
     url(r'^(?P<pk>\d+)/editar/', 'edit', name='edit'),
     url(r'^listar/$', 'list', name='list'),
     url(r'^(?P<pk>\d+)/remover/', 'delete', name='delete'),
+
+    url(r'^(?P<pk>\d+)/imagens/', 'list_images', name='list_images'),
+    url(r'^imagens/(?P<pk>\d+)/remover/', 'image_delete', name='image_delete'),
 )

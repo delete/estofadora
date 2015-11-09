@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="panel panel-default">
+    <div class="panel-body">
+        <h3>
+        	<p class="text-center">
+        		Imagens de {{ item }}
+        		<small>{{item.client.name}}</small>
+        	</p>
+        </h3>
+    </div>
+</div>
+
+<div class="row">
+	{% for picture in pictures %}
+    <div class="col-md-3 portfolio-item">
+        <a target="_blank" href="{{picture.image.url}}">
+            <img src="{{picture.image.url}}" class="img-responsive img-thumbnail item-image">
+        </a>
+	    <a class="btn btn-danger btn-xs" role="button" 
+			href="{% url 'item:image_delete' picture.pk %}">Apagar 
+		</a>
+    </div>
+    {% endfor %}
+</div>
+
+<div>
+	<a class="btn btn-default" role="button" 
+		href="{% url 'item:list' %}">Voltar 
+	</a>
+	<br>
+	<br>
+</div>
+
+{% endblock %}

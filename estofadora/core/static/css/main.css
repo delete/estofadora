@@ -108,3 +108,8 @@ body {
 .portfolio-item {
     margin-bottom: 25px;
 }
+
+.item-image {
+  width: 200px;
+  height: 180px;
+}

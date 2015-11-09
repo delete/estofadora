@@ -1,3 +1,5 @@
+import os
+
 from django.core.urlresolvers import reverse
 
 from estofadora.client.tests import create_client
@@ -5,7 +7,7 @@ from estofadora.client.tests import create_client
 from . import (
 	TestBase, ItemForm, create_item, Item, make_validated_form,
 	PictureFormSet, make_managementform_data, PATH_TO_IMAGE_TEST,
-	Picture
+	Picture, create_picture
 ) 
 
 
@@ -310,3 +312,62 @@ class DeleteViewTest(TestBase):
 
 	def test_message(self):
 		self.assertContains(self.response, 'Item removido com sucesso!')
+
+
+class ListImagesViewTest(TestBase):
+
+	def setUp(self):
+		self.login()
+		self.item1 = create_item(commit=True)
+		self.picture = create_picture(self.item1)
+
+		self.url = reverse('item:list_images', args=[self.item1.pk])
+		self.response = self.client.get(self.url)
+
+	def test_get(self):
+		self.assertEqual(self.response.status_code, 200)
+
+	def test_get_logout(self):
+		self._test_get_logout(self.url)
+
+	def test_template(self):
+		self.assertTemplateUsed(self.response, 'item/list_images.html')
+
+	def test_if_contains_items(self):
+		self.assertContains(self.response, self.item1.name)
+		self.assertContains(self.response, self.item1.client.name)			
+		self.assertContains(self.response, self.picture.image.url)
+
+	def test_massage_when_view_is_empty(self):
+		Picture.objects.all().delete()
+		self.response = self.client.get(self.url)
+		self.assertContains(self.response, 'Nenhuma imagem adicionada!')	
+
+
+class ImageDeleteViewTest(TestBase):
+
+	def setUp(self):
+		self.login()
+		self.item1 = create_item(commit=True)
+
+		self.picture1 = create_picture(self.item1)
+		self.picture2 = create_picture(self.item1)
+
+		self.assertEqual(len(Picture.objects.all()), 2)
+		
+		self.response = self.client.post(reverse('item:image_delete', args=[self.picture1.pk]), follow=True)
+	
+	def test_redirect(self):
+		expected_url = reverse('item:list_images', args=[self.item1.pk])
+
+		self.assertRedirects(self.response, expected_url, status_code=302, target_status_code=200)
+
+	def test_if_deleted(self):
+		self.assertEqual(len(Picture.objects.all()), 1)
+
+	def test_if_image_file_was_deleted(self):
+		path = self.picture1.image.path
+		self.assertFalse(os.path.exists(path))
+
+	def test_message(self):
+		self.assertContains(self.response, 'Imagem removida com sucesso!')
