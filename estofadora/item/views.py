@@ -2,8 +2,11 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.views .generic import CreateView
+from django.utils.decorators import method_decorator
+from django.forms.formsets import formset_factory, BaseFormSet
 
-from .forms import ItemForm
+from .forms import ItemForm, PictureFormSet
 from .models import Item
 
 
@@ -12,15 +15,21 @@ def add(request):
 	context = {}
 	
 	if request.method == 'POST':
-		form = ItemForm(request.POST)
+		item_form = ItemForm(request.POST)
+		picture_formset = PictureFormSet(request.POST, request.FILES)
 
-		if form.is_valid():
-			form.save()
+		if item_form.is_valid() and picture_formset.is_valid():
+			object = item_form.save()
+			picture_formset.instance = object
+			picture_formset.save()
 			messages.success(request, 'Item cadastrado com sucesso!')
-	else:
-		form = ItemForm()
 
-	context['form'] = form
+	else:
+		item_form = ItemForm()
+		picture_formset = PictureFormSet()
+
+	context['item_form'] = item_form
+	context['picture_formset'] = picture_formset
 	return render(request, 'item/add.html', context)
 
 

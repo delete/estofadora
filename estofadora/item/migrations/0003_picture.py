@@ -15,10 +15,10 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Picture',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', primary_key=True, serialize=False, auto_created=True)),
+                ('id', models.AutoField(verbose_name='ID', auto_created=True, serialize=False, primary_key=True)),
                 ('created_at', models.DateField(verbose_name='Criado em', auto_now_add=True)),
                 ('image', models.ImageField(verbose_name='Imagem', upload_to=estofadora.item.models.image_path)),
-                ('item', models.ForeignKey(related_name='pictures', to='item.Item')),
+                ('item', models.ForeignKey(to='item.Item', related_name='pictures')),
             ],
             options={
                 'verbose_name': 'Imagem',

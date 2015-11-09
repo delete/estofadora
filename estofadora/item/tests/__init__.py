@@ -5,7 +5,7 @@ from django.test.client import Client
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 from estofadora.settings import BASE_DIR, PATH_TO_IMAGE_TEST
-from estofadora.item.forms import ItemForm, PictureForm
+from estofadora.item.forms import ItemForm, PictureFormSet, PictureForm
 from estofadora.item.models import Item, Picture
 from estofadora.client.models import Client as ModelClient
 from estofadora.client.tests import create_client
@@ -85,3 +85,16 @@ def create_picture(item):
 
 	picture = Picture.objects.create(item=item, image=image_file)
 	return picture
+
+
+def make_managementform_data(**kwargs):
+	data={
+		'pictures-TOTAL_FORMS': 3,
+		'pictures-INITIAL_FORMS': 0,
+		'pictures-MAX_NUM_FORMS': 1000,
+		'pictures-0-image': '',
+		'pictures-1-image': '',
+		'pictures-2-image': '',
+	}
+	data.update(kwargs)
+	return data

@@ -1,5 +1,14 @@
 {% extends "base.html" %}
 
+{% block extra_js %}
+<script>
+    $('.picture-formset').formset({
+        addText: 'Adicionar imagem',
+        deleteText: 'Remover'
+    });
+</script>
+{% endblock %}
+
 {% block content %}
 <div class="panel panel-default">
 	<div class="panel-body">
@@ -7,23 +16,45 @@
 	</div>
 </div>
 <div class="marketing">
-	<form  method="POST" enctype="multipart/form-data" role="form">
-		{% csrf_token %}
-
-    	{{ form.non_field_errors}}
-
-	    {% for field in form %}
+	<form enctype="multipart/form-data" method="post">
+  		{% csrf_token %}
+  		<legend>Detalhes do item</legend>
+	  	{% for field in item_form %}
 		    <div class="form-group">
 			    {{ field.label_tag }}
 			    {{ field }}
 			    {{ field.errors }}
 		    </div>
 	    {% endfor %}
-
-	    <button class="btn btn-primary form-control" 
-	    	type="submit">Cadastrar
-	    </button>
-
+	  	
+	  	{{ picture_formset.management_form }}
+  		
+  		<legend>Images</legend>
+  		<div class="pictures">
+	  	{% for form in picture_formset %}
+	    		
+	    		<div class="picture-formset">
+	    		{{ form.image.label_tag }}
+	      		{{ form.image }}
+	      		<label for="id_pictures-<%= _id %>-DELETE">Apagar:</label>
+				<input id="id_pictures-<%= _id %>-DELETE" name="pictures-<%= _id %>-DELETE" type="checkbox">
+				<input id="id_pictures-<%= _id %>-item" name="pictures-<%= _id %>-item" type="hidden">
+				<input id="id_pictures-<%= _id %>-id" name="pictures-<%= _id %>-id" type="hidden">
+				</div>
+	      		{% if form.image.errors %}
+                    {% for error in form.image.errors %}
+                        {{ error|escape }}
+                    {% endfor %}
+                {% endif %}
+	    	
+	  	{% endfor %}
+ 		</div>
+	    <div>
+   			<button class="btn btn-primary form-control" 
+	    		type="submit">Cadastrar
+	    	</button>
+	    </div>
 	</form>
 </div>
+
 {% endblock %}

@@ -1,6 +1,12 @@
 from django.core.urlresolvers import reverse
+
 from estofadora.client.tests import create_client
-from . import TestBase, ItemForm, create_item, Item, make_validated_form
+
+from . import (
+	TestBase, ItemForm, create_item, Item, make_validated_form,
+	PictureFormSet, make_managementform_data, PATH_TO_IMAGE_TEST,
+	Picture
+) 
 
 
 class AddViewTest(TestBase):
@@ -19,25 +25,30 @@ class AddViewTest(TestBase):
 	def test_template(self):
 		self.assertTemplateUsed(self.response, 'item/add.html')
 
-	def test_if_has_form(self):
-		form = self.response.context['form']
-		self.assertIsInstance(form, ItemForm)
+	def test_if_has_forms(self):
+		item_form = self.response.context['item_form']
+		picture_formset = self.response.context['picture_formset']
+		
+		self.assertIsInstance(item_form, ItemForm)
+		self.assertIsInstance(picture_formset, PictureFormSet)
 
 	def test_html(self):
 		self.assertContains(self.response, '<form')
-		self.assertContains(self.response, '<input', 6)
-		self.assertContains(self.response, '<input', 6)
+		self.assertContains(self.response, '<input', 22)
 		self.assertContains(self.response, 'type="submit"')
 
 	def test_csrf(self):
 		self.assertContains(self.response, 'csrfmiddlewaretoken')
 
 
-class AddPostTest(TestBase):
-
+class AddPostWithoutImageTest(TestBase):
+	"""
+		Test post without images.
+	"""
 	def setUp(self):
 		self.login()
 		data = make_validated_form(commit=False)
+		data.update(make_managementform_data())
 		self.response = self.client.post(reverse('item:add'), data)
 
 	def test_message(self):
@@ -47,31 +58,76 @@ class AddPostTest(TestBase):
 		self.assertTrue(Item.objects.exists())
 
 
-class AddInvalidPostTest(TestBase):
+class AddPostWithImageTest(TestBase):
+	"""
+		Test post with image.
+	"""
+	def setUp(self):
+		self.login()
+		data = make_validated_form(commit=False)
+		
+		with open(PATH_TO_IMAGE_TEST, 'rb') as img:
+			data_new = {
+				'pictures-0-image': img,
+			}
+			data.update(make_managementform_data(**data_new))
+
+			self.response = self.client.post(reverse('item:add'), data)
+
+	def test_message(self):
+		self.assertContains(self.response, 'Item cadastrado com sucesso!')
+
+	def test_if_saved(self):
+		self.assertEqual(len(Item.objects.all()), 1)
+		self.assertEqual(len(Picture.objects.all()), 1)
+
+
+class AddInvalidItemPostTest(TestBase):
 
 	def setUp(self):
 		self.login()
 		self.url = reverse('item:add')
 
-	def test_post_name_required(self):
+	def test_post_name_is_required(self):
 		data = make_validated_form(name='', commit=False)
 		self._test_if_got_errors(data)
 
-	def test_post_description_required(self):
+	def test_post_description_is_required(self):
 		data = make_validated_form(description='', commit=False)
 		self._test_if_got_errors(data)
 
-	def test_post_delivery_date_required(self):
+	def test_post_delivery_date_is_required(self):
 		data = make_validated_form(delivery_date='', commit=False)
 		self._test_if_got_errors(data)
 
-	def test_post_fail_delivery_date(self):
-		data = make_validated_form(delivery_date='2015/01/21 22:00:00', commit=False)
+	def test_post_wrong_delivery_date(self):
+		data = make_validated_form(delivery_date='2015/01/21 22:00:00',
+									commit=False)
+		self._test_if_got_errors(data)
+
+	def _test_if_got_errors(self, data):
+		data.update(make_managementform_data())
+		self.response = self.client.post(self.url, data)
+		self.assertTrue(self.response.context['item_form'].errors)
+		self.assertTrue(self.response.context['picture_formset'].errors)
+
+
+class AddInvalidImagePostTest(TestBase):
+
+	def setUp(self):
+		self.login()
+		self.url = reverse('item:add')
+
+	def test_post_image_wrong_value(self):
+		data = make_validated_form(commit=False)
+		data_new = {'pictures-0-image': 'error'}
+		data.update(make_managementform_data(**data_new))
 		self._test_if_got_errors(data)
 
 	def _test_if_got_errors(self, data):
 		self.response = self.client.post(self.url, data)
-		self.assertTrue(self.response.context['form'].errors)
+		self.assertFalse(self.response.context['item_form'].errors)
+		self.assertTrue(self.response.context['picture_formset'].errors)
 
 
 class EditViewTest(AddViewTest):
@@ -84,6 +140,16 @@ class EditViewTest(AddViewTest):
 
 	def test_template(self):
 		self.assertTemplateUsed(self.response, 'item/edit.html')
+
+	def test_if_has_forms(self):
+		form = self.response.context['form']
+
+		self.assertIsInstance(form, ItemForm)
+
+	def test_html(self):
+		self.assertContains(self.response, '<form')
+		self.assertContains(self.response, '<input', 6)
+		self.assertContains(self.response, 'type="submit"')
 
 
 class EditPostTest(TestBase):
