@@ -29,7 +29,7 @@
 		    	type="submit">Alterar</button>
 		    <div class="form-group">
 		    <a class="btn btn-default form-control" 
-				href="{% url 'item:list'%}" 
+				href="{% url 'client:list_items' item.client.pk %}" 
 				role="button">Cancelar
 			</a>
 	    </div>
