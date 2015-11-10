@@ -36,7 +36,7 @@ class AddViewTest(TestBase):
 
 	def test_html(self):
 		self.assertContains(self.response, '<form')
-		self.assertContains(self.response, '<input', 22)
+		self.assertContains(self.response, '<input', 14)
 		self.assertContains(self.response, 'type="submit"')
 
 	def test_csrf(self):
@@ -342,6 +342,42 @@ class ImageListViewTest(TestBase):
 		Picture.objects.all().delete()
 		self.response = self.client.get(self.url)
 		self.assertContains(self.response, 'Nenhuma imagem adicionada!')	
+
+	def test_if_has_forms(self):
+		picture_formset = self.response.context['picture_formset']
+		
+		self.assertIsInstance(picture_formset, PictureFormSet)
+
+
+class ImageListViewPostWithImageTest(TestBase):
+	"""
+		Test post with image.
+	"""
+
+	def setUp(self):
+		self.login()
+		self.item1 = create_item(commit=True)
+
+		self.url = reverse('item:image_list', args=[self.item1.pk])
+		
+		with open(PATH_TO_IMAGE_TEST, 'rb') as img:
+			data_new = {
+				'pictures-0-image': img,
+			}
+			data = make_managementform_data(**data_new)
+
+			self.response = self.client.post(self.url, data, follow=True)
+
+	def test_message(self):
+		self.assertContains(self.response, 'Imagem enviada com sucesso!')
+
+	def test_redirect(self):
+		expected_url = reverse('item:image_list', args=[self.item1.pk])
+
+		self.assertRedirects(self.response, expected_url, status_code=302, target_status_code=200)
+
+	def test_if_saved(self):
+		self.assertTrue(Picture.objects.exists())
 
 
 class ImageDeleteViewTest(TestBase):

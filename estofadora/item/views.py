@@ -92,8 +92,21 @@ def image_list(request, pk):
 	if not pictures:
 			messages.warning(request, 'Nenhuma imagem adicionada!')
 
+	if request.method == 'POST':
+		picture_formset = PictureFormSet(request.POST, request.FILES)
+
+		if picture_formset.is_valid():
+			picture_formset.instance = item
+			picture_formset.save()
+			messages.success(request, 'Imagem enviada com sucesso!')
+			return redirect(reverse('item:image_list', args=[item.pk]))
+
+	else:
+		picture_formset = PictureFormSet()
+
 	context['item'] = item
 	context['pictures'] = pictures
+	context['picture_formset'] = picture_formset
 	return render(request, 'item/list_images.html', context)
 
 

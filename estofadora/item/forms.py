@@ -1,6 +1,7 @@
 #coding: utf-8
 from django import forms
 from django.forms.models import inlineformset_factory
+from django.forms.formsets import BaseFormSet
 
 from estofadora.client.models import Client
 
@@ -40,4 +41,6 @@ class PictureForm(forms.ModelForm):
 		self.fields['image'].widget.attrs.update({'class': 'form-control'})
 
 
-PictureFormSet = inlineformset_factory(Item, Picture, fields=('image',))
+PictureFormSet = inlineformset_factory(
+			Item, Picture, fields=('image',), extra=1
+		)
