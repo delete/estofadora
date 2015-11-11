@@ -47,24 +47,49 @@
         </div>
         <div>
             <button class="btn btn-primary form-control" 
-                type="submit">Enviar
+                type="submit" name="add-form">Enviar
             </button>
         </div>
     </form>
 </div>
 
-<div class="row">
-	{% for picture in pictures %}
-    <div class="col-md-3 portfolio-item">
-        <a target="_blank" href="{{picture.image.url}}">
-            <img src="{{picture.image.url}}" class="img-responsive img-thumbnail item-image">
-        </a>
-	    <a class="btn btn-danger btn-xs" role="button" 
-			href="{% url 'item:image_delete' picture.pk %}">Apagar 
-		</a>
+<form method="POST">
+    <div class="row">
+        {% for picture in pictures %}
+        <div class="col-md-3 portfolio-item">
+            <a target="_blank" href="{{picture.image.url}}">
+                <img src="{{picture.image.url}}" class="img-responsive img-thumbnail item-image {% if picture.public %}public-image{%endif%}"
+                {% if picture.public %}
+                    title="Imagem publica"
+                {% else %} 
+                    title="Imagem privada"
+                {% endif %}>
+            </a>
+                {% csrf_token %}
+                <a class="btn btn-danger btn-xs" role="button" 
+                    href="{% url 'item:image_delete' picture.pk %}">Apagar 
+                </a>
+                    <select name="selects[]" title="Estado do trabalho">
+                        <option value="{{picture.id}}_before"
+                            {% if picture.state == 'before'%} selected {% endif%}>Antes
+                        </option>
+                        <option value="{{picture.id}}_after"
+                            {% if picture.state == 'after'%} selected {% endif%}>Depois</option>
+                    </select>
+                <input name="checks[]"
+                    type="checkbox"
+                    title="Deixar imagem publica"
+                    {% if picture.public %}
+                        checked
+                    {% endif %}
+                    value="{{picture.id}}">
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-</div>
+    <div class=".col-lg-4 text-center">
+        <button type="submit" class="btn btn-primary">Alterar</button>
+    </div>
+</form>
 
 <div>
 	<a class="btn btn-default" role="button" 

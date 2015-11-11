@@ -77,13 +77,19 @@ def make_validated_form(client=None, commit=True, **kwargs):
 		return data
 
 
-def create_picture(item):
+def create_picture(item, **kwargs):
 	image_file = SimpleUploadedFile(
 		'test.png',
 		open(PATH_TO_IMAGE_TEST, 'rb').read()
 	)
-
-	picture = Picture.objects.create(item=item, image=image_file)
+	data = {
+		'item': item,
+		'image': image_file,
+		'state': 'before',
+		'public': False 
+	}
+	data.update(kwargs)
+	picture = Picture.objects.create(**data)
 	return picture
 
 

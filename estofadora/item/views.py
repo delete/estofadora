@@ -93,21 +93,65 @@ def image_list(request, pk):
 			messages.warning(request, 'Nenhuma imagem adicionada!')
 
 	if request.method == 'POST':
-		picture_formset = PictureFormSet(request.POST, request.FILES)
 
-		if picture_formset.is_valid():
-			picture_formset.instance = item
-			picture_formset.save()
-			messages.success(request, 'Imagem enviada com sucesso!')
+		# Adding a new image
+		if 'add-form' in request.POST:
+			picture_formset = PictureFormSet(request.POST, request.FILES)
+
+			if picture_formset.is_valid():
+				picture_formset.instance = item
+				picture_formset.save()
+				messages.success(request, 'Imagem enviada com sucesso!')
+				return redirect(reverse('item:image_list', args=[item.pk]))
+
+		# Changing image' states
+		else:
+			checked_ids = request.POST.getlist('checks[]')
+			selected_states = request.POST.getlist('selects[]')
+
+			# Create a list because will be need to remove itens
+			all_pictures = [p for p in pictures]
+			
+			all_pictures = removeCheckedPictureFromAllPictures(checked_ids, all_pictures)
+
+			setFalseInRemainPictures(all_pictures)
+
+			setTrueInCheckedPictures(checked_ids)
+
+			if selected_states:
+				for selected in selected_states:
+					_id, state = tuple(selected.split('_'))
+					
+					picture = get_object_or_404(Picture, pk=_id)
+					picture.state = state
+					picture.save()
+				
+			messages.success(request, 'Alterado com sucesso!')
 			return redirect(reverse('item:image_list', args=[item.pk]))
-
-	else:
-		picture_formset = PictureFormSet()
 
 	context['item'] = item
 	context['pictures'] = pictures
-	context['picture_formset'] = picture_formset
+	context['picture_formset'] = PictureFormSet()
 	return render(request, 'item/list_images.html', context)
+
+
+def removeCheckedPictureFromAllPictures(checked_ids, all_pictures):
+	for picture in all_pictures:
+		for check in checked_ids:
+			if int(picture.pk) == int(check):
+				all_pictures.remove(picture)
+	return all_pictures
+
+def setFalseInRemainPictures(all_pictures):
+	for picture in all_pictures:
+		picture.public = False
+		picture.save()
+
+def setTrueInCheckedPictures(checked_ids):
+	for check in checked_ids:
+		picture = get_object_or_404(Picture, pk=check)
+		picture.public = True
+		picture.save()
 
 
 @login_required

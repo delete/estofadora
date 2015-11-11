@@ -26,7 +26,7 @@ class ItemAdmin(admin.ModelAdmin):
 
 
 class PictureAdmin(admin.ModelAdmin):
-	list_display = ('item', 'created_at',)
+	list_display = ('item', 'created_at', 'public')
 	search_fields = ('item',)
 
 

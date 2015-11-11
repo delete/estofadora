@@ -109,6 +109,10 @@ body {
     margin-bottom: 25px;
 }
 
+.public-image {
+  background: blue;
+}
+
 .item-image {
   width: 200px;
   height: 180px;

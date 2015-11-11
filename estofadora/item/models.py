@@ -41,9 +41,17 @@ def image_path(data, filename):
 
 
 class Picture(models.Model):
+	AFTER = 'after'
+	BEFORE = 'before'
+	STATE_CHOICES = (
+		(AFTER, 'Depois'),
+		(BEFORE, 'Antes'),
+	)
 
 	item = models.ForeignKey(Item, blank=False, null=False, related_name='pictures')
 	created_at = models.DateField('Criado em', auto_now_add=True)
+	public = models.BooleanField('Publico', default=False)
+	state = models.CharField('Estado', max_length=6, choices=STATE_CHOICES, default=BEFORE)
 	image = models.ImageField(
 		upload_to=image_path, verbose_name="Imagem",
 		null=False, blank=False

@@ -40,7 +40,7 @@ class PictureFormTest(TestCase):
 		existing_fields = list(form.fields.keys())
 
 		expected_fields = [
-			'item', 'image'
+			'item', 'public', 'state', 'image'
 		]
 
 		self.assertEqual(existing_fields, expected_fields)
@@ -65,12 +65,13 @@ class PictureFormTest(TestCase):
 	def test_form(self):
 		upload_file = open(PATH_TO_IMAGE_TEST, 'rb')
 		new_item = create_item(commit=True)
-		data = {'item': new_item.pk}
+		data = {'item': new_item.pk, 'state': 'before'}
 		file_data = {
 			'image': SimpleUploadedFile(upload_file.name, upload_file.read())
 		}
 		
 		form = PictureForm(data, file_data)
+		print(form.errors)
 		self.assertTrue(form.is_valid())
 		form.save()
 		self.assertTrue(Picture.objects.exists())

@@ -42,3 +42,11 @@ class PictureModelTest(TestCase):
 		path = self.picture.image.path
 		self.picture.delete()
 		self.assertFalse(os.path.exists(path))
+
+	def test_if_public_is_false(self):
+		''' Public must be False as default '''
+		self.assertFalse(self.picture.public)
+
+	def test_if_state_is_before(self):
+		''' State must be 'berofe' as default '''
+		self.assertEqual(self.picture.state, 'before')

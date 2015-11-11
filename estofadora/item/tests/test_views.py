@@ -319,7 +319,8 @@ class ImageListViewTest(TestBase):
 	def setUp(self):
 		self.login()
 		self.item1 = create_item(commit=True)
-		self.picture = create_picture(self.item1)
+		self.picture1 = create_picture(self.item1, public=True)
+		self.picture2 = create_picture(self.item1)
 
 		self.url = reverse('item:image_list', args=[self.item1.pk])
 		self.response = self.client.get(self.url)
@@ -336,7 +337,15 @@ class ImageListViewTest(TestBase):
 	def test_if_contains_items(self):
 		self.assertContains(self.response, self.item1.name)
 		self.assertContains(self.response, self.item1.client.name)			
-		self.assertContains(self.response, self.picture.image.url)
+		self.assertContains(self.response, self.picture1.image.url)
+		self.assertContains(self.response, self.picture2.image.url)
+
+	def test_if_contain_checkbox_in_context(self):
+		# 2 from images(form list) and 1 from form to add a new image
+		self.assertContains(self.response, 'type="checkbox"', 3)
+	
+	def test_if_contain_checked_checkbox_in_context(self):
+		self.assertContains(self.response, 'checked', 1)
 
 	def test_massage_when_view_is_empty(self):
 		Picture.objects.all().delete()
@@ -363,6 +372,7 @@ class ImageListViewPostWithImageTest(TestBase):
 		with open(PATH_TO_IMAGE_TEST, 'rb') as img:
 			data_new = {
 				'pictures-0-image': img,
+				'add-form': ''
 			}
 			data = make_managementform_data(**data_new)
 
@@ -378,6 +388,73 @@ class ImageListViewPostWithImageTest(TestBase):
 
 	def test_if_saved(self):
 		self.assertTrue(Picture.objects.exists())
+
+
+class ImageListViewPostChangeStatesTest(TestBase):
+	"""
+		Test changing image' states(state and public).
+	"""
+
+	def setUp(self):
+		self.login()
+		self.item = create_item(commit=True)
+		self.picture1 = create_picture(self.item, public=True)
+		self.picture2 = create_picture(self.item, state='after')
+		self.picture3 = create_picture(self.item)
+		self.picture4 = create_picture(self.item)
+
+		# State must be 'before' before post.
+		self.assertEqual(self.picture1.state, 'before')
+		
+		# Public must be False before post.
+		self.assertFalse(self.picture2.public)
+
+		# State must be 'before' before post.
+		self.assertEqual(self.picture3.state, 'before')
+		
+		# State must be 'before' before post.
+		self.assertEqual(self.picture4.state, 'before')
+		
+		# Public must be False before post.
+		self.assertFalse(self.picture4.public)
+
+		# Change picture2.public from False to True
+		# and change picture1.state from 'before' to 'after'
+		# and change picture3.state from 'before' to 'after'
+		# and change picture4.state from 'before' to 'after'
+		# ang change picture4.public from False to True
+		
+		data = {
+			'checks[]': ['2', '4'],
+			'selects[]': [
+				str(self.picture1.pk) + '_after',
+				str(self.picture3.pk) + '_after',
+				str(self.picture4.pk) + '_after',
+			]
+		}
+
+		self.url = reverse('item:image_list', args=[self.item.pk])
+		self.response = self.client.post(self.url, data, follow=True)
+
+	def test_message(self):
+		self.assertContains(self.response, 'Alterado com sucesso!')
+
+	def test_redirect(self):
+		expected_url = reverse('item:image_list', args=[self.item.pk])
+
+		self.assertRedirects(self.response, expected_url, status_code=302, target_status_code=200)
+
+	def test_if_picture_1_state_has_changed(self):
+		picture = Picture.objects.get(id=self.picture1.pk)
+		self.assertEqual(picture.state, 'after')
+
+	def test_if_picture_2_public_has_changed(self):
+		picture = Picture.objects.get(id=self.picture2.pk)
+		self.assertTrue(picture.public)
+
+	def test_if_picture_3_state_has_changed(self):
+		picture = Picture.objects.get(id=self.picture3.pk)
+		self.assertEqual(picture.state, 'after')
 
 
 class ImageDeleteViewTest(TestBase):
