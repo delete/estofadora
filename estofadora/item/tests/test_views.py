@@ -298,7 +298,12 @@ class DeleteViewTest(TestBase):
 		self.client2 = create_client(commit=True, name='Andre', email='a@email.com')
 		self.item2 = create_item(client=self.client2, commit=True)
 
+		self.picture1 = create_picture(self.item2)
+		self.picture2 = create_picture(self.item2)
+
+		#Must have 2 itens and 2 images before post.
 		self.assertEqual(len(Item.objects.all()), 2)
+		self.assertEqual(len(Picture.objects.all()), 2)
 		
 		self.response = self.client.post(reverse('item:delete', args=[self.item2.pk]), follow=True)
 	
@@ -309,6 +314,9 @@ class DeleteViewTest(TestBase):
 
 	def test_if_deleted(self):
 		self.assertEqual(len(Item.objects.all()), 1)
+
+	def test_if_images_was_deleted(self):
+		self.assertEqual(len(Picture.objects.all()), 0)
 
 	def test_message(self):
 		self.assertContains(self.response, 'Item removido com sucesso!')
