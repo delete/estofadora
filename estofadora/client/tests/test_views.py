@@ -42,13 +42,20 @@ class AddPostTest(TestBase):
 	def setUp(self):
 		self.login()
 		data = create_client()
-		self.response = self.client.post(reverse('client:add'), data)
+		self.response = self.client.post(
+				reverse('client:add'), data, follow=True
+			)
 
 	def test_message(self):
 		self.assertContains(self.response, 'Cliente cadastrado com sucesso!')
 
 	def test_if_saved(self):
 		self.assertTrue(ModelClient.objects.exists())
+
+	def test_redirect(self):
+		expected_url = reverse('client:list')
+
+		self.assertRedirects(self.response, expected_url, status_code=302, target_status_code=200)
 
 
 class AddInvalidPostTest(TestBase):

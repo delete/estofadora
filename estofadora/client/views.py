@@ -20,6 +20,7 @@ def add(request):
 		if form.is_valid():
 			form.save()
 			messages.success(request, 'Cliente cadastrado com sucesso!')
+			return redirect('client:list')
 	else:
 		form = ClientForm()
 
