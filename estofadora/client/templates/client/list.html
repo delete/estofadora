@@ -12,32 +12,31 @@
 		href="{% url 'client:add' %}" role="button">Cadastrar cliente</a>
 </div>
 
-<div class="well well-sm">
-	<input class="form-control" 
-		placeholder="Filtrar..."
-	</input>
-</div>
-
-<table class="table table-striped">
-	<thead>
-		<tr>
-			<th>Nome</th>
-			<th>Email</th>
-			<th>Telefone 1</th>
-			<td>Editar</td>
-			<td>Itens</td>
-		</tr>
-	</thead>
-	<tbody>
-		{% for client in clients %}		
+{% if clients %}
+	<table class="table table-striped">
+		<thead>
 			<tr>
-				<td>{{client.name}}</td>
-				<td>{{client.email}}</td>
-				<td>{{client.telephone1}}</td>
-				<th><a href="{% url 'client:edit' client.pk %}"><i class="fa fa-pencil"></a></i></th>
-				<th><a href="{% url 'client:list_items' client.pk %}"><i class="fa fa-list"></a></i></th>
+				<th>Nome</th>
+				<th>Email</th>
+				<th>Telefone 1</th>
+				<td>Editar</td>
+				<td>Itens</td>
 			</tr>
-		{% endfor %}
-	</tbody>
-</table>
+		</thead>
+		<tbody>
+			{% for client in clients %}		
+				<tr>
+					<td>{{client.name}}</td>
+					<td>{{client.email}}</td>
+					<td>{{client.telephone1}}</td>
+					<th><a href="{% url 'client:edit' client.pk %}"><i class="fa fa-pencil"></a></i></th>
+					<th><a href="{% url 'client:list_items' client.pk %}"><i class="fa fa-list"></a></i></th>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% else %}
+<div class="alert alert-warning text-center" role="alert">Nenhum cliente cadastrado.</div>
+{% endif %}
+
 {% endblock %}

@@ -6,54 +6,57 @@
         <h3><p class="text-center">Itens de {{ client.name }}</p></h3>
     </div>
 </div>
-
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Nome</th>
-            <th>Data chegada</th>
-            <th>Data entrega</th>
-            <th>Valor pago/total</th>
-            <td>Detalhes / Editar</td>
-            <td>Fotos</td>
-        </tr>
-    </thead>
-    <tbody>
-        {% for item in items %}
+{% if items %}
+    <table class="table table-striped">
+        <thead>
             <tr>
-                <td>{{item.name}}</td>
-                <td>{{item.arrived_date}}</td>
-                <td>{{item.delivery_date }}</td>
-                <td>{{item.total_paid }} / {{item.total_value}}</td>
-                <th><p class="text-center"><a href="{% url 'item:edit' item.pk %}"><i class="fa fa-pencil"></a></i></p></th>
-                <th><a href="{% url 'item:image_list' item.pk %}"><i class="fa fa-picture-o"></a></i></th>
+                <th>Nome</th>
+                <th>Data chegada</th>
+                <th>Data entrega</th>
+                <th>Valor pago/total</th>
+                <td>Detalhes / Editar</td>
+                <td>Fotos</td>
             </tr>
-        {% endfor %}
-    </tbody>
-</table>
-<div class="amount">
-	<p class="text-center">
-		Quantidade: {{ amount }}
-	</p> 
-</div>
+        </thead>
+        <tbody>
+            {% for item in items %}
+                <tr>
+                    <td>{{item.name}}</td>
+                    <td>{{item.arrived_date}}</td>
+                    <td>{{item.delivery_date }}</td>
+                    <td>{{item.total_paid }} / {{item.total_value}}</td>
+                    <th><p class="text-center"><a href="{% url 'item:edit' item.pk %}"><i class="fa fa-pencil"></a></i></p></th>
+                    <th><a href="{% url 'item:image_list' item.pk %}"><i class="fa fa-picture-o"></a></i></th>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="amount">
+    	<p class="text-center">
+    		Quantidade: {{ amount }}
+    	</p> 
+    </div>
 
-<div class="total_value">
-	<p class="text-right text-primary">
-	Valor total: R$ {{ total }}
-	</p>
-</div>
+    <div class="total_value">
+    	<p class="text-right text-primary">
+    	Valor total: R$ {{ total }}
+    	</p>
+    </div>
 
-	<div class="total_paid">
-		{% if owing %}
-		<p class="text-right text-danger">
-		{% else %}	
-		<p class="text-right text-success">
-		{% endif %}
-		Valor recebido: R$ {{ received }}
-		</p>
-		
-		</p>
-	</div>
+    	<div class="total_paid">
+    		{% if owing %}
+    		<p class="text-right text-danger">
+    		{% else %}	
+    		<p class="text-right text-success">
+    		{% endif %}
+    		Valor recebido: R$ {{ received }}
+    		</p>
+    		
+    		</p>
+    	</div>
+{% else %}
+<div class="alert alert-warning text-center" role="alert">Nenhum item cadastrado para {{client.name}}.</div>
+{% endif %}
 <a class="btn btn-default" role="button" 
     href="{% url 'client:list' %}">Voltar 
 </a>

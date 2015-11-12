@@ -60,14 +60,8 @@ def list(request):
 		client_name = request.POST.get('name')
 		items = Item.objects.filter(client__name__icontains=client_name)
 
-		if not items:
-			messages.warning(request, 'Nenhum item cadastrado para esse cliente!')
-
 	else:
 		items = Item.objects.all()
-
-		if not items:
-			messages.warning(request, 'Nenhum item cadastrado!')
 
 	context['items'] = items
 	return render(request, 'item/list.html', context)
@@ -88,9 +82,6 @@ def image_list(request, pk):
 	item = get_object_or_404(Item, pk=pk)
 
 	pictures = Picture.objects.filter(item=item)
-
-	if not pictures:
-			messages.warning(request, 'Nenhuma imagem adicionada!')
 
 	if request.method == 'POST':
 

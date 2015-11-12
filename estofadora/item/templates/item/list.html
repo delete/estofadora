@@ -24,30 +24,36 @@
     </form>
 </div>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Cliente</th>
-            <th>Nome</th>
-            <th>Data chegada</th>
-            <th>Data entrega</th>
-            <th>Valor pago/total</th>
-            <td>Detalhes / Editar</td>
-            <td>Fotos</td>
-        </tr>
-    </thead>
-    <tbody>
-        {% for item in items %}
+{% if items %}
+    <table class="table table-striped">
+        <thead>
             <tr>
-                <td>{{item.client.name}}</td>
-                <td>{{item.name}}</td>
-                <td>{{item.arrived_date}}</td>
-                <td>{{item.delivery_date }}</td>
-                <td>{{item.total_paid }} / {{item.total_value}}</td>
-                <th><p class="text-center"><a href="{% url 'item:edit' item.pk %}"><i class="fa fa-pencil"></a></i></p></th>
-                <th><a href="{% url 'item:image_list' item.pk %}"><i class="fa fa-picture-o"></a></i></th>
+                <th>Cliente</th>
+                <th>Nome</th>
+                <th>Data chegada</th>
+                <th>Data entrega</th>
+                <th>Valor pago/total</th>
+                <td>Detalhes / Editar</td>
+                <td>Fotos</td>
             </tr>
-        {% endfor %}
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            {% for item in items %}
+                <tr>
+                    <td>{{item.client.name}}</td>
+                    <td>{{item.name}}</td>
+                    <td>{{item.arrived_date}}</td>
+                    <td>{{item.delivery_date }}</td>
+                    <td>{{item.total_paid }} / {{item.total_value}}</td>
+                    <th><p class="text-center"><a href="{% url 'item:edit' item.pk %}"><i class="fa fa-pencil"></a></i></p></th>
+                    <th><a href="{% url 'item:image_list' item.pk %}"><i class="fa fa-picture-o"></a></i></th>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% else %}
+<div class="alert alert-warning text-center" role="alert">Nenhum item encontrado!</div>
+{% endif %}
+
 {% endblock %}

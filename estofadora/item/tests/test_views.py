@@ -286,7 +286,7 @@ class ListViewTest(TestBase):
 	def test_massage_when_view_is_empty(self):
 		Item.objects.all().delete()
 		self.response = self.client.get(reverse('item:list'))
-		self.assertContains(self.response, 'Nenhum item cadastrado!')
+		self.assertContains(self.response, 'Nenhum item encontrado!')
 
 
 class DeleteViewTest(TestBase):

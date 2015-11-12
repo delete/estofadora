@@ -3,6 +3,7 @@ from django.core.urlresolvers import reverse
 from django.db.models.query import QuerySet
 
 from estofadora.item.tests import create_item
+from estofadora.item.models import Item
 
 from . import create_client, ClientForm, ModelClient, TestBase
 
@@ -208,6 +209,14 @@ class ListViewTest(TestBase):
 		self.assertContains(self.response, self.client1.name)
 		self.assertContains(self.response, self.client2.name)
 
+	def test_empty(self):
+		ModelClient.objects.all().delete()
+
+		self.response = self.client.get(reverse('client:list'))
+				
+		expected = 'Nenhum cliente cadastrado.'
+		self.assertContains(self.response, expected)
+
 
 class DeleteViewTest(TestBase):
 
@@ -278,4 +287,12 @@ class ListItemsViewTest(TestBase):
 		self.assertContains(self.response, self.item1.name)
 		self.assertContains(self.response, self.item2.name)
 		self.assertContains(self.response, self.item3.name)
+
+	def test_when_is_empty(self):
+		Item.objects.all().delete()
+		
+		self.response = self.client.get(self.url)
+		
+		expected = 'Nenhum item cadastrado para {}'.format(self.client1.name) 
+		self.assertContains(self.response, expected)
 	
