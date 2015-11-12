@@ -2,8 +2,8 @@
 from django.core.urlresolvers import reverse
 from django.db.models.query import QuerySet
 
-from estofadora.item.tests import create_item
-from estofadora.item.models import Item
+from estofadora.item.tests import create_item, create_picture
+from estofadora.item.models import Item, Picture
 
 from . import create_client, ClientForm, ModelClient, TestBase
 
@@ -225,8 +225,24 @@ class DeleteViewTest(TestBase):
 		self.client1 = create_client(commit=True)
 		self.client2 = create_client(commit=True, name='Andre', email='a@email.com')
 
+		# Creating data to client 1
+		self.item1 = create_item(client=self.client1, commit=True)
+		self.picture1 = create_picture(self.item1)
+		self.picture2 = create_picture(self.item1)
+
+		# Creating data to client 2
+		self.item2 = create_item(client=self.client2, commit=True)
+		self.picture3 = create_picture(self.item2)
+		self.picture4 = create_picture(self.item2)
+
+		# Before post must have: 
+		# 2 clients,
+		# 2 items
+		# 4 pictures
 		self.assertEqual(len(ModelClient.objects.all()), 2)
-		
+		self.assertEqual(len(Item.objects.all()), 2)
+		self.assertEqual(len(Picture.objects.all()), 4)
+
 		self.response = self.client.post(reverse('client:delete', args=[self.client1.pk]), follow=True)	
 
 	def test_redirected(self):
@@ -235,7 +251,18 @@ class DeleteViewTest(TestBase):
 		self.assertRedirects(self.response, expected_url, status_code=302, target_status_code=200)
 
 	def test_if_deleted(self):
+		"""
+			After post, must have be deleted the client
+			and the itens/pictures bonded with him.
+
+			Must have: 
+			1 client,
+			1 item,
+			2 pictures.
+		"""
 		self.assertEqual(len(ModelClient.objects.all()), 1)
+		self.assertEqual(len(Item.objects.all()), 1)
+		self.assertEqual(len(Picture.objects.all()), 2)		
 
 	def test_message(self):
 		self.assertContains(self.response, 'Cliente removido com sucesso!')
