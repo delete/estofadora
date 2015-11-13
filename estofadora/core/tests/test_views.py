@@ -39,7 +39,7 @@ class SiteViewTest(TestCase):
 		self.assertEqual(self.response.status_code, 200)
 
 	def test_template(self):
-		self.assertTemplateUsed(self.response, 'site.html')
+		self.assertTemplateUsed(self.response, 'site/site_index.html')
 
 	def test_if_has_login_url(self):
 		self.assertContains(self.response, reverse('login:login'))

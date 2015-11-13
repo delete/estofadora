@@ -1,0 +1,175 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Estofadora</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="" />
+<meta name="author" content="http://bootstraptaste.com" />
+<!-- css -->
+<link rel="stylesheet" href="{% static "site/css/bootstrap.min.css" %}">
+<link rel="stylesheet" href="{% static "site/css/fancybox/jquery.fancybox.css" %}">
+<link rel="stylesheet" href="{% static "site/css/flexslider.css" %}">
+<link rel="stylesheet" href="{% static "site/css/style.css" %}">
+
+<!-- Theme skin -->
+<link rel="stylesheet" href="{% static "site/skins/default.css" %}">
+
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+<div id="wrapper">
+	<!-- start header -->
+	<header>
+        <div class="navbar navbar-default navbar-static-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="index.html"><span>E</span>stofadora <span>A</span>na <span>P</span>aula</a>
+                </div>
+                <div class="navbar-collapse collapse ">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="{% url 'core:site' %}">Inicio</a></li>
+                        <li><a href="#">Trabalhos</a></li>
+                        <li><a href="#">Contato</a></li>
+                        <li><a href="{% url 'login:login' %}">Área restrita</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+	</header>
+	<!-- end header -->
+	<section id="featured">
+	<!-- start slider -->
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+	<!-- Slider -->
+        <div id="main-slider" class="flexslider">
+            <ul class="slides">
+              <li>
+                <img src="{% static "site/img/slides/estofador2.jpg" %}" alt="" />
+                <!--<div class="flex-caption">
+                    <h3>Modern Design</h3> 
+					<p>Duis fermentum auctor ligula ac malesuada. Mauris et metus odio, in pulvinar urna</p> 
+					<a href="#" class="btn btn-theme">Learn More</a>
+                </div>
+                -->
+              </li>
+              <li>
+                <img src="{% static "site/img/slides/sofa2.jpg" %}" alt="" />
+                 <!--<div class="flex-caption">
+                    <h3>Modern Design</h3> 
+					<p>Duis fermentum auctor ligula ac malesuada. Mauris et metus odio, in pulvinar urna</p> 
+					<a href="#" class="btn btn-theme">Learn More</a>
+                </div>
+                -->>
+              </li>
+            </ul>
+        </div>
+	<!-- end slider -->
+			</div>
+		</div>
+	</div>	
+	
+	</section>
+	<section class="callaction">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="big-cta">
+					<div class="cta-text">
+						{% block content_title %}{% endblock %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	</section>
+	<section id="content">
+	<div class="container">
+		{% block content %}{% endblock %}
+	</div>
+	</section>
+	<footer>
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-3">
+				<div class="widget">
+					<h5 class="widgetheading">Entre em contato conosco</h5>
+					<address>
+					<strong>Estofadora Ana Paula</strong><br>
+					 Modernbuilding suite V124, AB 01<br>
+					 Someplace 16425 Earth </address>
+					<p>
+						<i class="icon-phone"></i> (123) 456-7890 - (123) 555-7891 <br>
+						<i class="icon-envelope-alt"></i> email@domainname.com
+					</p>
+				</div>
+			</div>
+			<div class="col-lg-3">
+				<div class="widget">
+					<h5 class="widgetheading">Páginas</h5>
+					<ul class="link-list">
+						<li><a href="#">Nossos trabalhos</a></li>
+						<li><a href="#">Entre em contato</a></li>
+						<li><a href="{% url 'login:login' %}">Área restrita</a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="col-lg-3">
+				<div class="widget">
+					<h5 class="widgetheading">Últimos trabalhos</h5>
+					<ul class="link-list">
+						{% block last_works %}{% endblock %}
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="sub-footer">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-6">
+					<div class="copyright">
+						<p>
+							<span>&copy; Moderna 2014 All right reserved. By </span><a href="http://bootstraptaste.com" target="_blank">Bootstrap Themes</a>
+						</p>
+                        <!-- 
+                            All links in the footer should remain intact. 
+                            Licenseing information is available at: http://bootstraptaste.com/license/
+                            You can buy this theme without footer links online at: http://bootstraptaste.com/buy/?theme=Moderna
+                        -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	</footer>
+</div>
+<a href="#" class="scrollup"><i class="fa fa-angle-up active"></i></a>
+<!-- javascript
+    ================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="{% static "site/js/jquery.js" %}"></script>
+<script src="{% static "site/js/jquery.easing.1.3.js" %}"></script>
+<script src="{% static "site/js/bootstrap.min.js" %}"></script>
+<script src="{% static "site/js/jquery.fancybox.pack.js" %}"></script>
+<script src="{% static "site/js/jquery.fancybox-media.js" %}"></script>
+<script src="{% static "site/js/google-code-prettify/prettify.js" %}"></script>
+<script src="{% static "site/js/portfolio/jquery.quicksand.js" %}"></script>
+<script src="{% static "site/js/portfolio/setting.js" %}"></script>
+<script src="{% static "site/js/jquery.flexslider.js" %}"></script>
+<script src="{% static "site/js/animate.js" %}"></script>
+<script src="{% static "site/js/custom.js" %}"></script>
+</body>
+</html>

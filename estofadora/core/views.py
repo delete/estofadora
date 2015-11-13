@@ -7,4 +7,4 @@ def home(request):
 	return render(request, 'index.html')
 
 def site(request):
-	return render(request, 'site.html')
+	return render(request, 'site/site_index.html')
