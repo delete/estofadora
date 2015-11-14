@@ -53,7 +53,7 @@ class PortfolioViewTest(TestCase):
 		self.item = create_item(commit=True)
 		self.picture1 = create_picture(self.item, public=True)
 		self.picture2 = create_picture(self.item, public=True)
-		self.picture3 = create_picture(self.item)
+		self.picture3 = create_picture(self.item, public=False)
 
 		self.response = self.client.get(reverse('core:portfolio'))
 
@@ -64,14 +64,10 @@ class PortfolioViewTest(TestCase):
 		self.assertTemplateUsed(self.response, 'site/portfolio.html')
 
 	def test_url_in_content(self):
-		# Picture 1 and 2 must appear because they are public=True
-		self.assertContains(self.response, self.picture1.item.name)
+		# Picture 1 and 2 must appear, because they are public=True
+		self.assertContains(self.response, self.item.name)
 		self.assertContains(self.response, self.picture1.image.url)
-		self.assertContains(self.response, self.picture2.item.name)
 		self.assertContains(self.response, self.picture2.image.url)
 
-		# Picture 3 must not apper, because it is public=False
-		self.assertNotContains(self.response, self.picture3.item.name)
+		# Picture 3 must not appear, because it is public=False
 		self.assertNotContains(self.response, self.picture3.image.url)
-
-

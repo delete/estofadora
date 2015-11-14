@@ -27,6 +27,9 @@ class Item(models.Model):
 	def rest_value(self):
 		return (float(self.total_value) - float(self.total_paid))
 
+	def all_public_images(self):
+		return self.pictures.filter(public=True)
+
 	def __str__(self):
 		return self.name
 

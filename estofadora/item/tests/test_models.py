@@ -9,6 +9,8 @@ class ItemModelTest(TestCase):
 
 	def setUp(self):		
 		self.item = create_item(commit=True)
+		self.picture1 = create_picture(self.item, public=True)
+		self.picture2 = create_picture(self.item)
 		
 	def tearDown(self):
 		Item.objects.all().delete()
@@ -18,6 +20,11 @@ class ItemModelTest(TestCase):
 
 	def test_rest_value(self):
 		self.assertEqual(self.item.rest_value(), 500)
+
+	def test_all_public_images(self):
+		expected = 1 # one image
+		result = self.item.all_public_images()
+		self.assertEqual(len(result), expected)
 
 
 class PictureModelTest(TestCase):
