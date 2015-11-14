@@ -11,6 +11,8 @@ if (jQuery().quicksand) {
 		$(".filter li").removeClass("active");	
 		// Use the last category class as the category to filter by. This means that multiple categories are not supported (yet)
 		var filterClass=$(this).attr('class').split(' ').slice(-1)[0];
+
+		var filterItem=$(this).attr('class').split(' ').slice(-1)[0];
 		
 		if (filterClass == 'all') {
 			var $filteredData = $data.find('.item-thumbs');

@@ -1,9 +1,17 @@
 {% extends "site/site_base.html" %}
 {% load staticfiles %}
 
+{% block nav_bar %}
+<li class="active"><a href="{% url 'core:site' %}">Inicio</a></li>
+<li><a href="{% url 'core:portfolio' %}">Trabalhos</a></li>
+<li><a href="#">Contato</a></li>
+{% endblock %}
+
+
 {% block content_title %}
     <h2>A <span>arte</span> de estofar</h2>
 {% endblock %}
+
 
 {% block last_works %}
     <li><a href="#">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</a></li>

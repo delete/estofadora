@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="{% static "site/css/fancybox/jquery.fancybox.css" %}">
 <link rel="stylesheet" href="{% static "site/css/flexslider.css" %}">
 <link rel="stylesheet" href="{% static "site/css/style.css" %}">
+<link rel="stylesheet" href="{% static "site/css/main.css" %}">
 
 <!-- Theme skin -->
 <link rel="stylesheet" href="{% static "site/skins/default.css" %}">
@@ -38,9 +39,11 @@
                 </div>
                 <div class="navbar-collapse collapse ">
                     <ul class="nav navbar-nav">
+                    	{% block nav_bar %}
                         <li class="active"><a href="{% url 'core:site' %}">Inicio</a></li>
                         <li><a href="#">Trabalhos</a></li>
                         <li><a href="#">Contato</a></li>
+                    	{% endblock %}
                         <li><a href="{% url 'login:login' %}">Área restrita</a></li>
                     </ul>
                 </div>
@@ -167,7 +170,6 @@
 <script src="{% static "site/js/jquery.fancybox-media.js" %}"></script>
 <script src="{% static "site/js/google-code-prettify/prettify.js" %}"></script>
 <script src="{% static "site/js/portfolio/jquery.quicksand.js" %}"></script>
-<script src="{% static "site/js/portfolio/setting.js" %}"></script>
 <script src="{% static "site/js/jquery.flexslider.js" %}"></script>
 <script src="{% static "site/js/animate.js" %}"></script>
 <script src="{% static "site/js/custom.js" %}"></script>

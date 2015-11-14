@@ -1,0 +1,56 @@
+{% extends "site/site_base.html" %}
+
+{% block nav_bar %}
+<li><a href="{% url 'core:site' %}">Inicio</a></li>
+<li class="active"><a href="{% url 'core:portfolio' %}">Trabalhos</a></li>
+<li><a href="#">Contato</a></li>
+{% endblock %}
+
+
+{% block content_title %}
+    <h2>Nossas<span> artes</span></h2>
+{% endblock %}
+
+
+{% block content %}
+	
+	<div class="row">
+	
+	{% for item in items %}
+		
+
+			<div class="col-lg-12">
+				<h2> {{item.name}}</h2>
+				<div class="clearfix">
+				</div>
+
+				<div class="row">
+				{% for picture in item.pictures.all %}
+					<section id="projects">
+					<ul id="thumbs" class="portfolio">
+						<!-- Item Project and Filter Name -->
+						<li class="item-thumbs col-lg-3 design" data-id="id-0">
+						<!-- Fancybox - Gallery Enabled - Title - Full Image -->
+						<a class="hover-wrap fancybox" data-fancybox-group="gallery" title="{{picture.item.name}}" href="{{picture.image.url}}">
+						<span class="overlay-img"></span>
+						<span class="overlay-img-thumb font-icon-plus"></span>
+						</a>
+						<!-- Thumb Image and Description -->
+						<img src="{{picture.image.url}}"
+							alt="{% if picture.state == 'before' %}
+								Foto tirada antes do trabalho.
+								{% else %}
+								Foto tirada depois do trabalho.
+								{% endif %}" 
+							class="img-responsive img-rounded item-image">
+						</li>
+						<!-- End Item Project -->
+					</ul>
+					</section>
+				{% endfor %}
+				</div>
+			</div>			
+	{% endfor %}
+	</div>
+
+{% endblock %}
