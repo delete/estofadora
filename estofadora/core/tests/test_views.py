@@ -35,6 +35,13 @@ class HomeViewTest(TestCase):
 class SiteViewTest(TestCase):
 
 	def setUp(self):
+		self.item = create_item(commit=True)
+		self.picture1 = create_picture(self.item, public=True, state='after')
+		self.picture2 = create_picture(self.item, public=True, state='after')
+		self.picture3 = create_picture(self.item, public=True, state='after')
+		self.picture4 = create_picture(self.item, public=True, state='after')
+		self.picture5 = create_picture(self.item, public=True)
+
 		self.response = self.client.get(reverse('core:site'))
 
 	def test_get(self):
@@ -45,6 +52,16 @@ class SiteViewTest(TestCase):
 
 	def test_if_has_login_url(self):
 		self.assertContains(self.response, reverse('login:login'))
+
+	def test_url_in_content(self):
+		# Picture 1,2,3 and 4 must appear, because they are public=True
+		self.assertContains(self.response, self.picture1.image.url)
+		self.assertContains(self.response, self.picture2.image.url)
+		self.assertContains(self.response, self.picture3.image.url)
+		self.assertContains(self.response, self.picture4.image.url)
+
+		# Picture 5 must not appear, because it is public=False
+		self.assertNotContains(self.response, self.picture5.image.url)
 
 
 class PortfolioViewTest(TestCase):

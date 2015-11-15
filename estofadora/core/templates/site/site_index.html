@@ -109,53 +109,21 @@
                 <div class="row">
                     <section id="projects">
                     <ul id="thumbs" class="portfolio">
+                        {% for picture in pictures %}
                         <li class="col-lg-3 design" data-id="id-0" data-type="web">
                             <div class="item-thumbs">
                                 <!-- Fancybox - Gallery Enabled - Title - Full Image -->
-                                <a class="hover-wrap fancybox" data-fancybox-group="gallery" title="Work 1" href="{% static "site/img/works/1.jpg" %}">
+                                <a class="hover-wrap fancybox" data-fancybox-group="gallery" title="Work 1" href="{{picture.image.url}}">
                                 <span class="overlay-img"></span>
                                 <span class="overlay-img-thumb font-icon-plus"></span>
                                 </a>
                                 <!-- Thumb Image and Description -->
-                                <img src="{% static "site/img/works/1.jpg" %}" alt="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus quis elementum odio. Curabitur pellentesque, dolor vel pharetra mollis.">
+                                <img src="{{picture.image.url}}" 
+                                    alt="{{picture.item.name}}"
+                                    class="img-responsive img-rounded item-image">
                             </div>
                         </li>
-
-                        <li class="col-lg-3 design" data-id="id-0" data-type="web">
-                            <div class="item-thumbs">
-                                <!-- Fancybox - Gallery Enabled - Title - Full Image -->
-                                <a class="hover-wrap fancybox" data-fancybox-group="gallery" title="Work 1" href="{% static "site/img/works/1.jpg" %}">
-                                <span class="overlay-img"></span>
-                                <span class="overlay-img-thumb font-icon-plus"></span>
-                                </a>
-                                <!-- Thumb Image and Description -->
-                                <img src="{% static "site/img/works/1.jpg" %}" alt="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus quis elementum odio. Curabitur pellentesque, dolor vel pharetra mollis.">
-                            </div>
-                        </li>
-
-                        <li class="col-lg-3 design" data-id="id-0" data-type="web">
-                            <div class="item-thumbs">
-                                <!-- Fancybox - Gallery Enabled - Title - Full Image -->
-                                <a class="hover-wrap fancybox" data-fancybox-group="gallery" title="Work 1" href="{% static "site/img/works/1.jpg" %}">
-                                <span class="overlay-img"></span>
-                                <span class="overlay-img-thumb font-icon-plus"></span>
-                                </a>
-                                <!-- Thumb Image and Description -->
-                                <img src="{% static "site/img/works/1.jpg" %}" alt="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus quis elementum odio. Curabitur pellentesque, dolor vel pharetra mollis.">
-                            </div>
-                        </li>
-
-                        <li class="col-lg-3 design" data-id="id-0" data-type="web">
-                            <div class="item-thumbs">
-                                <!-- Fancybox - Gallery Enabled - Title - Full Image -->
-                                <a class="hover-wrap fancybox" data-fancybox-group="gallery" title="Work 1" href="{% static "site/img/works/1.jpg" %}">
-                                <span class="overlay-img"></span>
-                                <span class="overlay-img-thumb font-icon-plus"></span>
-                                </a>
-                                <!-- Thumb Image and Description -->
-                                <img src="{% static "site/img/works/1.jpg" %}" alt="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus quis elementum odio. Curabitur pellentesque, dolor vel pharetra mollis.">
-                            </div>
-                        </li>
+                        {% endfor %}
                     </ul>
                     </section>
                 </div>
