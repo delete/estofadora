@@ -5,4 +5,5 @@ urlpatterns = patterns('estofadora.core.views',
     url(r'^$', 'site', name='site'),
     url(r'^inicio/$', 'home', name='home'),
     url(r'^portfolio/$', 'portfolio', name='portfolio'),
+    url(r'^contato/$', 'contact', name='contact'),
 )

@@ -21,3 +21,7 @@ def portfolio(request):
 
 	context['items'] = items
 	return render(request, 'site/portfolio.html', context)
+
+
+def contact(request):
+	return render(request, 'site/contact.html')

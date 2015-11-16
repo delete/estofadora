@@ -88,3 +88,18 @@ class PortfolioViewTest(TestCase):
 
 		# Picture 3 must not appear, because it is public=False
 		self.assertNotContains(self.response, self.picture3.image.url)
+
+
+class ContactViewTest(TestCase):
+
+	def setUp(self):
+		self.response = self.client.get(reverse('core:contact'))
+
+	def test_get(self):
+		self.assertEqual(self.response.status_code, 200)
+
+	def test_template(self):
+		self.assertTemplateUsed(self.response, 'site/contact.html')
+
+	def test_context(self):
+		self.assertContains(self.response, '<iframe')
