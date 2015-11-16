@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 from estofadora.item.tests import create_item, create_picture
 
-from . import TestCase
+from . import TestCase, ContactForm, Contact, create_contact
 
 
 class HomeViewTest(TestCase):
@@ -103,3 +103,32 @@ class ContactViewTest(TestCase):
 
 	def test_context(self):
 		self.assertContains(self.response, '<iframe')
+
+	def test_if_has_form(self):
+		form = self.response.context['form']
+		self.assertIsInstance(form, ContactForm)
+
+	def test_html(self):
+		self.assertContains(self.response, '<form')
+		self.assertContains(self.response, '<input', 5)
+		self.assertContains(self.response, 'type="submit"')
+
+
+class ContactPostTest(TestCase):
+
+	def setUp(self):
+		data = create_contact(commit=False)
+		self.response = self.client.post(
+				reverse('core:contact'), data, follow=True
+			)
+
+	def test_message(self):
+		self.assertContains(self.response, 'Obrigado pela mensagem, entraremos em contato!')
+
+	def test_if_saved(self):
+		self.assertTrue(Contact.objects.exists())
+
+	def test_redirect(self):
+		expected_url = reverse('core:contact')
+
+		self.assertRedirects(self.response, expected_url, status_code=302, target_status_code=200)

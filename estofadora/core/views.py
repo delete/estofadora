@@ -1,7 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 from estofadora.item.models import Item, Picture
+
+from .forms import ContactForm
 
 
 @login_required
@@ -24,4 +28,18 @@ def portfolio(request):
 
 
 def contact(request):
-	return render(request, 'site/contact.html')
+	context = {}
+	
+	if request.method == 'POST':
+		
+		form = ContactForm(request.POST)
+
+		if form.is_valid():
+			form.save()
+			messages.success(request, 'Obrigado pela mensagem, entraremos em contato!')
+			return redirect(reverse('core:contact'))
+	else:
+		form = ContactForm()
+	
+	context['form'] = form
+	return render(request, 'site/contact.html', context)

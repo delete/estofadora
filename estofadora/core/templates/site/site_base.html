@@ -100,6 +100,29 @@
 	</section>
 	<section id="content">
 	<div class="container">
+		{% if messages %}
+        {% for message in messages %}
+	        {% if message.tags == 'success' %}
+		        <div class="alert alert-success mesagem">
+		            <i class="fa fa-check"></i>
+		            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+		            {{message}}
+		        </div>
+	        {% elif message.tags == 'warning'%}
+		        <div class="alert alert-warning mesagem">
+		            <i class="fa fa-warning"></i>
+		            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+		            {{message}}
+		        </div>
+	        {% elif message.tags == 'error'%}
+		        <div class="alert alert-danger mesagem">
+		            <i class="fa fa-ban"></i>
+		            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+		            {{message}}
+		        </div>
+	        {% endif %}
+        {% endfor %}
+    {% endif %}
 		{% block content %}{% endblock %}
 	</div>
 	</section>
