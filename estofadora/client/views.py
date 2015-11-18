@@ -38,6 +38,7 @@ def edit(request, pk):
 		if form.is_valid():
 			form.save()
 			messages.success(request, 'Cliente alterado com sucesso!')
+			return redirect(reverse('client:list'))
 	else:
 		form = ClientForm(instance=client)
 

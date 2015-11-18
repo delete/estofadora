@@ -115,38 +115,47 @@ class EditPostTest(TestBase):
 	def test_post_name(self):
 		self.data['name'] = 'Fellipe Pinheiro'
 
-		self.response = self.client.post(self.url, self.data)
+		self.__post(self.data)
 		self.assertEqual(ModelClient.objects.first().name, 'Fellipe Pinheiro')
 
 	def test_post_adress(self):
 		self.data['adress'] = 'Rua b'
 
-		self.response = self.client.post(self.url, self.data)
+		self.__post(self.data)
 		self.assertEqual(ModelClient.objects.first().adress, 'Rua b')
 
 	def test_post_email(self):
 		self.data['email'] = 'fe@email.com'
 		
-		self.response = self.client.post(self.url, self.data)
+		self.__post(self.data)
 		self.assertEqual(ModelClient.objects.first().email, 'fe@email.com')
 
 	def test_post_telephone1(self):
 		self.data['telephone1'] = '456'
 		
-		self.response = self.client.post(self.url, self.data)
+		self.__post(self.data)
 		self.assertEqual(ModelClient.objects.first().telephone1, '456')
 
 	def test_post_telephone2(self):
 		self.data['telephone2'] = '678'
 		
-		self.response = self.client.post(self.url, self.data)
+		self.__post(self.data)
 		self.assertEqual(ModelClient.objects.first().telephone2, '678')
 
 	def test_post_is_active(self):
 		self.data['is_active'] = False
 		
-		self.response = self.client.post(self.url, self.data)
+		self.__post(self.data)
 		self.assertEqual(ModelClient.objects.first().is_active, False)
+
+	def __post(self, data):
+		response = self.client.post(self.url, data, follow=True)
+		self.__test_redirected(response)
+
+	def __test_redirected(self, response):
+		expected_url = reverse('client:list')
+		
+		self.assertRedirects(response, expected_url, status_code=302, target_status_code=200)
 
 
 class EditInvalidPostTest(TestBase):
