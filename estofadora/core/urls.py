@@ -6,4 +6,7 @@ urlpatterns = patterns('estofadora.core.views',
     url(r'^inicio/$', 'home', name='home'),
     url(r'^portfolio/$', 'portfolio', name='portfolio'),
     url(r'^contato/$', 'contact', name='contact'),
+    
+    url(r'^mensagens/$', 'contactMessages', name='contactMessages'),
+    url(r'^(?P<pk>\d+)/remover/', 'deleteMessage', name='deleteMessage'),
 )

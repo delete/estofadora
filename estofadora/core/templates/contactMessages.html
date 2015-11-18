@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="panel panel-default">
+    <div class="panel-body">
+        <h3><p class="text-center">Mensagens</p></h3>
+    </div>
+</div>
+
+{% if contactMessages %}
+    
+    {% for contact in contactMessages %}
+		
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				{{ contact.subject }} - <small>{{ contact.created_at }}</small>
+				<a class="btn btn-danger btn-xs pull-right" role="button" 
+                        href="{% url 'core:deleteMessage' contact.pk %}">Apagar 
+                </a>
+			</div>
+			<div class="panel-body">
+				<p><strong>Nome:</strong> {{contact.name}}</p>
+				{% if contact.email %}
+					<p><strong>Email:</strong> {{contact.email}}</p>
+				{% endif %}
+				{% if contact.telephone %}
+					<p><strong>Telefone:</strong> {{contact.telephone}}</p>
+				{% endif %}
+				<p><strong>Mensagem:</strong> {{contact.description}}</p>
+			</div>
+		</div>
+
+    {% endfor %}
+
+{% else %}
+<div class="alert alert-warning text-center" role="alert">
+	Nenhuma mensagem!
+</div>
+{% endif %}
+
+{% endblock %}

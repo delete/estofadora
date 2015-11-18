@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -6,6 +6,7 @@ from django.contrib import messages
 from estofadora.item.models import Item, Picture
 
 from .forms import ContactForm
+from .models import Contact
 
 
 @login_required
@@ -43,3 +44,22 @@ def contact(request):
 	
 	context['form'] = form
 	return render(request, 'site/contact.html', context)
+
+
+@login_required
+def contactMessages(request):
+	context = {}
+
+	contactMessages = Contact.objects.all()
+	
+	context['contactMessages'] = contactMessages
+	return render(request, 'contactMessages.html', context)
+
+@login_required
+def deleteMessage(request, pk):
+	contact = get_object_or_404(Contact, pk=pk)
+
+	contact.delete()
+
+	messages.success(request, 'Mensagem removida com sucesso!')
+	return redirect(reverse('core:contactMessages'))

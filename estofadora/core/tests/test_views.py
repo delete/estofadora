@@ -132,3 +132,67 @@ class ContactPostTest(TestCase):
 		expected_url = reverse('core:contact')
 
 		self.assertRedirects(self.response, expected_url, status_code=302, target_status_code=200)
+
+
+class ContactMessagesViewTest(TestCase):
+
+	def setUp(self):
+		user = User.objects.create_user('admin', 'a@a.com', '123')
+		self.client = Client()
+		self.client.login(username='admin', password='123')
+
+		self.contactMessage = create_contact(commit=True)
+
+		self.response = self.client.get(reverse('core:contactMessages'))
+
+	def test_get(self):
+		self.assertEqual(self.response.status_code, 200)
+
+	def test_template(self):
+		self.assertTemplateUsed(self.response, 'contactMessages.html')
+
+	def test_get_logout(self):
+		self.client.logout()
+		self.response = self.client.get(reverse('core:home'))
+		self.assertEqual(self.response.status_code, 302)
+
+	def test_content(self):
+		self.assertContains(self.response, self.contactMessage.name)
+		self.assertContains(self.response, self.contactMessage.subject)
+		self.assertContains(self.response, self.contactMessage.email)
+		self.assertContains(self.response, self.contactMessage.telephone)
+		self.assertContains(self.response, self.contactMessage.description)
+
+	def test_empty(self):
+		Contact.objects.all().delete()
+		
+		self.response = self.client.get(reverse('core:contactMessages'))		
+		self.assertContains(self.response, 'Nenhuma mensagem!')
+
+
+class DeleteMensagemViewTest(TestCase):
+
+	def setUp(self):
+		user = User.objects.create_user('admin', 'a@a.com', '123')
+		self.client = Client()
+		self.client.login(username='admin', password='123')
+
+		self.contactMessage1 = create_contact(commit=True)
+
+		self.contactMessage2 = create_contact(commit=True)
+
+		#Must have 2 messages before post.
+		self.assertEqual(len(Contact.objects.all()), 2)
+		
+		self.response = self.client.post(reverse('core:deleteMessage', args=[self.contactMessage1.pk]), follow=True)
+	
+	def test_redirect(self):
+		expected_url = reverse('core:contactMessages')
+
+		self.assertRedirects(self.response, expected_url, status_code=302, target_status_code=200)
+
+	def test_if_deleted(self):
+		self.assertEqual(len(Contact.objects.all()), 1)
+
+	def test_message(self):
+		self.assertContains(self.response, 'Mensagem removida com sucesso!')
