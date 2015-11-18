@@ -22,7 +22,10 @@ def add(request):
 			object = item_form.save()
 			picture_formset.instance = object
 			picture_formset.save()
+			
 			messages.success(request, 'Item cadastrado com sucesso!')
+			item_form = ItemForm()
+			picture_formset = PictureFormSet()
 
 	else:
 		item_form = ItemForm()

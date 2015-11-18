@@ -114,24 +114,6 @@ class AddInvalidItemPostTest(TestBase):
 		self.assertTrue(self.response.context['picture_formset'].errors)
 
 
-class AddInvalidImagePostTest(TestBase):
-
-	def setUp(self):
-		self.login()
-		self.url = reverse('item:add')
-
-	def test_post_image_wrong_value(self):
-		data = make_validated_form(commit=False)
-		data_new = {'pictures-0-image': 'error'}
-		data.update(make_managementform_data(**data_new))
-		self._test_if_got_errors(data)
-
-	def _test_if_got_errors(self, data):
-		self.response = self.client.post(self.url, data)
-		self.assertFalse(self.response.context['item_form'].errors)
-		self.assertTrue(self.response.context['picture_formset'].errors)
-
-
 class EditViewTest(AddViewTest):
 
 	def setUp(self):
