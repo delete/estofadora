@@ -47,6 +47,9 @@ def edit(request, pk):
 		if form.is_valid():
 			form.save()
 			messages.success(request, 'Item alterado com sucesso!')
+			return redirect(
+					reverse('client:list_items', args=[item.client.pk])
+				)
 	else:	
 		form = ItemForm(instance=item)
 

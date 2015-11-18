@@ -188,9 +188,14 @@ class EditPostTest(TestBase):
 		self.assertEqual(saved_date, expected_date)
 
 	def _post_and_test_response(self):
-		
-		self.response = self.client.post(self.url, self.data)
+		self.response = self.client.post(self.url, self.data, follow=True)
 		self.assertContains(self.response, 'Item alterado com sucesso!')
+		self.__test_redirect()
+
+	def __test_redirect(self):
+		expected_url = reverse('client:list_items', args=[self.item.client.pk])
+
+		self.assertRedirects(self.response, expected_url, status_code=302, target_status_code=200)
 
 
 class EditInvalidPostTest(TestBase):
