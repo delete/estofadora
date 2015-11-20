@@ -10,14 +10,29 @@
 {% if contactMessages %}
     
     {% for contact in contactMessages %}
-		
+
+		{% if contact.read %}
 		<div class="panel panel-default">
+		{% else %}
+		<div class="panel panel-primary">
+		{% endif %}
+
 			<div class="panel-heading">
 				{{ contact.subject }} - <small>{{ contact.created_at }}</small>
-				<a class="btn btn-danger btn-xs pull-right" role="button" 
-                        href="{% url 'core:deleteMessage' contact.pk %}">Apagar 
-                </a>
+				<div class="pull-right">
+					{% if not contact.read %}
+	                <a class="btn btn-success btn-xs" role="button" 
+	                        href="{% url 'core:markMessageAsRead' contact.pk %}"
+	                        title="Marcar mensagem como lida">Lido
+	                </a>
+					{% endif %}
+					<a class="btn btn-danger btn-xs" role="button" 
+	                        href="{% url 'core:deleteMessage' contact.pk %}"
+	                        title="Apagar mensagem">Apagar 
+	                </a>
+				</div>
 			</div>
+
 			<div class="panel-body">
 				<p><strong>Nome:</strong> {{contact.name}}</p>
 				{% if contact.email %}
@@ -28,6 +43,7 @@
 				{% endif %}
 				<p><strong>Mensagem:</strong> {{contact.description}}</p>
 			</div>
+			
 		</div>
 
     {% endfor %}

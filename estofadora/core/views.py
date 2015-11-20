@@ -50,7 +50,7 @@ def contact(request):
 def contactMessages(request):
 	context = {}
 
-	contactMessages = Contact.objects.all()
+	contactMessages = Contact.objects.all().order_by('-created_at')
 	
 	context['contactMessages'] = contactMessages
 	return render(request, 'contactMessages.html', context)
@@ -62,4 +62,14 @@ def deleteMessage(request, pk):
 	contact.delete()
 
 	messages.success(request, 'Mensagem removida com sucesso!')
+	return redirect(reverse('core:contactMessages'))
+
+
+@login_required
+def markMessageAsRead(request, pk):
+	contact = get_object_or_404(Contact, pk=pk)
+	contact.read = True
+	contact.save()
+
+	messages.success(request, 'Mensagem lida!')
 	return redirect(reverse('core:contactMessages'))

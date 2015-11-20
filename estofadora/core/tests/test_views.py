@@ -196,3 +196,30 @@ class DeleteMensagemViewTest(TestCase):
 
 	def test_message(self):
 		self.assertContains(self.response, 'Mensagem removida com sucesso!')
+
+
+class MarkAsReadMensagemViewTest(TestCase):
+
+	def setUp(self):
+		user = User.objects.create_user('admin', 'a@a.com', '123')
+		self.client = Client()
+		self.client.login(username='admin', password='123')
+
+		self.contactMessage1 = create_contact(commit=True)
+
+		#read must start as False
+		self.assertFalse(self.contactMessage1.read)
+		
+		self.response = self.client.post(reverse('core:markMessageAsRead', args=[self.contactMessage1.pk]), follow=True)
+	
+	def test_redirect(self):
+		expected_url = reverse('core:contactMessages')
+
+		self.assertRedirects(self.response, expected_url, status_code=302, target_status_code=200)
+
+	def test_if_deleted(self):
+		contact = Contact.objects.get(pk=self.contactMessage1.pk)
+		self.assertTrue(contact.read)
+
+	def test_message(self):
+		self.assertContains(self.response, 'Mensagem lida!')

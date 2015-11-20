@@ -9,6 +9,7 @@ class Contact(models.Model):
 	subject = models.CharField('Assunto', max_length=30, null=False, blank=False)
 	description = models.TextField('Mensagem', blank=False, null=False)
 	created_at = models.DateTimeField('Criado em', auto_now_add=True)
+	read = models.BooleanField('Lido', default=False)
 
 	class Meta:
 		verbose_name = "Contact"

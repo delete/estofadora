@@ -6,4 +6,4 @@ register = template.Library()
 
 @register.simple_tag
 def get_mensagens():
-    return Contact.objects.all().count()
+    return Contact.objects.filter(read=False).count()

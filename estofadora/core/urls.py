@@ -9,4 +9,5 @@ urlpatterns = patterns('estofadora.core.views',
     
     url(r'^mensagens/$', 'contactMessages', name='contactMessages'),
     url(r'^(?P<pk>\d+)/remover/', 'deleteMessage', name='deleteMessage'),
+    url(r'^(?P<pk>\d+)/lida/', 'markMessageAsRead', name='markMessageAsRead'),
 )
