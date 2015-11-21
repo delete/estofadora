@@ -28,12 +28,16 @@
 					{% if not contact.read %}
 	                <a class="btn btn-success btn-xs" role="button" 
 	                        href="{% url 'core:markMessageAsRead' contact.pk %}"
-	                        title="Marcar mensagem como lida">Lido
+	                        title="Marcar mensagem como lida">
+	                        <i class="fa fa-eye"></i>
+							Lido
 	                </a>
 					{% endif %}
 					<a class="btn btn-danger btn-xs" role="button" 
 	                        href="{% url 'core:deleteMessage' contact.pk %}"
-	                        title="Apagar mensagem">Apagar 
+	                        title="Apagar mensagem">
+	                        <i class="fa fa-trash"></i>
+	                        Apagar 
 	                </a>
 				</div>
 			</div>

@@ -23,7 +23,11 @@
         <div class="form-inline">
             <input class="form-control" type="date" name="search_date" placeholder='Data para listar'>
             <span>
-                <button class="btn btn-default form-control" type="submit" name="search_form" id="search-btn">Listar</button>
+                <button class="btn btn-default form-control" type="submit" 
+                	name="search_form" id="search-btn">
+                	<i class="fa fa-search"></i>
+                	Listar
+                </button>
             </span>
         </div>
     </form>
@@ -108,7 +112,10 @@
 	    {% endfor %}
 
 	    <button class="btn btn-primary form-control" 
-	    	type="submit" name="post_form">Inserir</button>
+	    	type="submit" name="post_form">
+	    	<i class="fa fa-plus-circle"></i>
+	    	Inserir
+	    </button>
 
 	</form>
 </div>

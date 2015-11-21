@@ -9,7 +9,9 @@
 
 <div class="marketing">
 	<a class="btn btn-danger pull-right" 
-		href="{% url 'item:delete' item.pk %}" role="button">Remover</a>
+		href="{% url 'item:delete' item.pk %}" role="button">
+		<i class="fa fa-trash"></i>
+		Remover</a>
 	<br>
 	<form  method="POST" enctype="multipart/form-data" role="form">
 	{% csrf_token %}
@@ -26,11 +28,15 @@
 
 	    <div class="form-inline">
 		    <button class="btn btn-primary form-control" 
-		    	type="submit">Alterar</button>
+		    	type="submit">
+		    	<i class="fa fa-floppy-o"></i>
+		    	Alterar</button>
 		    <div class="form-group">
 		    <a class="btn btn-default form-control" 
 				href="{% url 'client:list_items' item.client.pk %}" 
-				role="button">Cancelar
+				role="button">
+				<i class="fa fa-minus-circle"></i>
+				Cancelar
 			</a>
 	    </div>
 

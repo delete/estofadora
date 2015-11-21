@@ -38,10 +38,22 @@
           <div class="collapse navbar-collapse" id="js-navbar-collapse">
 
             <ul class="nav navbar-nav">
-              <li><a href="{% url 'core:home' %}">Home</a></li>
-              <li><a href="{% url 'client:list' %}">Clientes</a> </li>
+              <li>
+                <a href="{% url 'core:home' %}">
+                  <i class="fa fa-home"></i>
+                </a>
+              </li>
+              <li>
+                <a href="{% url 'client:list' %}">
+                  <i class="fa fa-users"></i>
+                  Clientes
+                </a>
+              </li>
               <li class="dropdown">
-                <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="{% url 'statement:home' %}">Cadastrar <span class="caret"></span></a>
+                <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="{% url 'statement:home' %}">
+                  <i class="fa fa-plus-circle"></i> Cadastrar 
+                  <span class="caret"></span>
+                </a>
                 <ul class="dropdown-menu">
                   <li>
                     <a href="{% url 'item:add' %}">Item</a>
@@ -50,7 +62,10 @@
                 </ul>
               </li>
               <li class="dropdown">
-                <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="{% url 'statement:home' %}">Relatórios <span class="caret"></span></a>
+                <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="{% url 'statement:home' %}">
+                  <i class="fa fa-bar-chart"></i> Relatórios 
+                  <span class="caret"></span>
+                </a>
                 <ul class="dropdown-menu">
                   <li>
                     <a href="{% url 'statement:cash' %}">Caixa diário</a>
@@ -58,10 +73,19 @@
                   </li>
                 </ul>
               </li>
-              <li><a href="{% url 'core:contactMessages' %}">Mensagens <span class="badge">{% get_mensagens %}</span></a> </li>
+              <li>
+                <a href="{% url 'core:contactMessages' %}">
+                  <i class="fa fa-commenting-o"></i>
+                  Mensagens <span class="badge">{% get_mensagens %}</span>
+                </a> 
+              </li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="{% url 'login:logout' %}">Sair</a></li>
+            <li>
+              <a href="{% url 'login:logout' %}">
+                <i class="fa fa-sign-out"></i>Sair
+              </a>
+            </li>
           </ul>
       </div>
   </div>

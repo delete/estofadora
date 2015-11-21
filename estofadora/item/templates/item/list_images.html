@@ -47,7 +47,9 @@
         </div>
         <div>
             <button class="btn btn-primary form-control" 
-                type="submit" name="add-form">Enviar
+                type="submit" name="add-form">
+                <i class="fa fa-paper-plane"></i>
+                Enviar
             </button>
         </div>
     </form>
@@ -87,7 +89,10 @@
             {% endfor %}
         </div>
         <div class=".col-lg-4 text-center">
-            <button type="submit" class="btn btn-primary">Alterar</button>
+            <button type="submit" class="btn btn-primary">
+                <i class="fa fa-floppy-o"></i>
+                Alterar
+            </button>
         </div>
     </form>
 {% else %}
@@ -95,7 +100,8 @@
 {% endif %}
 <div>
 	<a class="btn btn-default" role="button" 
-		href="{% url 'client:list_items' item.client.pk %}">Voltar 
+		href="{% url 'client:list_items' item.client.pk %}">
+        <i class="fa fa-arrow-circle-left"></i> Voltar 
 	</a>
 	<br>
 	<br>
