@@ -6,7 +6,7 @@ from django.views .generic import CreateView
 from django.utils.decorators import method_decorator
 from django.forms.formsets import formset_factory, BaseFormSet
 
-from .forms import ItemForm, ItemPictureForm, PictureFormSet
+from .forms import ItemForm, ItemPictureForm, PictureForm
 from .models import Item, Picture
 
 
@@ -87,11 +87,10 @@ def image_list(request, pk):
 
 		# Adding a new image
 		if 'add-form' in request.POST:
-			picture_formset = PictureFormSet(request.POST, request.FILES)
+			picture_form = PictureForm(request.POST, request.FILES)
 
-			if picture_formset.is_valid():
-				picture_formset.instance = item
-				picture_formset.save()
+			if picture_form.is_valid():
+				picture_form.save(instance=item, commit=False)
 				messages.success(request, 'Imagem enviada com sucesso!')
 				return redirect(reverse('item:image_list', args=[item.pk]))
 
@@ -122,7 +121,7 @@ def image_list(request, pk):
 
 	context['item'] = item
 	context['pictures'] = pictures
-	context['picture_formset'] = PictureFormSet()
+	context['picture_form'] = PictureForm()
 	return render(request, 'item/list_images.html', context)
 
 

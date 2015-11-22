@@ -6,8 +6,9 @@ from estofadora.client.tests import create_client
 
 from . import (
 	TestBase, ItemForm, create_item, Item, make_validated_item_form,
-	PictureFormSet, make_managementform_data, PATH_TO_IMAGE_TEST,
-	Picture, create_picture, ItemPictureForm, make_validated_item_picture_form
+	make_managementform_data, PATH_TO_IMAGE_TEST,Picture, create_picture, 
+	ItemPictureForm, make_validated_item_picture_form,
+	PictureForm
 ) 
 
 
@@ -331,7 +332,7 @@ class ImageListViewTest(TestBase):
 
 	def test_if_contain_checkbox_in_context(self):
 		# 2 from images(form list) and 1 from form to add a new image
-		self.assertContains(self.response, 'type="checkbox"', 3)
+		self.assertContains(self.response, 'type="checkbox"', 2)
 	
 	def test_if_contain_checked_checkbox_in_context(self):
 		self.assertContains(self.response, 'checked', 1)
@@ -342,9 +343,9 @@ class ImageListViewTest(TestBase):
 		self.assertContains(self.response, 'Nenhuma imagem adicionada!')	
 
 	def test_if_has_forms(self):
-		picture_formset = self.response.context['picture_formset']
+		picture_form = self.response.context['picture_form']
 		
-		self.assertIsInstance(picture_formset, PictureFormSet)
+		self.assertIsInstance(picture_form, PictureForm)
 
 
 class ImageListViewPostWithImageTest(TestBase):
@@ -359,11 +360,10 @@ class ImageListViewPostWithImageTest(TestBase):
 		self.url = reverse('item:image_list', args=[self.item1.pk])
 		
 		with open(PATH_TO_IMAGE_TEST, 'rb') as img:
-			data_new = {
-				'pictures-0-image': img,
-				'add-form': ''
+			data = {
+				'add-form': '',
+				'files': img,
 			}
-			data = make_managementform_data(**data_new)
 
 			self.response = self.client.post(self.url, data, follow=True)
 

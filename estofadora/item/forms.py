@@ -34,7 +34,10 @@ class ItemForm(forms.ModelForm):
 
 class ItemPictureForm(ItemForm):
 
-	files = MultiFileField(min_num=0, max_num=10, max_file_size=1024*1024*5, required=False)
+	files = MultiFileField(
+			label="Imagens", min_num=0, max_num=10, max_file_size=1024*1024*5,
+			required=False
+		)
 
 	def save(self, commit=True):
 		instance = super(ItemPictureForm, self).save(commit)
@@ -45,6 +48,16 @@ class ItemPictureForm(ItemForm):
 		return instance
 
 
-PictureFormSet = inlineformset_factory(
-			Item, Picture, fields=('image',), extra=1
+class PictureForm(forms.Form):
+
+	files = MultiFileField(
+			label="Imagens", min_num=0, max_num=10, max_file_size=1024*1024*5
 		)
+
+	def save(self, instance, commit=True):
+		
+		for each in self.cleaned_data['files']:			
+			
+			Picture.objects.create(image=each, item=instance)
+			
+

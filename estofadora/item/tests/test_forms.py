@@ -4,8 +4,9 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from estofadora.settings import PATH_TO_IMAGE_TEST
 
 from . import (
-	TestCase, make_validated_item_form, ItemForm, 
-	ItemPictureForm, make_validated_item_picture_form
+	TestCase, make_validated_item_form, ItemForm,
+	ItemPictureForm, make_validated_item_picture_form,
+	PictureForm
 )
 
 
@@ -57,3 +58,21 @@ class ItemPictureFormTest(ItemFormTest):
 
 		form = ItemPictureForm(data)
 		self.assertTrue(form.is_valid())
+
+
+class PictureFormTest(TestCase):
+
+	def test_if_has_fields(self):
+		form = PictureForm()
+		existing_fields = list(form.fields.keys())
+
+		expected_fields = ['files']
+
+		self.assertEqual(existing_fields, expected_fields)
+
+	def test_files_is_not_optional(self):
+		data = {
+			'files': ''
+		}
+		form = PictureForm(data)
+		self.assertTrue(form.errors)

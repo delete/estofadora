@@ -24,26 +24,7 @@
 <div class="well well-sm">
     <form enctype="multipart/form-data" method="post">
         {% csrf_token %}
-        {{ picture_formset.management_form }}
-        <legend>Enviar images</legend>
-        <div class="pictures">
-        {% for form in picture_formset %}
-                
-                <div class="picture-formset">
-                {{ form.image.label_tag }}
-                {{ form.image }}
-                <label for="id_pictures-<%= _id %>-DELETE">Apagar:</label>
-                <input id="id_pictures-<%= _id %>-DELETE" name="pictures-<%= _id %>-DELETE" type="checkbox">
-                <input id="id_pictures-<%= _id %>-item" name="pictures-<%= _id %>-item" type="hidden">
-                <input id="id_pictures-<%= _id %>-id" name="pictures-<%= _id %>-id" type="hidden">
-                </div>
-                {% if form.image.errors %}
-                    {% for error in form.image.errors %}
-                        {{ error|escape }}
-                    {% endfor %}
-                {% endif %}
-            
-        {% endfor %}
+        {{picture_form.as_p}}
         </div>
         <div>
             <button class="btn btn-primary form-control" 
