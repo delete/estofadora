@@ -6,7 +6,7 @@ from django.views .generic import CreateView
 from django.utils.decorators import method_decorator
 from django.forms.formsets import formset_factory, BaseFormSet
 
-from .forms import ItemForm, PictureFormSet
+from .forms import ItemForm, ItemPictureForm, PictureFormSet
 from .models import Item, Picture
 
 
@@ -15,24 +15,18 @@ def add(request):
 	context = {}
 	
 	if request.method == 'POST':
-		item_form = ItemForm(request.POST)
-		picture_formset = PictureFormSet(request.POST, request.FILES)
+		item_picture_form = ItemPictureForm(request.POST, request.FILES)
 
-		if item_form.is_valid() and picture_formset.is_valid():
-			object = item_form.save()
-			picture_formset.instance = object
-			picture_formset.save()
+		if item_picture_form.is_valid():
+			item_picture_form.save()
 			
 			messages.success(request, 'Item cadastrado com sucesso!')
-			item_form = ItemForm()
-			picture_formset = PictureFormSet()
+			item_picture_form = ItemPictureForm()
 
 	else:
-		item_form = ItemForm()
-		picture_formset = PictureFormSet()
+		item_picture_form = ItemPictureForm()
 
-	context['item_form'] = item_form
-	context['picture_formset'] = picture_formset
+	context['item_picture_form'] = item_picture_form
 	return render(request, 'item/add.html', context)
 
 

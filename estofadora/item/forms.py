@@ -3,6 +3,8 @@ from django import forms
 from django.forms.models import inlineformset_factory
 from django.forms.formsets import BaseFormSet
 
+from multiupload.fields import MultiFileField
+
 from estofadora.client.models import Client
 
 from .models import Item, Picture
@@ -30,15 +32,17 @@ class ItemForm(forms.ModelForm):
 		self.fields['total_paid'].widget.attrs.update({'class': 'form-control'})
 
 
-class PictureForm(forms.ModelForm):
+class ItemPictureForm(ItemForm):
 
-	class Meta:
-		model = Picture
-		exclude = ['created_at']
+	files = MultiFileField(min_num=0, max_num=10, max_file_size=1024*1024*5, required=False)
 
-	def __init__(self, *args, **kwargs):
-		super(PictureForm, self).__init__(*args, **kwargs)
-		self.fields['image'].widget.attrs.update({'class': 'form-control'})
+	def save(self, commit=True):
+		instance = super(ItemPictureForm, self).save(commit)
+
+		for each in self.cleaned_data['files']:
+			Picture.objects.create(image=each, item=instance)
+
+		return instance
 
 
 PictureFormSet = inlineformset_factory(

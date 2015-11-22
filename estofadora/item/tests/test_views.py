@@ -5,9 +5,9 @@ from django.core.urlresolvers import reverse
 from estofadora.client.tests import create_client
 
 from . import (
-	TestBase, ItemForm, create_item, Item, make_validated_form,
+	TestBase, ItemForm, create_item, Item, make_validated_item_form,
 	PictureFormSet, make_managementform_data, PATH_TO_IMAGE_TEST,
-	Picture, create_picture
+	Picture, create_picture, ItemPictureForm, make_validated_item_picture_form
 ) 
 
 
@@ -28,15 +28,13 @@ class AddViewTest(TestBase):
 		self.assertTemplateUsed(self.response, 'item/add.html')
 
 	def test_if_has_forms(self):
-		item_form = self.response.context['item_form']
-		picture_formset = self.response.context['picture_formset']
+		item_picture_form = self.response.context['item_picture_form']
 		
-		self.assertIsInstance(item_form, ItemForm)
-		self.assertIsInstance(picture_formset, PictureFormSet)
+		self.assertIsInstance(item_picture_form, ItemPictureForm)
 
 	def test_html(self):
 		self.assertContains(self.response, '<form')
-		self.assertContains(self.response, '<input', 14)
+		self.assertContains(self.response, '<input', 7)
 		self.assertContains(self.response, 'type="submit"')
 
 	def test_csrf(self):
@@ -49,8 +47,8 @@ class AddPostWithoutImageTest(TestBase):
 	"""
 	def setUp(self):
 		self.login()
-		data = make_validated_form(commit=False)
-		data.update(make_managementform_data())
+		data = make_validated_item_picture_form(commit=False)
+		
 		self.response = self.client.post(reverse('item:add'), data)
 
 	def test_message(self):
@@ -66,14 +64,11 @@ class AddPostWithImageTest(TestBase):
 	"""
 	def setUp(self):
 		self.login()
-		data = make_validated_form(commit=False)
+		data = make_validated_item_picture_form(commit=False)
 		
 		with open(PATH_TO_IMAGE_TEST, 'rb') as img:
-			data_new = {
-				'pictures-0-image': img,
-			}
-			data.update(make_managementform_data(**data_new))
-
+			data['files'] = img
+			
 			self.response = self.client.post(reverse('item:add'), data)
 
 	def test_message(self):
@@ -91,27 +86,26 @@ class AddInvalidItemPostTest(TestBase):
 		self.url = reverse('item:add')
 
 	def test_post_name_is_required(self):
-		data = make_validated_form(name='', commit=False)
+		data = make_validated_item_form(name='', commit=False)
 		self._test_if_got_errors(data)
 
 	def test_post_description_is_required(self):
-		data = make_validated_form(description='', commit=False)
+		data = make_validated_item_form(description='', commit=False)
 		self._test_if_got_errors(data)
 
 	def test_post_delivery_date_is_required(self):
-		data = make_validated_form(delivery_date='', commit=False)
+		data = make_validated_item_form(delivery_date='', commit=False)
 		self._test_if_got_errors(data)
 
 	def test_post_wrong_delivery_date(self):
-		data = make_validated_form(delivery_date='2015/01/21 22:00:00',
+		data = make_validated_item_form(delivery_date='2015/01/21 22:00:00',
 									commit=False)
 		self._test_if_got_errors(data)
 
 	def _test_if_got_errors(self, data):
 		data.update(make_managementform_data())
 		self.response = self.client.post(self.url, data)
-		self.assertTrue(self.response.context['item_form'].errors)
-		self.assertTrue(self.response.context['picture_formset'].errors)
+		self.assertTrue(self.response.context['item_picture_form'].errors)
 
 
 class EditViewTest(AddViewTest):
