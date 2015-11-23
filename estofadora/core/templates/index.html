@@ -92,5 +92,45 @@
     </div>
 </div> <!-- #row -->
 
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Entregas da semana
+            <div class="pull-right text-muted">Data de hoje: {% now "j F Y" %}</div>
+        </h3>
+    </div>
+    <div class="panel-body">
+        {% if items %}
+            
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Cliente</th>
+                        <th>Item</th>
+                        <th>Data de entrega</th>
+                        <td>Detalhes</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}   
+                        <tr>
+                            <td>{{item.client.name}}</td>
+                            <td>{{item.name}}</td>
+                            <td>{{item.delivery_date}}</td>
+                            <th><p class="text-center"><a href="{% url 'item:edit' item.pk %}"><i class="fa fa-info-circle fa-2x"></i></a></p>
+                            </th>
+                        </tr>
+                        
+                    {% endfor %}
+                </tbody>
+            </table>
+        
+        {% else %}
+            <div class="alert alert-warning" role="alert">
+                <p>Nenhuma entrega para essa semana.</p>
+            </div>   
+        {% endif %}
+    </div>
+</div>
 
 {% endblock %}

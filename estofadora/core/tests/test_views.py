@@ -1,9 +1,12 @@
 #coding: utf-8
+import datetime
+
 from django.core.urlresolvers import reverse
 from django.test.client import Client
 from django.contrib.auth.models import User
 
-from estofadora.item.tests import create_item, create_picture
+from estofadora.item.tests import create_item, create_picture, create_client
+from estofadora.bills.tests import create_bill
 
 from . import TestCase, ContactForm, Contact, create_contact
 
@@ -30,6 +33,26 @@ class HomeViewTest(TestCase):
 		self.response = self.client.get(reverse('core:home'))
 		self.assertEqual(self.response.status_code, 302)
 
+	def test_content_empty(self):
+		self.assertContains(self.response, '"announcement-heading">0<', 4)
+		self.assertContains(self.response, 'Nenhuma entrega para essa semana.')
+
+	def test_content_not_empty(self):
+		client = create_client(commit=True)
+		today = datetime.datetime.now()
+		item1 = create_item(client=client, delivery_date=today, commit=True)
+		item2 = create_item(client=client, name='Puff', commit=True)
+		picture = create_picture(item=item1)
+		bill = create_bill(commit=True)
+
+		self.response = self.client.get(reverse('core:home'))
+		# one client, one picture and one bill
+		self.assertContains(self.response, '"announcement-heading">1<', 3)
+		# two items
+		self.assertContains(self.response, '"announcement-heading">2<', 1)
+
+		self.assertContains(self.response, item1.name)
+		self.assertContains(self.response, item1.client.name)
 
 
 class SiteViewTest(TestCase):
