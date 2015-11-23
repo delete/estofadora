@@ -39,15 +39,10 @@
 
             <ul class="nav navbar-nav">
               <li>
-                <a href="{% url 'core:home' %}">
-                  <i class="fa fa-home"></i>
-                </a>
+                <a href="{% url 'core:home' %}"><i class="fa fa-home"></i></a>
               </li>
               <li>
-                <a href="{% url 'client:list' %}">
-                  <i class="fa fa-users"></i>
-                  Clientes
-                </a>
+                <a href="{% url 'client:list' %}"><i class="fa fa-users"></i>Clientes</a>
               </li>
               <li class="dropdown">
                 <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="{% url 'statement:home' %}">
@@ -74,10 +69,7 @@
                 </ul>
               </li>
               <li>
-                <a href="{% url 'core:contactMessages' %}">
-                  <i class="fa fa-commenting-o"></i>
-                  Mensagens <span class="badge">{% get_mensagens %}</span>
-                </a> 
+                <a href="{% url 'core:contactMessages' %}"><span class="badge">{% get_mensagens %}</span> Mensagens </a> 
               </li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
