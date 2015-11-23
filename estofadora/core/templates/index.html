@@ -1,16 +1,96 @@
 {% extends "base.html" %}
+{% load quantity_tags%}
 
 {% block content %}
-<div class="jumbotron">
-  <h1>Bem vindo</h1>
-  <p class="lead">
-  Área administrativa
-  </p>
+<div class="splash">
+    <div class="pure-g-r">
+        <div class="pure-u-1">
+            <div class="l-box splash-text">
+                <h1 class="splash-head text-center">
+                    Área administrativa
+                </h1>
+                <h2 class="splash-subhead text-center">
+                    <small> Gerencie clientes, itens, contas e relatórios.</small>
+                </h2>
+            </div>
+        </div>
+    </div>
 </div>
+<br>
 
-<div class="row marketing">
+<div class="row">
+    <div class="col-lg-3">
+        <a href="{% url 'client:list' %}">
+            <div class="panel panel-warning">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <i class="fa fa-users fa-5x"></i>
+                        </div>
+                        <div class="col-xs-6 text-right">
+                            <p class="announcement-heading">{% get_clients %}</p>
+                            <p class="announcement-text"> Clientes</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+    
+    <div class="col-lg-3">
+        <a href="{% url 'item:list' %}">
+            <div class="panel panel-info">
+              <div class="panel-heading">
+                <div class="row">
+                  <div class="col-xs-6">
+                    <i class="fa fa-cubes fa-5x"></i>
+                  </div>
+                  <div class="col-xs-6 text-right">
+                    <p class="announcement-heading">{% get_items %}</p>
+                    <p class="announcement-text"> Itens</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </a>
+    </div>
 
-</div>
+    <div class="col-lg-3">
+        <a href="">
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <i class="fa fa-file-image-o fa-5x"></i>
+                        </div>
+                        <div class="col-xs-6 text-right">
+                            <p class="announcement-heading">{% get_pictures %}</p>
+                            <p class="announcement-text"> Imagens</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-lg-3">
+        <a href="">
+            <div class="panel panel-danger">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <i class="fa fa-money fa-5x"></i>
+                        </div>
+                        <div class="col-xs-6 text-right">
+                            <p class="announcement-heading">{% get_bills %}</p>
+                            <p class="announcement-text"> Contas</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+</div> <!-- #row -->
 
 
 {% endblock %}
