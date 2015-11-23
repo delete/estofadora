@@ -28,7 +28,7 @@ def home(request):
 def site(request):
 	context = {}
 
-	pictures = Picture.objects.filter(state='after').order_by('-created_at')[:4]
+	pictures = Picture.objects.filter(public=True, state='after').order_by('-created_at')[:4]
 	context['pictures'] = pictures
 	return render(request, 'site/site_index.html', context)
 
