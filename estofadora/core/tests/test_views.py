@@ -2,25 +2,21 @@
 import datetime
 
 from django.core.urlresolvers import reverse
-from django.test.client import Client
-from django.contrib.auth.models import User
-
-from estofadora.item.tests import create_item, create_picture, create_client
-from estofadora.bills.tests import create_bill
-
-from . import TestCase, ContactForm, Contact, create_contact
 
 
-class HomeViewTest(TestCase):
+
+from . import (
+	TestBase, ContactForm, Contact, create_contact,
+	create_item, create_picture, create_client, create_bill
+)
+
+
+class HomeViewTest(TestBase):
 
 	def setUp(self):
-		user = User.objects.create_user('admin', 'a@a.com', '123')
-		self.client = Client()
-		self.client.login(username='admin', password='123')
-		self.response = self.client.get(reverse('core:home'))
-
-	def tearDown(self):
-		self.client.logout()
+		self.login()
+		self.url = reverse('core:home')
+		self.response = self.client.get(self.url)
 		
 	def test_get(self):
 		self.assertEqual(self.response.status_code, 200)
@@ -29,9 +25,7 @@ class HomeViewTest(TestCase):
 		self.assertTemplateUsed(self.response, 'index.html')
 
 	def test_get_logout(self):
-		self.client.logout()
-		self.response = self.client.get(reverse('core:home'))
-		self.assertEqual(self.response.status_code, 302)
+		self._test_get_logout(self.url)
 
 	def test_content_empty(self):
 		self.assertContains(self.response, '"announcement-heading">0<', 4)
@@ -49,7 +43,7 @@ class HomeViewTest(TestCase):
 		picture = create_picture(item=item1)
 		bill = create_bill(commit=True)
 
-		self.response = self.client.get(reverse('core:home'))
+		self.response = self.client.get(self.url)
 		# one client, one picture and one bill
 		self.assertContains(self.response, '"announcement-heading">1<', 3)
 		# two items
@@ -67,7 +61,7 @@ class HomeViewTest(TestCase):
 		bill2 = create_bill(name='Luz', value=33, commit=True)
 
 		#Bill2 belong this week number
-		self.response = self.client.get(reverse('core:home'))
+		self.response = self.client.get(self.url)
 		self.assertContains(self.response, bill1.name)
 		self.assertContains(self.response, bill1.value)
 
@@ -77,7 +71,7 @@ class HomeViewTest(TestCase):
 
 
 
-class SiteViewTest(TestCase):
+class SiteViewTest(TestBase):
 
 	def setUp(self):
 		self.item = create_item(commit=True)
@@ -109,7 +103,7 @@ class SiteViewTest(TestCase):
 		self.assertNotContains(self.response, self.picture5.image.url)
 
 
-class PortfolioViewTest(TestCase):
+class PortfolioViewTest(TestBase):
 
 	def setUp(self):
 		self.item = create_item(commit=True)
@@ -135,7 +129,7 @@ class PortfolioViewTest(TestCase):
 		self.assertNotContains(self.response, self.picture3.image.url)
 
 
-class ContactViewTest(TestCase):
+class ContactViewTest(TestBase):
 
 	def setUp(self):
 		self.response = self.client.get(reverse('core:contact'))
@@ -159,7 +153,7 @@ class ContactViewTest(TestCase):
 		self.assertContains(self.response, 'type="submit"')
 
 
-class ContactPostTest(TestCase):
+class ContactPostTest(TestBase):
 
 	def setUp(self):
 		data = create_contact(commit=False)
@@ -179,16 +173,15 @@ class ContactPostTest(TestCase):
 		self.assertRedirects(self.response, expected_url, status_code=302, target_status_code=200)
 
 
-class ContactMessagesViewTest(TestCase):
+class ContactMessagesViewTest(TestBase):
 
 	def setUp(self):
-		user = User.objects.create_user('admin', 'a@a.com', '123')
-		self.client = Client()
-		self.client.login(username='admin', password='123')
+		self.login()
 
 		self.contactMessage = create_contact(commit=True)
-
-		self.response = self.client.get(reverse('core:contactMessages'))
+		
+		self.url = reverse('core:contactMessages')
+		self.response = self.client.get(self.url)
 
 	def test_get(self):
 		self.assertEqual(self.response.status_code, 200)
@@ -197,9 +190,7 @@ class ContactMessagesViewTest(TestCase):
 		self.assertTemplateUsed(self.response, 'contactMessages.html')
 
 	def test_get_logout(self):
-		self.client.logout()
-		self.response = self.client.get(reverse('core:home'))
-		self.assertEqual(self.response.status_code, 302)
+		self._test_get_logout(self.url)
 
 	def test_content(self):
 		self.assertContains(self.response, self.contactMessage.name)
@@ -211,16 +202,14 @@ class ContactMessagesViewTest(TestCase):
 	def test_empty(self):
 		Contact.objects.all().delete()
 		
-		self.response = self.client.get(reverse('core:contactMessages'))		
+		self.response = self.client.get(self.url)		
 		self.assertContains(self.response, 'Nenhuma mensagem!')
 
 
-class DeleteMensagemViewTest(TestCase):
+class DeleteMensagemViewTest(TestBase):
 
 	def setUp(self):
-		user = User.objects.create_user('admin', 'a@a.com', '123')
-		self.client = Client()
-		self.client.login(username='admin', password='123')
+		self.login()
 
 		self.contactMessage1 = create_contact(commit=True)
 
@@ -229,7 +218,13 @@ class DeleteMensagemViewTest(TestCase):
 		#Must have 2 messages before post.
 		self.assertEqual(len(Contact.objects.all()), 2)
 		
-		self.response = self.client.post(reverse('core:deleteMessage', args=[self.contactMessage1.pk]), follow=True)
+		self.url = reverse(
+				'core:deleteMessage', args=[self.contactMessage1.pk]
+			)
+		self.response = self.client.post(self.url, follow=True)
+
+	def test_get_logout(self):
+		self._test_get_logout(self.url)
 	
 	def test_redirect(self):
 		expected_url = reverse('core:contactMessages')
@@ -243,19 +238,23 @@ class DeleteMensagemViewTest(TestCase):
 		self.assertContains(self.response, 'Mensagem removida com sucesso!')
 
 
-class MarkAsReadMensagemViewTest(TestCase):
+class MarkAsReadMensagemViewTest(TestBase):
 
 	def setUp(self):
-		user = User.objects.create_user('admin', 'a@a.com', '123')
-		self.client = Client()
-		self.client.login(username='admin', password='123')
+		self.login()
 
 		self.contactMessage1 = create_contact(commit=True)
 
 		#read must start as False
 		self.assertFalse(self.contactMessage1.read)
 		
-		self.response = self.client.post(reverse('core:markMessageAsRead', args=[self.contactMessage1.pk]), follow=True)
+		self.url = reverse(
+				'core:markMessageAsRead', args=[self.contactMessage1.pk]
+			)
+		self.response = self.client.post(self.url, follow=True)
+
+	def test_get_logout(self):
+		self._test_get_logout(self.url)
 	
 	def test_redirect(self):
 		expected_url = reverse('core:contactMessages')
