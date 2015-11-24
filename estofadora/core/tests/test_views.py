@@ -35,12 +35,16 @@ class HomeViewTest(TestCase):
 
 	def test_content_empty(self):
 		self.assertContains(self.response, '"announcement-heading">0<', 4)
+
+	def test_week_delivery_content_when_empty(self):
 		self.assertContains(self.response, 'Nenhuma entrega para essa semana.')
 
-	def test_content_not_empty(self):
+	def test_week_delivery_content_when_not_empty(self):
 		client = create_client(commit=True)
+		
 		today = datetime.datetime.now()
 		item1 = create_item(client=client, delivery_date=today, commit=True)
+		
 		item2 = create_item(client=client, name='Puff', commit=True)
 		picture = create_picture(item=item1)
 		bill = create_bill(commit=True)
@@ -53,6 +57,24 @@ class HomeViewTest(TestCase):
 
 		self.assertContains(self.response, item1.name)
 		self.assertContains(self.response, item1.client.name)
+
+	def test_week_bills_content_when_empty(self):
+		self.assertContains(self.response, 'Nenhuma conta para essa semana.')
+
+	def test_week_bills_content_when_not_empty(self):
+		today = datetime.datetime.now()
+		bill1 = create_bill(value=11, date_to_pay=today, commit=True)
+		bill2 = create_bill(name='Luz', value=33, commit=True)
+
+		#Bill2 belong this week number
+		self.response = self.client.get(reverse('core:home'))
+		self.assertContains(self.response, bill1.name)
+		self.assertContains(self.response, bill1.value)
+
+		#Bill2 don't belong this week number.
+		self.assertNotContains(self.response, bill2.name)
+		self.assertNotContains(self.response, bill2.value)
+
 
 
 class SiteViewTest(TestCase):
