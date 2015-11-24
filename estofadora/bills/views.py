@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.urlresolvers import reverse
@@ -33,3 +33,13 @@ def list(request):
 
 	context['bills'] = bills
 	return render(request, 'bills/list.html', context)
+
+
+@login_required
+def delete(request, pk):
+	bill = get_object_or_404(Bill, pk=pk)
+
+	bill.delete()
+
+	messages.success(request, 'Conta removida com sucesso!')
+	return redirect(reverse('bills:list'))

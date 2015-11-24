@@ -85,3 +85,28 @@ class ListViewTest(TestBase):
 
 		self.response = self.client.get(self.url)
 		self.assertContains(self.response, 'Nenhuma conta cadastrada.')
+
+
+class DeleteViewTest(TestBase):
+
+	def setUp(self):
+		self.login()
+
+		self.bill1 = create_bill(is_paid=True, commit=True)
+		self.bill2 = create_bill(name='Client2', commit=True)
+
+		#Must have 2 bills before post.
+		self.assertEqual(len(Bill.objects.all()), 2)
+		
+		self.response = self.client.post(reverse('bills:delete', args=[self.bill2.pk]), follow=True)
+	
+	def test_redirect(self):
+		expected_url = reverse('bills:list')
+
+		self.assertRedirects(self.response, expected_url, status_code=302, target_status_code=200)
+
+	def test_if_deleted(self):
+		self.assertEqual(len(Bill.objects.all()), 1)
+
+	def test_message(self):
+		self.assertContains(self.response, 'Conta removida com sucesso!')
