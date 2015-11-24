@@ -235,7 +235,8 @@ class ListViewTest(TestBase):
 		self.item3 = create_item(client=self.client2, commit=True, name='Chair')
 		self.item4 = create_item(client=self.client2, commit=True, name='Table')
 
-		self.response = self.client.get(reverse('item:list'))
+		self.url = reverse('item:list')
+		self.response = self.client.get(self.url)
 
 	def test_get(self):
 		self.assertEqual(self.response.status_code, 200)
@@ -255,7 +256,7 @@ class ListViewTest(TestBase):
 
 	def test_post(self):
 		data = {'name':'Andre'}
-		self.response = self.client.post(reverse('item:list'), data)
+		self.response = self.client.post(self.url, data)
 		self.assertContains(self.response, self.client2.name)
 		self.assertContains(self.response, self.item2.name)
 		self.assertContains(self.response, self.item3.name)
@@ -267,7 +268,7 @@ class ListViewTest(TestBase):
 
 	def test_massage_when_view_is_empty(self):
 		Item.objects.all().delete()
-		self.response = self.client.get(reverse('item:list'))
+		self.response = self.client.get(self.url)
 		self.assertContains(self.response, 'Nenhum item encontrado!')
 
 
