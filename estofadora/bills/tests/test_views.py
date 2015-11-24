@@ -49,3 +49,39 @@ class NewSavePostTest(TestBase):
 	def test_if_cash_has_saved(self):
 		'Must save a Cash object too'
 		self.assertTrue(Cash.objects.exists())
+
+
+class ListViewTest(TestBase):
+
+	def setUp(self):
+		self.login()
+
+		self.bill1 = create_bill(is_paid=True, commit=True)
+		self.bill2 = create_bill(name='Client2', commit=True)
+
+		self.url = reverse('bills:list')
+		self.response = self.client.get(self.url)
+
+	def test_get(self):
+		self.assertEqual(self.response.status_code, 200)
+
+	def test_template(self):		
+		self.assertTemplateUsed(self.response, 'bills/list.html')
+	
+	def test_get_logout(self):
+		self._test_get_logout(self.url)
+
+	def test_html(self):
+		self.assertContains(self.response, self.bill1.name)
+		self.assertContains(self.response, self.bill1.value)
+		# The bill1 was paid.
+		self.assertContains(self.response, 'Pago', 1)
+
+		self.assertContains(self.response, self.bill2.name)
+		self.assertContains(self.response, self.bill2.value)
+
+	def test_empty(self):
+		Bill.objects.all().delete()
+
+		self.response = self.client.get(self.url)
+		self.assertContains(self.response, 'Nenhuma conta cadastrada.')

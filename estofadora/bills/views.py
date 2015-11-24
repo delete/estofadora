@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.core.urlresolvers import reverse
 
 from .forms import BillForm
+from .models import Bill
 
 
 @login_required
@@ -23,3 +24,12 @@ def new(request):
 
 	context['form'] = form
 	return render(request, 'bills/new.html', context)
+
+
+@login_required
+def list(request):
+	context = {}
+	bills = Bill.objects.all()
+
+	context['bills'] = bills
+	return render(request, 'bills/list.html', context)
