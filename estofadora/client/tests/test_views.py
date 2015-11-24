@@ -206,7 +206,8 @@ class ListViewTest(TestBase):
 		self.client1 = create_client(commit=True)
 		self.client2 = create_client(commit=True, name='Andre', email='a@email.com')
 
-		self.response = self.client.get(reverse('client:list'))
+		self.url = reverse('client:list')
+		self.response = self.client.get(self.url)
 
 	def test_get(self):
 		self.assertEqual(self.response.status_code, 200)
@@ -221,7 +222,7 @@ class ListViewTest(TestBase):
 	def test_empty(self):
 		ModelClient.objects.all().delete()
 
-		self.response = self.client.get(reverse('client:list'))
+		self.response = self.client.get(self.url)
 				
 		expected = 'Nenhum cliente cadastrado.'
 		self.assertContains(self.response, expected)
