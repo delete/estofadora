@@ -43,3 +43,14 @@ def delete(request, pk):
 
 	messages.success(request, 'Conta removida com sucesso!')
 	return redirect(reverse('bills:list'))
+
+
+@login_required
+def mark_as_paid(request, pk):
+	bill = get_object_or_404(Bill, pk=pk)
+
+	bill.is_paid = True
+	bill.save()
+
+	messages.success(request, 'Conta marcada como paga!')
+	return redirect(reverse('bills:list'))

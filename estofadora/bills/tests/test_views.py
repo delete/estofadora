@@ -110,3 +110,28 @@ class DeleteViewTest(TestBase):
 
 	def test_message(self):
 		self.assertContains(self.response, 'Conta removida com sucesso!')
+
+
+class MarkAsPaidViewTest(TestBase):
+
+	def setUp(self):
+		self.login()
+
+		self.bill1 = create_bill(commit=True)
+
+		#Must be False before post
+		self.assertFalse(self.bill1.is_paid)
+		
+		self.response = self.client.post(reverse('bills:mark_as_paid', args=[self.bill1.pk]), follow=True)
+	
+	def test_redirect(self):
+		expected_url = reverse('bills:list')
+
+		self.assertRedirects(self.response, expected_url, status_code=302, target_status_code=200)
+
+	def test_if_changes(self):
+		bill = Bill.objects.get(pk=self.bill1.pk)
+		self.assertTrue(bill.is_paid)
+
+	def test_message(self):
+		self.assertContains(self.response, 'Conta marcada como paga!')

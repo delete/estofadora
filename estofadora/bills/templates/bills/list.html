@@ -36,7 +36,7 @@
 							{% if bill.is_paid %}
 								<span class="label label-success">Pago</span>
 							{% else %}
-							<a href="">
+							<a href="{% url 'bills:mark_as_paid' bill.pk %}">
 								<i class="fa fa-check-square fa-2x"></i>
 							</a>
 							{% endif %}
