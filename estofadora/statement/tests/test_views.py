@@ -353,3 +353,93 @@ class CashMonthSeachPostTest(TestBase):
 			follow=True)
 
 		self.assertContains(self.response, 'Nenhum registro encontrado em:')
+
+
+class CashAnnualViewTest(TestBase):
+
+	def setUp(self):
+		self.login()
+
+		self.today = datetime.datetime.now().date()
+		self.url = reverse('statement:cash_annual')
+		self.response = self.client.get(self.url)
+
+	def test_get(self):
+		self.assertEqual(self.response.status_code, 200)
+
+	def test_template(self):		
+		self.assertTemplateUsed(self.response, 'statement/cash_annual.html')
+	
+	def test_get_logout(self):
+		self._test_get_logout(self.url)
+
+	def test_html(self):
+		# + csrf input
+		self.assertContains(self.response, '<input', 1)
+		self.assertContains(self.response, '<select', 1)
+		self.assertContains(self.response, 'submit', 1)
+
+	def test_message_when_is_empty(self):
+		'Must return a warning message when there are not any registry'
+		self.assertContains(self.response, 'Nenhum registro encontrado.')
+
+	def test_year_in_context(self):
+		'When was not choose a specific year, the default date is atual year'
+		self.assertEqual(self.response.context['choose_date'], self.today)
+
+
+class CashAnnualSeachPostTest(TestBase):
+
+	def setUp(self):
+		self.login()
+		
+		september = datetime.datetime(2014, 9, 10)
+
+		october = datetime.datetime(2015, 10, 10)
+
+		self.cash1 = create_cash(
+			commit=True, history='Cash1', date=september.date(),
+			expenses=100, income=100
+		)
+		self.cash2 = create_cash(
+			commit=True, history='Cash2', date=september.date(),
+			expenses=200, income=200
+		)
+		self.cash3 = create_cash(
+			commit=True, history='Cash3', date=october.date(),
+			expenses=300, income=300
+		)
+
+		data = {
+			'selectyear': october.date().year
+		}
+
+		self.url = reverse('statement:cash_annual')
+		self.response = self.client.post(self.url, data,
+			follow=True)
+
+	def test_data_after_post(self):
+		'The response must have the data of cash3, only'
+		self.assertContains(self.response, self.cash3.history)
+		self.assertContains(self.response, self.cash3.income)
+		self.assertContains(self.response, self.cash3.expenses)
+
+		self.assertNotContains(self.response, self.cash1.history)
+		self.assertNotContains(self.response, self.cash1.income)
+		self.assertNotContains(self.response, self.cash1.expenses)		
+
+		self.assertNotContains(self.response, self.cash2.history)
+		self.assertNotContains(self.response, self.cash2.income)
+		self.assertNotContains(self.response, self.cash2.expenses)
+
+	def test_in_another_date(self):
+		'If there are not registries, must return a warning message'
+		
+		data = {
+			'selectyear': '2013'
+		}
+
+		self.response = self.client.post(self.url, data,
+			follow=True)
+
+		self.assertContains(self.response, 'Nenhum registro encontrado.')
