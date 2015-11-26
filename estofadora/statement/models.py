@@ -27,8 +27,32 @@ class Cash(models.Model):
 
 	@staticmethod
 	def total_value_by_month_year(date):
-		incomes = sum(item.income for item in Cash.objects.filter(date__month=date.month, date__year=date.year))
-		expenses = sum(item.expenses for item in Cash.objects.filter(date__month=date.month, date__year=date.year))
+		incomes = sum(
+				item.income for item in Cash.objects.filter(
+					date__month=date.month, date__year=date.year
+				)
+			)
+		expenses = sum(
+				item.expenses for item in Cash.objects.filter(
+					date__month=date.month, date__year=date.year
+				)
+			)
+
+		return incomes - expenses
+
+	@staticmethod
+	def total_value_by_year(date):
+		incomes = sum(
+				item.income for item in Cash.objects.filter(
+					date__year=date.year
+				)
+			)
+		expenses = sum(
+				item.expenses for item in Cash.objects.filter(
+					date__year=date.year
+				)
+			)
+
 		return incomes - expenses
 
 	@staticmethod
@@ -36,6 +60,10 @@ class Cash(models.Model):
 		return Cash.objects.filter(
 			date__month=date.month, date__year=date.year
 		)
+
+	@staticmethod
+	def filter_by_year(date):
+		return Cash.objects.filter(date__year=date.year)
 
 	@staticmethod
 	def list_years():

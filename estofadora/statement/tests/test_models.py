@@ -9,7 +9,7 @@ class CashModelTest(TestCase):
 	def setUp(self):
 		self.september = datetime.datetime(2015, 9, 10)
 
-		self.october = datetime.datetime(2015, 10, 10)
+		self.october = datetime.datetime(2014, 10, 10)
 
 		self.cash1 = create_cash(
 			commit=True, history='Cash1', date=self.september.date(),
@@ -61,6 +61,12 @@ class CashModelTest(TestCase):
 
 		date = self.september.date()
 		self.assertEqual(Cash.total_value_by_month_year(date), expected_total)
+
+	def test_total_value_by_year(self):
+		expected_total = self.cash3.total + self.cash4.total
+
+		date = self.october.date()
+		self.assertEqual(Cash.total_value_by_year(date), expected_total)
 
 	def test_filter_by_month_year(self):
 		expected_items = 2
