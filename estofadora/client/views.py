@@ -51,7 +51,17 @@ def edit(request, pk):
 def list(request):
 	context = {}
 
-	context['clients'] = Client.objects.order_by('name')
+	if request.method == 'POST':
+		client_name = request.POST.get('name')
+		clients = Client.objects.filter(
+					name__icontains=client_name
+				).order_by('name')
+
+	else:
+		clients = Client.objects.all().order_by('name')
+
+
+	context['clients'] = clients
 	return render(request, 'client/list.html', context)
 
 

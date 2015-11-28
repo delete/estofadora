@@ -224,8 +224,23 @@ class ListViewTest(TestBase):
 
 		self.response = self.client.get(self.url)
 				
-		expected = 'Nenhum cliente cadastrado.'
+		expected = 'Nenhum cliente encontrado.'
 		self.assertContains(self.response, expected)
+
+	def test_context(self):
+		# + 1 csrf
+		self.assertContains(self.response, '<input', 2)
+		self.assertContains(self.response, 'submit', 1)
+
+	def test_post(self):
+		data = {'name':'Andre'}
+		self.response = self.client.post(self.url, data)
+		self.assertContains(self.response, self.client2.name)
+		self.assertContains(self.response, self.client2.email)
+
+		#client1 items should not appear
+		self.assertNotContains(self.response, self.client1.name)
+		self.assertNotContains(self.response, self.client1.email)
 
 
 class DeleteViewTest(TestBase):
