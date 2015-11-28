@@ -255,16 +255,14 @@ class ListViewTest(TestBase):
 		self.assertContains(self.response, 'type="submit"')
 
 	def test_post(self):
-		data = {'name':'Andre'}
+		data = {'name':'Table'}
 		self.response = self.client.post(self.url, data)
-		self.assertContains(self.response, self.client2.name)
-		self.assertContains(self.response, self.item2.name)
-		self.assertContains(self.response, self.item3.name)
 		self.assertContains(self.response, self.item4.name)
 
 		#client1 items should not appear
-		self.assertNotContains(self.response, self.item1.client.name)
 		self.assertNotContains(self.response, self.item1.name)
+		self.assertNotContains(self.response, self.item2.name)
+		self.assertNotContains(self.response, self.item3.name)
 
 	def test_massage_when_view_is_empty(self):
 		Item.objects.all().delete()

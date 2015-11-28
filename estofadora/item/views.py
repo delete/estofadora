@@ -57,8 +57,8 @@ def list(request):
 	context = {}
 
 	if request.method == 'POST':
-		client_name = request.POST.get('name')
-		items = Item.objects.filter(client__name__icontains=client_name)
+		item_name = request.POST.get('name')
+		items = Item.objects.filter(name__icontains=item_name)
 
 	else:
 		items = Item.objects.all()
