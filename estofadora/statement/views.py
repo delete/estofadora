@@ -91,9 +91,11 @@ def edit(request, pk):
 def cash_month(request):
 	context = {}
 	date = datetime.datetime.now().date()
+	year = date.year
+	month = date.month
 
-	content = Cash.filter_by_date(month=date.month, year=date.year)
-	total_value = Cash.total_value_by_date(month=date.month, year=date.year)
+	content = Cash.filter_by_date(month=month, year=year)
+	total_value = Cash.total_value_by_date(month=month, year=year)
 
 	if request.method == 'POST':
 		month = int(request.POST.get('selectmonth'))
@@ -104,7 +106,8 @@ def cash_month(request):
 
 	context['content'] = content
 	context['total_value'] = total_value
-	context['choose_date'] = date
+	context['choose_month'] = month
+	context['choose_year'] = year
 	context['months'] = MONTHS
 	context['years'] = Cash.list_years()
 	return render(request, 'statement/cash_month.html', context)
@@ -113,10 +116,10 @@ def cash_month(request):
 @login_required
 def cash_annual(request):
 	context = {}
-	date = datetime.datetime.now().date()
+	year = datetime.datetime.now().date().year
 
-	content = Cash.filter_by_date(year=date.year)
-	total_value = Cash.total_value_by_date(date.year)
+	content = Cash.filter_by_date(year=year)
+	total_value = Cash.total_value_by_date(year)
 
 	if request.method == 'POST':
 		year = int(request.POST.get('selectyear'))
@@ -127,6 +130,7 @@ def cash_annual(request):
 
 	context['total_value'] = total_value
 	context['content'] = content
-	context['choose_date'] = date
+	context['choose_year'] = year
 	context['years'] = Cash.list_years()
+
 	return render(request, 'statement/cash_annual.html', context)

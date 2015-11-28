@@ -19,7 +19,7 @@
         	<select name="selectmonth" class="form-control">
         		{% for number, name in months %}
 	        		<option value="{{number}}"
-	        			{% if number == choose_date|date:'m' %}selected{% endif %}>
+	        			{% if number == choose_month %}selected{% endif %}>
 						{{name}}
 					</option>
         		{% endfor %}
@@ -27,7 +27,7 @@
         	<select name="selectyear" class="form-control">
         		{% for year in years %}
 					<option value="{{year}}"
-						{% if year == choose_date.year %}selected{% endif %}>
+						{% if year == choose_year %}selected{% endif %}>
 						{{year}}
 					</option> 
         		{% endfor %}

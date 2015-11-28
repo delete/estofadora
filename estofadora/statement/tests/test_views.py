@@ -294,7 +294,8 @@ class CashMonthViewTest(TestBase):
 
 	def test_date_in_context(self):
 		'When was not choose a specific date, the default date is "today"'
-		self.assertEqual(self.response.context['choose_date'], self.today)
+		self.assertEqual(self.response.context['choose_month'], self.today.month)
+		self.assertEqual(self.response.context['choose_year'], self.today.year)
 
 
 class CashMonthSeachPostTest(TestBase):
@@ -385,7 +386,7 @@ class CashAnnualViewTest(TestBase):
 
 	def test_year_in_context(self):
 		'When was not choose a specific year, the default date is atual year'
-		self.assertEqual(self.response.context['choose_date'], self.today)
+		self.assertEqual(self.response.context['choose_year'], self.today.year)
 
 
 class CashAnnualSeachPostTest(TestBase):
