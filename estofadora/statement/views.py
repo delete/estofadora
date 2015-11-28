@@ -22,7 +22,9 @@ def cash(request):
 	date = datetime.datetime.now().date()
 	
 	content = Cash.objects.filter(date=date)
-	total_value = Cash.total_value_by_date(date=date)
+	total_value = Cash.total_value_by_date(
+					day=date.day, month=date.month, year=date.year
+				)
 
 	form = CashForm()
 
@@ -36,7 +38,9 @@ def cash(request):
 				date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
 			
 			content = Cash.objects.filter(date=date)
-			total_value = Cash.total_value_by_date(date=date)
+			total_value = Cash.total_value_by_date(
+							day=date.day, month=date.month, year=date.year
+						)
 
 		else:
 		
@@ -88,18 +92,15 @@ def cash_month(request):
 	context = {}
 	date = datetime.datetime.now().date()
 
-	content = Cash.filter_by_month_year(date)
-	total_value = Cash.total_value_by_month_year(date)
+	content = Cash.filter_by_date(month=date.month, year=date.year)
+	total_value = Cash.total_value_by_date(month=date.month, year=date.year)
 
 	if request.method == 'POST':
-		month = request.POST.get('selectmonth')
-		year = request.POST.get('selectyear')
+		month = int(request.POST.get('selectmonth'))
+		year = int(request.POST.get('selectyear'))
 		
-		#Create a datetime object
-		date = datetime.datetime(int(year), int(month), 1).date()
-
-		content = Cash.filter_by_month_year(date)
-		total_value = Cash.total_value_by_month_year(date)
+		content = Cash.filter_by_date(month=month, year=year)
+		total_value = Cash.total_value_by_date(month=month, year=year)
 
 	context['content'] = content
 	context['total_value'] = total_value
@@ -114,17 +115,14 @@ def cash_annual(request):
 	context = {}
 	date = datetime.datetime.now().date()
 
-	content = Cash.objects.filter(date__year=date.year)
-	total_value = Cash.total_value_by_year(date)
+	content = Cash.filter_by_date(year=date.year)
+	total_value = Cash.total_value_by_date(date.year)
 
 	if request.method == 'POST':
-		year = request.POST.get('selectyear')
+		year = int(request.POST.get('selectyear'))
 
-		#Create a datetime object
-		date = datetime.datetime(int(year), 1, 1).date()
-
-		content = Cash.filter_by_year(date)
-		total_value = Cash.total_value_by_year(date)
+		content = Cash.filter_by_date(year=int(year))
+		total_value = Cash.total_value_by_date(year=year)
 
 
 	context['total_value'] = total_value

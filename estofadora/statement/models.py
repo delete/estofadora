@@ -11,63 +11,25 @@ class Cash(models.Model):
 
 	@property
 	def total(self):
+		'''
+			Total from the instanced object.
+		'''
 		return self.income - self.expenses
 
 	@staticmethod
 	def total_value():
+		'''
+			Total from all objects.
+		'''
 		incomes = sum(item.income for item in Cash.objects.all())
 		expenses = sum(item.expenses for item in Cash.objects.all())
 		return incomes - expenses
 
 	@staticmethod
-	def total_value_by_date(date):
-		incomes = sum(item.income for item in Cash.objects.filter(date=date))
-		expenses = sum(item.expenses for item in Cash.objects.filter(date=date))
-		return incomes - expenses
-
-	@staticmethod
-	def total_value_by_month_year(date):
-		incomes = sum(
-				item.income for item in Cash.objects.filter(
-					date__month=date.month, date__year=date.year
-				)
-			)
-		expenses = sum(
-				item.expenses for item in Cash.objects.filter(
-					date__month=date.month, date__year=date.year
-				)
-			)
-
-		return incomes - expenses
-
-	@staticmethod
-	def total_value_by_year(date):
-		incomes = sum(
-				item.income for item in Cash.objects.filter(
-					date__year=date.year
-				)
-			)
-		expenses = sum(
-				item.expenses for item in Cash.objects.filter(
-					date__year=date.year
-				)
-			)
-
-		return incomes - expenses
-
-	@staticmethod
-	def filter_by_month_year(date):
-		return Cash.objects.filter(
-			date__month=date.month, date__year=date.year
-		)
-
-	@staticmethod
-	def filter_by_year(date):
-		return Cash.objects.filter(date__year=date.year)
-
-	@staticmethod
 	def list_years():
-		'Get a list of years that there object cash saved.'
+		'''
+			Return a list of years that there are objects cash saved.
+		'''
 		cashs = Cash.objects.all()
 		years = [c.date.year for c in cashs]
 
@@ -76,6 +38,46 @@ class Cash(models.Model):
 			dicio[year] = 1
 
 		return list(dicio.keys())
+
+	@staticmethod
+	def filter_by_date(day=None, month=None, year=None):
+		filters = {
+			'date__day':day, 
+			'date__month':month, 
+			'date__year':year,
+		}
+		filters.update(filters)
+
+		filter_by = {
+			key:value for key, value in filters.items() if value is not None
+		}
+
+		return Cash.objects.filter(**filter_by)
+
+	@staticmethod
+	def total_value_by_date(day=None, month=None, year=None):
+		filters = {
+			'date__day':day, 
+			'date__month':month, 
+			'date__year':year,
+		}
+		filters.update(filters)
+
+		filter_by = {
+			key:value for key, value in filters.items() if value is not None
+		}
+
+		incomes = sum(
+				item.income for item in Cash.objects.filter(
+					**filter_by
+				)
+			)
+		expenses = sum(
+				item.expenses for item in Cash.objects.filter(
+					**filter_by
+				)
+			)
+		return incomes - expenses
 
 	class Meta:
 		ordering = ['date']

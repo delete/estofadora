@@ -25,7 +25,7 @@ class CashModelTest(TestCase):
 		)
 
 		self.cash4 = create_cash(
-			commit=True, history='Cash4', date=datetime.datetime(2014, 10, 10),
+			commit=True, history='Cash4', date=self.october.date(),
 			expenses=400, income=200
 		)
 		
@@ -34,6 +34,9 @@ class CashModelTest(TestCase):
 		Cash.objects.all().delete()
 
 	def test_total(self):
+		'''
+			Test total from instanced object.
+		'''
 		expected_total = self.cash1.income - self.cash1.expenses
 		self.assertEqual(self.cash1.total, expected_total)
 
@@ -44,40 +47,67 @@ class CashModelTest(TestCase):
 		self.assertEqual(self.cash3.total, expected_total)
 
 	def test_total_value(self):
-		expected_total = (self.cash1.total + self.cash2.total + 
-			self.cash3.total + self.cash4.total)
+		'''
+			Test total from all objects.
+		'''
+		expected_total = (
+			self.cash1.total + self.cash2.total + 
+			self.cash3.total + self.cash4.total
+		)
 
 		self.assertEqual(Cash.total_value(), expected_total)
-
-	def test_total_value_by_date(self):
-		# cash1 and cash2 have the same date		
-		expected_total = self.cash1.total + self.cash2.total
-
-		date = self.september.date()
-		self.assertEqual(Cash.total_value_by_date(date), expected_total)
-
-	def test_total_value_by_month_year(self):
-		expected_total = self.cash1.total + self.cash2.total
-
-		date = self.september.date()
-		self.assertEqual(Cash.total_value_by_month_year(date), expected_total)
-
-	def test_total_value_by_year(self):
-		expected_total = self.cash3.total + self.cash4.total
-
-		date = self.october.date()
-		self.assertEqual(Cash.total_value_by_year(date), expected_total)
-
-	def test_filter_by_month_year(self):
-		expected_items = 2
-
-		date = self.september.date()
-		self.assertEqual(
-			len(Cash.filter_by_month_year(date)), expected_items
-		)
 
 	def test_list_years(self):
 		expected_items = [2014, 2015]
 
 		self.assertEqual(Cash.list_years(), expected_items)
 
+	def test_filter_by_date_by_year(self):
+		# Filter by year = 2014 must return 2 items
+		expected_items = 2
+
+		items = Cash.filter_by_date(year=2014)
+
+		self.assertEqual(len(items), expected_items)
+
+	def test_filter_by_date_by_month(self):
+		# Filter by month = 10 must return 2 items
+		expected_items = 2
+
+		items = Cash.filter_by_date(month=10)
+
+		self.assertEqual(len(items), expected_items)
+
+	def test_filter_by_date_by_day(self):
+		#Filter by day = 11 must return 0 items
+		expected_items = 0
+
+		items = Cash.filter_by_date(day=11)
+
+		self.assertEqual(len(items), expected_items)
+
+	def test_total_value_by_date_by_year(self):
+		#Filter by year = 2014
+		expected_total = self.cash3.total + self.cash4.total
+
+		year = 2014
+		self.assertEqual(Cash.total_value_by_date(year=year), expected_total)
+
+	def test_total_value_by_date_by_month_and_year(self):
+		#Filter by month and year = 09/2014
+		expected_total = self.cash1.total + self.cash2.total
+
+		month = 9
+		year = 2015
+		total = Cash.total_value_by_date(month=month, year=year)
+		self.assertEqual(total, expected_total)
+
+	def test_total_value_by_date_by_day(self):
+		#Filter by day = 11/10/2014
+		expected_total = self.cash3.total + self.cash4.total
+
+		day = 10
+		month = 10
+		year = 2014
+		total = Cash.total_value_by_date(day=day, month=month, year=year)
+		self.assertEqual(total, expected_total)
