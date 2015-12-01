@@ -1,7 +1,7 @@
 #coding: utf-8
 from django.core.files.uploadedfile import SimpleUploadedFile
 
-from estofadora.settings import PATH_TO_IMAGE_TEST
+from estofadora.settings.base import PATH_TO_IMAGE_TEST
 
 from . import (
 	TestCase, make_validated_item_form, ItemForm,

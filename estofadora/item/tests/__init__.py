@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.test.client import Client
 from django.core.files.uploadedfile import SimpleUploadedFile
 
-from estofadora.settings import BASE_DIR, PATH_TO_IMAGE_TEST
+from estofadora.settings.base import BASE_DIR, PATH_TO_IMAGE_TEST
 from estofadora.item.forms import ItemForm, ItemPictureForm, PictureForm
 from estofadora.item.models import Item, Picture
 from estofadora.client.models import Client as ModelClient

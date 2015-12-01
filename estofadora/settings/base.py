@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
@@ -25,7 +24,7 @@ PASSWORD_HASHERS = (
 )
 
 PATH_TO_IMAGE_TEST = os.path.join(
-    BASE_DIR, 'estofadora', 'core', 'static', 'img') + '/test.jpg'
+    BASE_DIR, 'core', 'static', 'img') + '/test.jpg'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -55,6 +54,7 @@ INSTALLED_APPS = (
     'estofadora.statement',
     'estofadora.bills',
 )
+
 
 MIDDLEWARE_CLASSES = (
     #'opbeat.contrib.django.middleware.OpbeatAPMMiddleware',
@@ -109,7 +109,7 @@ USE_TZ = False
 STATIC_URL = '/static/'
 STATIC_ROOT = 'staticfiles'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'estofadora', 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 
@@ -117,28 +117,3 @@ MEDIA_URL = '/media/'
 LOGIN_URL = 'login:login'
 LOGOUT_URL = 'login:logout'
 LOGIN_REDIRECT_URL = 'core:home'
-
-# # HEROKU CONFIGS
-
-# Parse database configuration from $DATABASE_URL
-import dj_database_url
-DATABASES = {}
-DATABASES['default'] =  dj_database_url.config()
-
-# Honor the 'X-Forwarded-Proto' header for request.is_secure()
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-
-# Allow all host headers
-ALLOWED_HOSTS = ['*']
-
-# Static asset configuration
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
-# STATICFILES_DIRS = (
-#     os.path.join(BASE_DIR, 'static'),
-# )
-
-try:
-    from estofadora.local_settings import *
-except ImportError:
-    pass
