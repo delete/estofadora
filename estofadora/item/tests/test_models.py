@@ -2,10 +2,10 @@
 import os
 
 from django.db import IntegrityError, transaction
-from . import TestCase, Item, create_item, create_picture, Picture
+from . import TestBase, Item, create_item, create_picture, Picture
 
 
-class ItemModelTest(TestCase):
+class ItemModelTest(TestBase):
 
 	def setUp(self):		
 		self.item = create_item(commit=True)
@@ -27,7 +27,7 @@ class ItemModelTest(TestCase):
 		self.assertEqual(len(result), expected)
 
 
-class PictureModelTest(TestCase):
+class PictureModelTest(TestBase):
 
 	def setUp(self):
 		self.item = create_item(commit=True)
