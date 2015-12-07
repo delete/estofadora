@@ -45,6 +45,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     
     #'opbeat.contrib.django',
+    'rest_framework',
 
     #My apps
     'estofadora.core',
@@ -53,6 +54,7 @@ INSTALLED_APPS = (
     'estofadora.item',
     'estofadora.statement',
     'estofadora.bills',
+    'estofadora.api',
 )
 
 
@@ -117,3 +119,12 @@ MEDIA_URL = '/media/'
 LOGIN_URL = 'login:login'
 LOGOUT_URL = 'login:logout'
 LOGIN_REDIRECT_URL = 'core:home'
+
+# Django Rest Framework
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAdminUser',
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'PAGE_SIZE': 10
+}
