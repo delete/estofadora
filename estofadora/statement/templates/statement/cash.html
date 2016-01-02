@@ -33,6 +33,18 @@
     </form>
 </div>
 
+<div class="well well-sm">
+	<div class="total_value">
+		{% if total_before > 0 %}
+		<p class="text-right text-success">
+		{% else %}
+		<p class="text-right text-danger">
+		{% endif %}
+			Valor total anterior: R$ {{ total_before }}
+		</p>
+	</div>
+</div>
+
 {% if content %}
 
 	<table class="table table-striped">
@@ -52,18 +64,7 @@
 	                <td>{{item.history}}</td>
 	                <td>{{item.income}}</td>
 	                <td>{{item.expenses }}</td>
-	                <td>{{item.total }}</td>
-	                <!-- <th>
-	                	<p class="text-center">
-	                		<a href="{% url 'statement:edit' item.pk %}" 
-	                			data-toggle="modal" 
-	                			data-target="#modal" 
-	                			title="editar item"
-	                			data-tooltip>
-	                			<i class="fa fa-pencil"></i>
-	                		</a>
-	                	</p>
-	                </th> -->
+	                <td>{{item.balance }}</td>
 	                <th>
 	                	<a href="{% url 'statement:delete' item.pk %}"
 	                		title="remover item">
@@ -81,7 +82,7 @@
 		{% else %}
 		<p class="text-right text-danger">
 		{% endif %}
-			Valor total: R$ {{ total_value }}
+			Valor total de hoje: R$ {{ total_value }}
 		</p>
 	</div>
 

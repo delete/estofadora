@@ -1,7 +1,7 @@
 # coding: utf-8
 import datetime
 
-from . import TestCase, Cash, create_cash
+from . import TestCase, Cash, create_cash, create_balance, Balance
 
 
 class CashModelTest(TestCase):
@@ -28,7 +28,6 @@ class CashModelTest(TestCase):
 			commit=True, history='Cash4', date=self.october.date(),
 			expenses=400, income=200
 		)
-		
 		
 	def tearDown(self):
 		Cash.objects.all().delete()
@@ -111,3 +110,45 @@ class CashModelTest(TestCase):
 		year = 2014
 		total = Cash.total_value_by_date(day=day, month=month, year=year)
 		self.assertEqual(total, expected_total)
+
+	def test_create_balance(self):
+		total_yesterday = 100
+		
+		content = []
+
+		content = Cash.objects.filter(date=self.september)
+
+		content, balance = Cash.create_balance(content, total_yesterday)
+		
+		last_element = len(content) - 1
+
+		self.assertEqual(float(content[last_element].balance), balance)
+		self.assertEqual(float(content[last_element].balance), float(-50))
+
+
+class BalanceModelTest(TestCase):
+
+	def setUp(self):
+		dayone = datetime.datetime(2015,12,1)
+		daytwo = datetime.datetime(2015,12,2)
+		daythree = datetime.datetime(2015,12,3)
+		anotherday = datetime.datetime(2016,1,1)
+		
+		self.b1 = create_balance(date=dayone, value=100, commit=True)
+		self.b2 = create_balance(date=daytwo, value=200, commit=True)
+		self.b3 = create_balance(date=daythree, value=-100, commit=True)
+
+		#This balance should not count
+		self.b11 = create_balance(date=anotherday, value=-1000, commit=True)
+
+	def test_if_was_created(self):
+		self.assertEqual(len(Balance.objects.all()), 4)
+
+	def test_total_balance_before(self):
+		'''
+			Test if is getting date less then the day.
+		'''
+		day = datetime.datetime(2016,1,1)
+		total_balance = Balance.total_balance_before(date=day)
+
+		self.assertEqual(float(total_balance), float(200))

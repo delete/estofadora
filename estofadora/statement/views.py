@@ -1,14 +1,15 @@
-import datetime
+from datetime import datetime
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.contrib import messages
+from django.db import IntegrityError
 
 from estofadora.core.utils import MONTHS
 
 from .forms import CashForm
-from .models import Cash
+from .models import Cash, Balance
 
 
 @login_required
@@ -19,42 +20,43 @@ def home(request):
 @login_required
 def cash(request):
 	context = {}
-	date = datetime.datetime.now().date()
+	date = datetime.now().date()
 	
 	content = Cash.objects.filter(date=date)
-	total_value = Cash.total_value_by_date(
-					day=date.day, month=date.month, year=date.year
-				)
 
-	form = CashForm()
+	total_before = Balance.total_balance_before(date)
+
+	form = CashForm(initial={'date': date})
 
 	if request.method == 'POST':
 		
 		if 'search_form' in request.POST:
 			date = request.POST.get('search_date')
 			try:
-				date = datetime.datetime.strptime(date, '%d/%m/%Y').date()
+				date = datetime.strptime(date, '%d/%m/%Y').date()
 			except ValueError:
-				date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
+				date = datetime.strptime(date, '%Y-%m-%d').date()
 			
 			content = Cash.objects.filter(date=date)
-			total_value = Cash.total_value_by_date(
-							day=date.day, month=date.month, year=date.year
-						)
-
+			total_before = Balance.total_balance_before(date)
+			
 		else:
 		
 			form = CashForm(request.POST)
 
 			if form.is_valid():
 				form.save()
+
 				messages.success(request, 'Registrado com sucesso!')
-				form = CashForm()
+
 				return redirect(reverse('statement:cash'))
+
+	content, balance = Cash.create_balance(content, total_before)
 
 	context['form'] = form
 	context['content'] = content
-	context['total_value'] = total_value
+	context['total_value'] = balance
+	context['total_before'] = total_before
 	context['choose_date'] = date
 	return render(request, 'statement/cash.html', context)
 
@@ -90,7 +92,7 @@ def edit(request, pk):
 @login_required
 def cash_month(request):
 	context = {}
-	date = datetime.datetime.now().date()
+	date = datetime.now().date()
 	year = date.year
 	month = date.month
 
@@ -116,7 +118,7 @@ def cash_month(request):
 @login_required
 def cash_annual(request):
 	context = {}
-	year = datetime.datetime.now().date().year
+	year = datetime.now().date().year
 
 	content = Cash.filter_by_date(year=year)
 	total_value = Cash.total_value_by_date(year)

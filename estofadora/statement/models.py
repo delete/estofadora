@@ -1,5 +1,6 @@
 #conding: utf-8
 from django.db import models
+from django.db import IntegrityError, transaction
 
 
 class Cash(models.Model):
@@ -79,7 +80,73 @@ class Cash(models.Model):
 			)
 		return incomes - expenses
 
+	@staticmethod
+	def create_balance(content, total_before):
+		"""
+			Create a new temporary field (balance) that will save the amount of
+			balance before plus the atual item total. Example:
+
+			ITEM  TOTAL  BALANCE
+			item0 -1000  -1000    (item0.total + total from the day before)
+			item1 +500   -500     (item1.total + item0.balance)
+			item2 +600   100      (item2.total + item1.balance)
+			etc...
+			"""
+		last_element = len(content) - 1
+		balance = 0
+
+		for index, item in enumerate(content):
+			if index == 0:
+				item.balance = item.total + total_before
+			else:
+				item.balance = content[index-1].balance + (item.total)
+
+			# The last one has the total
+			if index == last_element:
+				balance = item.balance
+		
+		return content, balance
+
+	
+	def save(self, *args, **kwargs):
+		# Need instance balance obj to store the total value
+		try:
+			#If exists will raise IntegrityError.
+			with transaction.atomic():
+				obj = Balance(date=self.date, value=self.total)
+				obj.save()
+
+		except IntegrityError:
+			# Get the balance and update
+			obj = Balance.objects.get(date=self.date)
+			obj.value += self.total
+			obj.save()
+
+		# Call the "real" save() method.
+		super(Cash, self).save(*args, **kwargs)
+
+
+
 	class Meta:
 		ordering = ['date']
 		verbose_name = ('Cash')
 		verbose_name_plural = ('Cash')
+
+
+class Balance(models.Model):
+
+	date = models.DateField('Dia', unique=True)
+	value = models.DecimalField('Valor', max_digits=20, decimal_places=2, default=0.0)
+
+	@staticmethod
+	def total_balance_before(date):
+		items = Balance.objects.filter(date__lt=date)
+
+		total = sum(i.value for i in items)
+
+		return total
+
+	class Meta:
+		ordering = ['date']
+		verbose_name = ('Balance')
+		verbose_name_plural = ('Balance')

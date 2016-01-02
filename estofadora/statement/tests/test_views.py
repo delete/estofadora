@@ -1,5 +1,6 @@
 #conding: utf-8
 import datetime
+from datetime import timedelta
 
 from django.core.urlresolvers import reverse
 
@@ -51,17 +52,28 @@ class CashViewTest(TestBase):
 		self.assertContains(self.response, '<input', 7)
 		self.assertContains(self.response, 'submit', 2)
 
-	def test_data_after_post(self):
+	def test_response_after_post(self):
 		today = datetime.datetime.now().date()
-		cash = create_cash(commit=True, date=today)
+		fiveDaysBefore = today - timedelta(days=5)
+
+		cash1 = create_cash(commit=True, date=today)
+		cash2 = create_cash(
+				commit=True, history='Rent', 
+				date=fiveDaysBefore, expenses=100, income=0
+			)
 
 		self.response = self.client.get(self.url)
 
-		self.assertContains(self.response, cash.history)
-		self.assertContains(self.response, cash.expenses)
-		self.assertContains(self.response, cash.income)
-		self.assertContains(self.response, cash.total)
+		self.assertContains(self.response, cash1.history)
+		#Cash2 should not appear because it is not from today
+		self.assertNotContains(self.response, cash2.history)
 
+		#Test if blaance before is right
+		self.assertContains(self.response, 'Valor total anterior: R$ -100,00')
+
+		#Test if atual blaance is right (500 -100 = 400)
+		self.assertContains(self.response, 'Valor total de hoje: R$ 400,00')
+		
 
 class CashSavePostTest(TestBase):
 

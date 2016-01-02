@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.test.client import Client
 
 from estofadora.statement.forms import CashForm
-from estofadora.statement.models import Cash
+from estofadora.statement.models import Cash, Balance
 
 
 class TestBase(TestCase):
@@ -57,5 +57,17 @@ def create_cash(commit=False, **kwargs):
 	data.update(kwargs)	
 	if commit:
 		return Cash.objects.create(**data)
+	
+	return data
+
+
+def create_balance(commit=False, **kwargs):
+	data = {
+		'date': '2015-10-17',
+		'value': 500,
+	}
+	data.update(kwargs)	
+	if commit:
+		return Balance.objects.create(**data)
 	
 	return data
