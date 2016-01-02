@@ -24,6 +24,7 @@ class TestBase(TestCase):
 		self.logout()
 		User.objects.all().delete()
 		Cash.objects.all().delete()
+		Balance.objects.all().delete()
 
 	def _test_get_logout(self, url):
 		self.logout()
