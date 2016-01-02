@@ -31,6 +31,7 @@ class CashModelTest(TestCase):
 		
 	def tearDown(self):
 		Cash.objects.all().delete()
+		Balance.objects.all().delete()
 
 	def test_total(self):
 		'''
@@ -125,6 +126,52 @@ class CashModelTest(TestCase):
 		self.assertEqual(float(content[last_element].balance), balance)
 		self.assertEqual(float(content[last_element].balance), float(-50))
 
+	def test_if_balance_was_created(self):
+		cash1 = create_cash(
+			commit=True, history='Cash1', date=self.september.date(),
+			expenses=100, income=50
+		)
+
+		cash2 = create_cash(
+			commit=True, history='Cash2', date=self.september.date(),
+			expenses=0, income=200
+		)
+
+		self.assertEqual(len(Balance.objects.all()), 2)
+
+	def test_if_balance_was_deleted(self):
+		# Clear first
+		Balance.objects.all().delete()
+		
+		cash1 = create_cash(
+			commit=True, history='Cash1', date=self.september.date(),
+			expenses=100, income=50
+		)
+
+		cash1.delete()
+
+		self.assertEqual(len(Balance.objects.all()), 0)
+
+	def test_if_balance_was_updated(self):
+		# Clear first
+		Balance.objects.all().delete()
+
+		cash1 = create_cash(
+			commit=True, history='Cash1', date=self.september.date(),
+			expenses=100, income=50
+		)
+
+		cash2 = create_cash(
+			commit=True, history='Cash1', date=self.september.date(),
+			expenses=0, income=200
+		)
+
+		cash1.delete()
+		# As the cash1 was deleted, will just remain the value from cash2, that it's 200.
+
+		balance = Balance.objects.get(date=cash2.date)
+		self.assertEqual(float(balance.value), float(200))
+
 
 class BalanceModelTest(TestCase):
 
@@ -140,7 +187,11 @@ class BalanceModelTest(TestCase):
 
 		#This balance should not count
 		self.b11 = create_balance(date=anotherday, value=-1000, commit=True)
-
+	
+	def tearDown(self):
+		Cash.objects.all().delete()
+		Balance.objects.all().delete()
+	
 	def test_if_was_created(self):
 		self.assertEqual(len(Balance.objects.all()), 4)
 

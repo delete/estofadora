@@ -125,6 +125,16 @@ class Cash(models.Model):
 		# Call the "real" save() method.
 		super(Cash, self).save(*args, **kwargs)
 
+	def delete(self, *args, **kwargs):
+		obj = Balance.objects.get(date=self.date)
+		obj.value -= self.total
+
+		if obj.value == float(0):
+			obj.delete()
+		else:
+			obj.save()
+
+		super(Cash, self).delete(*args, **kwargs)
 
 
 	class Meta:
