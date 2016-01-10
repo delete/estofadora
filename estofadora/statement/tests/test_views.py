@@ -489,7 +489,7 @@ class CashAnnualSeachPostTest(TestBase):
         self.assertContains(self.response, 'Valor total anterior: R$ 190,00')
 
         # Test if atual balance is right (100 -100 + 200 -200 + 500 = 500)
-        self.assertContains(self.response, 'Valor total: R$ 500,00')
+        self.assertContains(self.response, 'Valor total: R$ 690,00')
 
     def test_in_another_date(self):
         'If there are not registries, must return a warning message'
