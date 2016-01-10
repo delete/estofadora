@@ -435,35 +435,46 @@ class CashAnnualSeachPostTest(TestBase):
     def setUp(self):
         self.login()
 
-        september = datetime.datetime(2014, 9, 10)
+        september = datetime.datetime(2014, 9, 10).date()
 
-        october = datetime.datetime(2015, 10, 10)
+        october = datetime.datetime(2015, 10, 10).date()
+
+        january = datetime.datetime(2016, 1, 5).date()
 
         self.cash1 = create_cash(
-            commit=True, history='Cash1', date=september.date(),
+            commit=True, history='Cash1', date=september,
             expenses=100, income=100
         )
         self.cash2 = create_cash(
-            commit=True, history='Cash2', date=september.date(),
-            expenses=200, income=200
+            commit=True, history='Cash2', date=september,
+            expenses=160, income=200
         )
         self.cash3 = create_cash(
-            commit=True, history='Cash3', date=october.date(),
-            expenses=300, income=300
+            commit=True, history='Cash3', date=october,
+            expenses=150, income=300
+        )
+
+        self.cash4 = create_cash(
+            commit=True, history='Cash4', date=january,
+            expenses=0, income=500
         )
 
         data = {
-            'selectyear': october.date().year
+            'selectyear': january.year
         }
 
         self.url = reverse('statement:cash_annual')
         self.response = self.client.post(self.url, data, follow=True)
 
     def test_data_after_post(self):
-        'The response must have the data of cash3, only'
-        self.assertContains(self.response, self.cash3.history)
-        self.assertContains(self.response, self.cash3.income)
-        self.assertContains(self.response, self.cash3.expenses)
+        'The response must have the data of cash4, only'
+        self.assertContains(self.response, self.cash4.history)
+        self.assertContains(self.response, self.cash4.income)
+        self.assertContains(self.response, self.cash4.expenses)
+
+        self.assertNotContains(self.response, self.cash3.history)
+        self.assertNotContains(self.response, self.cash3.income)
+        self.assertNotContains(self.response, self.cash3.expenses)
 
         self.assertNotContains(self.response, self.cash1.history)
         self.assertNotContains(self.response, self.cash1.income)
@@ -472,6 +483,13 @@ class CashAnnualSeachPostTest(TestBase):
         self.assertNotContains(self.response, self.cash2.history)
         self.assertNotContains(self.response, self.cash2.income)
         self.assertNotContains(self.response, self.cash2.expenses)
+
+        # Test if balance before is right
+        # cash1.total + cash2.total + cash3.total => 0 + 40 + 150 = 190
+        self.assertContains(self.response, 'Valor total anterior: R$ 190,00')
+
+        # Test if atual balance is right (100 -100 + 200 -200 + 500 = 500)
+        self.assertContains(self.response, 'Valor total: R$ 500,00')
 
     def test_in_another_date(self):
         'If there are not registries, must return a warning message'

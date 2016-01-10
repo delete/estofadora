@@ -35,6 +35,18 @@
     </form>
 </div>
 
+<div class="well well-sm">
+    <div class="total_value">
+        {% if total_before > 0 %}
+        <p class="text-right text-success">
+        {% else %}
+        <p class="text-right text-danger">
+        {% endif %}
+            Valor total anterior: R$ {{ total_before }}
+        </p>
+    </div>
+</div>
+
 {% if content %}
 
 	<table class="table table-striped">

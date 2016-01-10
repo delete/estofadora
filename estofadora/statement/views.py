@@ -130,8 +130,14 @@ def cash_annual(request):
     context = {}
     year = datetime.now().date().year
 
+    january = 1
+    y, m = month_before_of(year, january)
+    last_day_year_before = last_day_of(y, m)
+
+    total_before = Balance.total_balance_before(last_day_year_before)
+
     content = Cash.filter_by_date(year=year)
-    total_value = Cash.total_value_by_date(year)
+    total_value = Cash.total_value_by_date(year=year)
 
     if request.method == 'POST':
         year = int(request.POST.get('selectyear'))
@@ -140,6 +146,7 @@ def cash_annual(request):
         total_value = Cash.total_value_by_date(year=year)
 
     context['total_value'] = total_value
+    context['total_before'] = total_before
     context['content'] = content
     context['choose_year'] = year
     context['years'] = Cash.list_years()
