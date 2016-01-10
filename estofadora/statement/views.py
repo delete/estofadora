@@ -23,8 +23,6 @@ def cash(request):
 
     content = Cash.objects.filter(date=date)
 
-    total_before = Balance.total_balance_before(date)
-
     form = CashForm(initial={'date': date})
 
     if request.method == 'POST':
@@ -37,7 +35,6 @@ def cash(request):
                 date = datetime.strptime(date, '%Y-%m-%d').date()
 
             content = Cash.objects.filter(date=date)
-            total_before = Balance.total_balance_before(date)
 
         else:
 
@@ -50,6 +47,7 @@ def cash(request):
 
                 return redirect(reverse('statement:cash'))
 
+    total_before = Balance.total_balance_before(date)
     content, balance = Cash.create_balance(content, total_before)
 
     context['form'] = form
@@ -98,11 +96,6 @@ def cash_month(request):
     year = date.year
     month = date.month
 
-    y, m = month_before_of(year, month)
-    last_day_month_before = last_day_of(y, m)
-
-    total_before = Balance.total_balance_before(last_day_month_before)
-
     content = Cash.filter_by_date(month=month, year=year)
     total_value = Cash.total_value_by_date(month=month, year=year)
 
@@ -112,6 +105,11 @@ def cash_month(request):
 
         content = Cash.filter_by_date(month=month, year=year)
         total_value = Cash.total_value_by_date(month=month, year=year)
+
+    y, m = month_before_of(year, month)
+    last_day_month_before = last_day_of(y, m)
+
+    total_before = Balance.total_balance_before(last_day_month_before)
 
     content, total_value = Cash.create_balance(content, total_before)
 
@@ -130,12 +128,6 @@ def cash_annual(request):
     context = {}
     year = datetime.now().date().year
 
-    january = 1
-    y, m = month_before_of(year, january)
-    last_day_year_before = last_day_of(y, m)
-
-    total_before = Balance.total_balance_before(last_day_year_before)
-
     content = Cash.filter_by_date(year=year)
     total_value = Cash.total_value_by_date(year=year)
 
@@ -144,6 +136,12 @@ def cash_annual(request):
 
         content = Cash.filter_by_date(year=int(year))
         total_value = Cash.total_value_by_date(year=year)
+
+    january = 1
+    y, m = month_before_of(year, january)
+    last_day_year_before = last_day_of(y, m)
+
+    total_before = Balance.total_balance_before(last_day_year_before)
 
     context['total_value'] = total_value
     context['total_before'] = total_before

@@ -346,7 +346,7 @@ class CashMonthSeachPostTest(TestBase):
         )
         self.cash3 = create_cash(
             commit=True, history='Cash3', date=october,
-            expenses=300, income=300
+            expenses=180, income=300
         )
         self.cash4 = create_cash(
             commit=True, history='Cash4', date=august,
@@ -377,10 +377,10 @@ class CashMonthSeachPostTest(TestBase):
         self.assertNotContains(self.response, self.cash3.expenses)
 
         # Test if balance before is right (500 from august)
-        self.assertContains(self.response, 'Valor total anterior: R$ 500,00')
+        self.assertContains(self.response, 'Valor total anterior: R$ 120,00')
 
-        # Test if atual balance is right (100 -100 + 200 -200 + 500 = 500)
-        self.assertContains(self.response, 'Valor total: R$ 500,00')
+        # Test if atual balance is right (100 -100 + 200 -200 +300 - 180 = 120)
+        self.assertContains(self.response, 'Valor total: R$ 120,00')
 
     def test_in_another_date(self):
         'If there are not registries, must return a warning message'
