@@ -6,200 +6,201 @@ from . import TestCase, Cash, create_cash, create_balance, Balance
 
 class CashModelTest(TestCase):
 
-	def setUp(self):
-		self.september = datetime.datetime(2015, 9, 10)
+    def setUp(self):
+        self.september = datetime.datetime(2015, 9, 10)
 
-		self.october = datetime.datetime(2014, 10, 10)
+        self.october = datetime.datetime(2014, 10, 10)
 
-		self.cash1 = create_cash(
-			commit=True, history='Cash1', date=self.september.date(),
-			expenses=100, income=50
-		)
-		self.cash2 = create_cash(
-			commit=True, history='Cash2', date=self.september.date(),
-			expenses=200, income=100
-		)
-		self.cash3 = create_cash(
-			commit=True, history='Cash3', date=self.october.date(),
-			expenses=300, income=150
-		)
+        self.cash1 = create_cash(
+            commit=True, history='Cash1', date=self.september.date(),
+            expenses=100, income=50
+        )
+        self.cash2 = create_cash(
+            commit=True, history='Cash2', date=self.september.date(),
+            expenses=200, income=100
+        )
+        self.cash3 = create_cash(
+            commit=True, history='Cash3', date=self.october.date(),
+            expenses=300, income=150
+        )
 
-		self.cash4 = create_cash(
-			commit=True, history='Cash4', date=self.october.date(),
-			expenses=400, income=200
-		)
-		
-	def tearDown(self):
-		Cash.objects.all().delete()
-		Balance.objects.all().delete()
+        self.cash4 = create_cash(
+            commit=True, history='Cash4', date=self.october.date(),
+            expenses=400, income=200
+        )
 
-	def test_total(self):
-		'''
-			Test total from instanced object.
-		'''
-		expected_total = self.cash1.income - self.cash1.expenses
-		self.assertEqual(self.cash1.total, expected_total)
+    def tearDown(self):
+        Cash.objects.all().delete()
+        Balance.objects.all().delete()
 
-		expected_total = self.cash2.income - self.cash2.expenses
-		self.assertEqual(self.cash2.total, expected_total)
+    def test_total(self):
+        '''
+            Test total from instanced object.
+        '''
+        expected_total = self.cash1.income - self.cash1.expenses
+        self.assertEqual(self.cash1.total, expected_total)
 
-		expected_total = self.cash3.income - self.cash3.expenses
-		self.assertEqual(self.cash3.total, expected_total)
+        expected_total = self.cash2.income - self.cash2.expenses
+        self.assertEqual(self.cash2.total, expected_total)
 
-	def test_total_value(self):
-		'''
-			Test total from all objects.
-		'''
-		expected_total = (
-			self.cash1.total + self.cash2.total + 
-			self.cash3.total + self.cash4.total
-		)
+        expected_total = self.cash3.income - self.cash3.expenses
+        self.assertEqual(self.cash3.total, expected_total)
 
-		self.assertEqual(Cash.total_value(), expected_total)
+    def test_total_value(self):
+        '''
+            Test total from all objects.
+        '''
+        expected_total = (
+            self.cash1.total + self.cash2.total +
+            self.cash3.total + self.cash4.total
+        )
 
-	def test_list_years(self):
-		expected_items = [2014, 2015]
+        self.assertEqual(Cash.total_value(), expected_total)
 
-		self.assertEqual(Cash.list_years(), expected_items)
+    def test_list_years(self):
+        expected_items = [2014, 2015]
 
-	def test_filter_by_date_by_year(self):
-		# Filter by year = 2014 must return 2 items
-		expected_items = 2
+        self.assertEqual(Cash.list_years(), expected_items)
 
-		items = Cash.filter_by_date(year=2014)
+    def test_filter_by_date_by_year(self):
+        # Filter by year = 2014 must return 2 items
+        expected_items = 2
 
-		self.assertEqual(len(items), expected_items)
+        items = Cash.filter_by_date(year=2014)
 
-	def test_filter_by_date_by_month(self):
-		# Filter by month = 10 must return 2 items
-		expected_items = 2
+        self.assertEqual(len(items), expected_items)
 
-		items = Cash.filter_by_date(month=10)
+    def test_filter_by_date_by_month(self):
+        # Filter by month = 10 must return 2 items
+        expected_items = 2
 
-		self.assertEqual(len(items), expected_items)
+        items = Cash.filter_by_date(month=10)
 
-	def test_filter_by_date_by_day(self):
-		#Filter by day = 11 must return 0 items
-		expected_items = 0
+        self.assertEqual(len(items), expected_items)
 
-		items = Cash.filter_by_date(day=11)
+    def test_filter_by_date_by_day(self):
+        # Filter by day = 11 must return 0 items
+        expected_items = 0
 
-		self.assertEqual(len(items), expected_items)
+        items = Cash.filter_by_date(day=11)
 
-	def test_total_value_by_date_by_year(self):
-		#Filter by year = 2014
-		expected_total = self.cash3.total + self.cash4.total
+        self.assertEqual(len(items), expected_items)
 
-		year = 2014
-		self.assertEqual(Cash.total_value_by_date(year=year), expected_total)
+    def test_total_value_by_date_by_year(self):
+        # Filter by year = 2014
+        expected_total = self.cash3.total + self.cash4.total
 
-	def test_total_value_by_date_by_month_and_year(self):
-		#Filter by month and year = 09/2014
-		expected_total = self.cash1.total + self.cash2.total
+        year = 2014
+        self.assertEqual(Cash.total_value_by_date(year=year), expected_total)
 
-		month = 9
-		year = 2015
-		total = Cash.total_value_by_date(month=month, year=year)
-		self.assertEqual(total, expected_total)
+    def test_total_value_by_date_by_month_and_year(self):
+        # Filter by month and year = 09/2014
+        expected_total = self.cash1.total + self.cash2.total
 
-	def test_total_value_by_date_by_day(self):
-		#Filter by day = 11/10/2014
-		expected_total = self.cash3.total + self.cash4.total
+        month = 9
+        year = 2015
+        total = Cash.total_value_by_date(month=month, year=year)
+        self.assertEqual(total, expected_total)
 
-		day = 10
-		month = 10
-		year = 2014
-		total = Cash.total_value_by_date(day=day, month=month, year=year)
-		self.assertEqual(total, expected_total)
+    def test_total_value_by_date_by_day(self):
+        # Filter by day = 11/10/2014
+        expected_total = self.cash3.total + self.cash4.total
 
-	def test_create_balance(self):
-		total_yesterday = 100
-		
-		content = []
+        day = 10
+        month = 10
+        year = 2014
+        total = Cash.total_value_by_date(day=day, month=month, year=year)
+        self.assertEqual(total, expected_total)
 
-		content = Cash.objects.filter(date=self.september)
+    def test_create_balance(self):
+        total_yesterday = 100
 
-		content, balance = Cash.create_balance(content, total_yesterday)
-		
-		last_element = len(content) - 1
+        content = []
 
-		self.assertEqual(float(content[last_element].balance), balance)
-		self.assertEqual(float(content[last_element].balance), float(-50))
+        content = Cash.objects.filter(date=self.september)
 
-	def test_if_balance_was_created(self):
-		cash1 = create_cash(
-			commit=True, history='Cash1', date=self.september.date(),
-			expenses=100, income=50
-		)
+        content, balance = Cash.create_balance(content, total_yesterday)
 
-		cash2 = create_cash(
-			commit=True, history='Cash2', date=self.september.date(),
-			expenses=0, income=200
-		)
+        last_element = len(content) - 1
 
-		self.assertEqual(len(Balance.objects.all()), 2)
+        self.assertEqual(float(content[last_element].balance), balance)
+        self.assertEqual(float(content[last_element].balance), float(-50))
 
-	def test_if_balance_was_deleted(self):
-		# Clear first
-		Balance.objects.all().delete()
-		
-		cash1 = create_cash(
-			commit=True, history='Cash1', date=self.september.date(),
-			expenses=100, income=50
-		)
+    def test_if_balance_was_created(self):
+        cash1 = create_cash(
+            commit=True, history='Cash1', date=self.september.date(),
+            expenses=100, income=50
+        )
 
-		cash1.delete()
+        cash2 = create_cash(
+            commit=True, history='Cash2', date=self.september.date(),
+            expenses=0, income=200
+        )
 
-		self.assertEqual(len(Balance.objects.all()), 0)
+        self.assertEqual(len(Balance.objects.all()), 2)
 
-	def test_if_balance_was_updated(self):
-		# Clear first
-		Balance.objects.all().delete()
+    def test_if_balance_was_deleted(self):
+        # Clear first
+        Balance.objects.all().delete()
 
-		cash1 = create_cash(
-			commit=True, history='Cash1', date=self.september.date(),
-			expenses=100, income=50
-		)
+        cash1 = create_cash(
+            commit=True, history='Cash1', date=self.september.date(),
+            expenses=100, income=50
+        )
 
-		cash2 = create_cash(
-			commit=True, history='Cash1', date=self.september.date(),
-			expenses=0, income=200
-		)
+        cash1.delete()
 
-		cash1.delete()
-		# As the cash1 was deleted, will just remain the value from cash2, that it's 200.
+        self.assertEqual(len(Balance.objects.all()), 0)
 
-		balance = Balance.objects.get(date=cash2.date)
-		self.assertEqual(float(balance.value), float(200))
+    def test_if_balance_was_updated(self):
+        # Clear first
+        Balance.objects.all().delete()
+
+        cash1 = create_cash(
+            commit=True, history='Cash1', date=self.september.date(),
+            expenses=100, income=50
+        )
+
+        cash2 = create_cash(
+            commit=True, history='Cash1', date=self.september.date(),
+            expenses=0, income=200
+        )
+
+        cash1.delete()
+        # As the cash1 was deleted, will just remain the value from cash2,
+        # that it's 200.
+
+        balance = Balance.objects.get(date=cash2.date)
+        self.assertEqual(float(balance.value), float(200))
 
 
 class BalanceModelTest(TestCase):
 
-	def setUp(self):
-		dayone = datetime.datetime(2015,12,1)
-		daytwo = datetime.datetime(2015,12,2)
-		daythree = datetime.datetime(2015,12,3)
-		anotherday = datetime.datetime(2016,1,1)
-		
-		self.b1 = create_balance(date=dayone, value=100, commit=True)
-		self.b2 = create_balance(date=daytwo, value=200, commit=True)
-		self.b3 = create_balance(date=daythree, value=-100, commit=True)
+    def setUp(self):
+        dayone = datetime.datetime(2015, 12, 1)
+        daytwo = datetime.datetime(2015, 12, 2)
+        daythree = datetime.datetime(2015, 12, 3)
+        anotherday = datetime.datetime(2016, 1, 1)
 
-		#This balance should not count
-		self.b11 = create_balance(date=anotherday, value=-1000, commit=True)
-	
-	def tearDown(self):
-		Cash.objects.all().delete()
-		Balance.objects.all().delete()
-	
-	def test_if_was_created(self):
-		self.assertEqual(len(Balance.objects.all()), 4)
+        self.b1 = create_balance(date=dayone, value=100, commit=True)
+        self.b2 = create_balance(date=daytwo, value=200, commit=True)
+        self.b3 = create_balance(date=daythree, value=-100, commit=True)
 
-	def test_total_balance_before(self):
-		'''
-			Test if is getting date less then the day.
-		'''
-		day = datetime.datetime(2016,1,1)
-		total_balance = Balance.total_balance_before(date=day)
+        # This balance should not count
+        self.b11 = create_balance(date=anotherday, value=-1000, commit=True)
 
-		self.assertEqual(float(total_balance), float(200))
+    def tearDown(self):
+        Cash.objects.all().delete()
+        Balance.objects.all().delete()
+
+    def test_if_was_created(self):
+        self.assertEqual(len(Balance.objects.all()), 4)
+
+    def test_total_balance_before(self):
+        '''
+            Test if is getting date less then the day.
+        '''
+        day = datetime.datetime(2016, 1, 1)
+        total_balance = Balance.total_balance_before(date=day)
+
+        self.assertEqual(float(total_balance), float(200))
