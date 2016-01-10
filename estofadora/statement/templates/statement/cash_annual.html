@@ -1,4 +1,5 @@
 {% extends "base.html" %}	
+{% load staticfiles %}
 
 {% block content %}
 <div class="panel panel-default">
@@ -35,6 +36,8 @@
     </form>
 </div>
 
+{% if years %}
+    
 <div class="well well-sm">
     <div class="total_value">
         {% if total_before > 0 %}
@@ -42,53 +45,85 @@
         {% else %}
         <p class="text-right text-danger">
         {% endif %}
-            Valor total anterior: R$ {{ total_before }}
+            Valor total de {{choose_year|add:"-1"}}: R$ {{ total_before }}
         </p>
     </div>
 </div>
 
-{% if content %}
+<!-- Prepare a Dom with size (width and height) for ECharts -->
+<div id="mychart" style="height:600px"></div>
 
-	<table class="table table-striped">
-	    <thead>
-	        <tr>
-	            <th>Data</th>
-	            <th>Histórico</th>
-	            <th>Entrada</th>
-	            <th>Saida</th>
-                <th>Saldo</th>
-	        </tr>
-	    </thead>
-	    <tbody>
-	        {% for item in content %}
-	            <tr>
-	                <td>{{item.date}}</td>
-	                <td>{{item.history}}</td>
-	                <td>{{item.income}}</td>
-	                <td>{{item.expenses }}</td>
-                    <td>{{item.balance }}</td>
-	            </tr>
-	        {% endfor %}
-	    </tbody>
-	</table>
+<div class="well well-sm">
+    <div class="total_value">
+        {% if total_value > 0 %}
+        <p class="text-right text-success">
+        {% else %}
+        <p class="text-right text-danger">
+        {% endif %}
+            Valor total de {{choose_year}}: R$ {{ total_value }}
+        </p>
+    </div>
+</div>
 
-	<div class="total_value">
-		{% if total_value > 0 %}
-		<p class="text-right text-success">
-		{% else %}
-		<p class="text-right text-danger">
-		{% endif %}
-			Valor total: R$ {{ total_value }}
-		</p>
-	</div>
-
+<!-- ECharts import -->
+<script src="{% static "js/echarts.js" %}"></script>
+<script type="text/javascript">
+    // configure for module loader
+    require.config({
+        paths: {
+            echarts: 'http://echarts.baidu.com/build/dist'
+        }
+    });
+    
+    // use
+    require(
+        [
+            'echarts',
+            'echarts/chart/bar' // require the specific chart type
+        ],
+        function (ec) {
+            // Initialize after dom ready
+            var myChart = ec.init(document.getElementById('mychart')); 
+            
+            var option = {
+                tooltip: {
+                    show: true
+                },
+                legend: {
+                    data:['Saldo']
+                },
+                xAxis : [
+                    {
+                        type : 'category',
+                        data : ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"]
+                    }
+                ],
+                yAxis : [
+                    {
+                        type : 'value'
+                    }
+                ],
+                series : [
+                    {
+                        "name":"Saldo",
+                        "type":"bar",
+                        "data": {{balances}} 
+                    }
+                ],
+            };
+    
+            // Load data into the ECharts instance 
+            myChart.setOption(option); 
+        }
+    );
+</script>
 {% else %}
-	<div class="alert alert-warning" role="alert">
-		<p class="text-center">
-			Nenhum registro encontrado.
-		</p>
-		
-	</div>
+    <div class="alert alert-warning" role="alert">
+        <p class="text-center">
+            Nenhum registro encontrado.
+        </p>
+        
+    </div>
 {% endif %}
 
 {% endblock %}

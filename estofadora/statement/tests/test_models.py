@@ -204,3 +204,10 @@ class BalanceModelTest(TestCase):
         total_balance = Balance.total_balance_before(date=day)
 
         self.assertEqual(float(total_balance), float(200))
+
+    def test_total_balance_from_month(self):
+        expected = self.b1.value + self.b2.value + self.b3.value
+
+        result = Balance.balance_from_month(year=2015, month=12)
+
+        self.assertEqual(expected, result)

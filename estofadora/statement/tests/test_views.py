@@ -467,37 +467,12 @@ class CashAnnualSeachPostTest(TestBase):
         self.response = self.client.post(self.url, data, follow=True)
 
     def test_data_after_post(self):
-        'The response must have the data of cash4, only'
-        self.assertContains(self.response, self.cash4.history)
-        self.assertContains(self.response, self.cash4.income)
-        self.assertContains(self.response, self.cash4.expenses)
-
-        self.assertNotContains(self.response, self.cash3.history)
-        self.assertNotContains(self.response, self.cash3.income)
-        self.assertNotContains(self.response, self.cash3.expenses)
-
-        self.assertNotContains(self.response, self.cash1.history)
-        self.assertNotContains(self.response, self.cash1.income)
-        self.assertNotContains(self.response, self.cash1.expenses)
-
-        self.assertNotContains(self.response, self.cash2.history)
-        self.assertNotContains(self.response, self.cash2.income)
-        self.assertNotContains(self.response, self.cash2.expenses)
-
         # Test if balance before is right
         # cash1.total + cash2.total + cash3.total => 0 + 40 + 150 = 190
-        self.assertContains(self.response, 'Valor total anterior: R$ 190,00')
+        self.assertContains(self.response, 'Valor total de 2015: R$ 190,00')
 
-        # Test if atual balance is right (100 -100 + 200 -200 + 500 = 500)
-        self.assertContains(self.response, 'Valor total: R$ 690,00')
+        # Test if atual balance is right (500 from january)
+        self.assertContains(self.response, 'Valor total de 2016: R$ 500,00')
 
-    def test_in_another_date(self):
-        'If there are not registries, must return a warning message'
-
-        data = {
-            'selectyear': '2013'
-        }
-
-        self.response = self.client.post(self.url, data, follow=True)
-
-        self.assertContains(self.response, 'Nenhum registro encontrado.')
+    def test_chart(self):
+        self.assertContains(self.response, 'id="mychart"')

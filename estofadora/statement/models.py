@@ -162,6 +162,14 @@ class Balance(models.Model):
 
         return total
 
+    @staticmethod
+    def balance_from_month(year, month):
+        items = Balance.objects.filter(date__year=year, date__month=month)
+
+        total = sum(i.value for i in items)
+
+        return total
+
     class Meta:
         ordering = ['date']
         verbose_name = ('Balance')
