@@ -143,6 +143,8 @@ def cash_annual(request):
 
     total_before = Balance.total_balance_before(last_day_year_before)
 
+    content, total_value = Cash.create_balance(content, total_before)
+
     context['total_value'] = total_value
     context['total_before'] = total_before
     context['content'] = content
