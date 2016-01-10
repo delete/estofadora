@@ -14,15 +14,21 @@ MONTHS = [
 ]
 
 
-def get_last_day(year, month):
+def last_day_of(year, month):
     import calendar
     from datetime import datetime
+
+    day = calendar.monthrange(year, month)[1]
+    return datetime(year, month, day).date()
+
+
+def month_before_of(year, month):
     # Get the month before
     month = month - 1
     if month == 0:
+        # If was January, should return to December.
         month = 12
-        # If the month return to 12, it means that
+        # If the month return to December, it means that
         # is from a year before.
         year -= 1
-    day = calendar.monthrange(year, month)[1]
-    return datetime(year, month, day).date()
+    return year, month
