@@ -330,26 +330,32 @@ class CashMonthSeachPostTest(TestBase):
     def setUp(self):
         self.login()
 
-        september = datetime.datetime(2015, 9, 10)
+        october = datetime.datetime(2015, 8, 10).date()
 
-        october = datetime.datetime(2015, 10, 10)
+        september = datetime.datetime(2015, 9, 10).date()
+
+        august = datetime.datetime(2015, 10, 10).date()
 
         self.cash1 = create_cash(
-            commit=True, history='Cash1', date=september.date(),
+            commit=True, history='Cash1', date=september,
             expenses=100, income=100
         )
         self.cash2 = create_cash(
-            commit=True, history='Cash2', date=september.date(),
+            commit=True, history='Cash2', date=september,
             expenses=200, income=200
         )
         self.cash3 = create_cash(
-            commit=True, history='Cash3', date=october.date(),
+            commit=True, history='Cash3', date=october,
             expenses=300, income=300
+        )
+        self.cash4 = create_cash(
+            commit=True, history='Cash4', date=august,
+            expenses=0, income=500
         )
 
         data = {
-            'selectmonth': september.date().month,
-            'selectyear': september.date().year
+            'selectmonth': september.month,
+            'selectyear': september.year
         }
 
         self.response = self.client.post(
@@ -369,6 +375,12 @@ class CashMonthSeachPostTest(TestBase):
         self.assertNotContains(self.response, self.cash3.history)
         self.assertNotContains(self.response, self.cash3.income)
         self.assertNotContains(self.response, self.cash3.expenses)
+
+        # Test if balance before is right (500 from august)
+        self.assertContains(self.response, 'Valor total anterior: R$ 500,00')
+
+        # Test if atual balance is right (100 -100 + 200 -200 + 500 = 500)
+        self.assertContains(self.response, 'Valor total: R$ 500,00')
 
     def test_in_another_date(self):
         'If there are not registries, must return a warning message'

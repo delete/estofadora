@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 
-from estofadora.core.utils import MONTHS
+from estofadora.core.utils import MONTHS, get_last_day
 
 from .forms import CashForm
 from .models import Cash, Balance
@@ -98,6 +98,10 @@ def cash_month(request):
     year = date.year
     month = date.month
 
+    last_day_month_before = get_last_day(year, month)
+
+    total_before = Balance.total_balance_before(last_day_month_before)
+
     content = Cash.filter_by_date(month=month, year=year)
     total_value = Cash.total_value_by_date(month=month, year=year)
 
@@ -108,8 +112,11 @@ def cash_month(request):
         content = Cash.filter_by_date(month=month, year=year)
         total_value = Cash.total_value_by_date(month=month, year=year)
 
+    content, total_value = Cash.create_balance(content, total_before)
+
     context['content'] = content
     context['total_value'] = total_value
+    context['total_before'] = total_before
     context['choose_month'] = month
     context['choose_year'] = year
     context['months'] = MONTHS
