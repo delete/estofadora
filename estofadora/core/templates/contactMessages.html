@@ -23,16 +23,16 @@
 		{% endif %}
 
 			<div class="panel-heading">
-				{{ contact.subject }} - <small>{{ contact.created_at }}</small>
-				<div class="pull-right">
-					{% if not contact.read %}
-	                <a class="btn btn-success btn-xs" role="button" 
-	                        href="{% url 'core:markMessageAsRead' contact.pk %}"
-	                        title="Marcar mensagem como lida">
-	                        <i class="fa fa-eye"></i>
-							Lido
-	                </a>
-					{% endif %}
+				{% if not contact.read %}
+                <a class="btn btn-success btn-xs" role="button" 
+                        href="{% url 'core:markMessageAsRead' contact.pk %}"
+                        title="Marcar mensagem como lida">
+                        <i class="fa fa-eye"></i>
+						Lido
+                </a> - 
+				{% endif %}
+                {{ contact.subject }} - <small>{{ contact.created_at }}</small>
+                <div class="pull-right">
 					<a class="btn btn-danger btn-xs" role="button" 
 	                        href="{% url 'core:deleteMessage' contact.pk %}"
 	                        title="Apagar mensagem">
