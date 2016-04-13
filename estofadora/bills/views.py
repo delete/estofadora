@@ -9,48 +9,48 @@ from .models import Bill
 
 @login_required
 def new(request):
-	context = {}
+    context = {}
 
-	if request.method == 'POST':
-		
-		form = BillForm(request.POST)
+    if request.method == 'POST':
 
-		if form.is_valid():
-			form.save()
-			messages.success(request, 'Cadastrada com sucesso!')
-			return redirect(reverse('bills:new'))
-	else:
-		form = BillForm()
+        form = BillForm(request.POST)
 
-	context['form'] = form
-	return render(request, 'bills/new.html', context)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Cadastrada com sucesso!')
+            return redirect(reverse('bills:new'))
+    else:
+        form = BillForm()
+
+    context['form'] = form
+    return render(request, 'bills/new.html', context)
 
 
 @login_required
 def list(request):
-	context = {}
-	bills = Bill.objects.all()
+    context = {}
+    bills = Bill.objects.all()
 
-	context['bills'] = bills
-	return render(request, 'bills/list.html', context)
+    context['bills'] = bills
+    return render(request, 'bills/list.html', context)
 
 
 @login_required
 def delete(request, pk):
-	bill = get_object_or_404(Bill, pk=pk)
+    bill = get_object_or_404(Bill, pk=pk)
 
-	bill.delete()
+    bill.delete()
 
-	messages.success(request, 'Conta removida com sucesso!')
-	return redirect(reverse('bills:list'))
+    messages.success(request, 'Conta removida com sucesso!')
+    return redirect(reverse('bills:list'))
 
 
 @login_required
 def mark_as_paid(request, pk):
-	bill = get_object_or_404(Bill, pk=pk)
+    bill = get_object_or_404(Bill, pk=pk)
 
-	bill.is_paid = True
-	bill.save()
+    bill.is_paid = True
+    bill.save()
 
-	messages.success(request, 'Conta marcada como paga!')
-	return redirect(reverse('bills:list'))
+    messages.success(request, 'Conta marcada como paga!')
+    return redirect(reverse('bills:list'))

@@ -127,12 +127,12 @@ class CashModelTest(TestCase):
         self.assertEqual(float(content[last_element].balance), float(-50))
 
     def test_if_balance_was_created(self):
-        cash1 = create_cash(
+        create_cash(
             commit=True, history='Cash1', date=self.september.date(),
             expenses=100, income=50
         )
 
-        cash2 = create_cash(
+        create_cash(
             commit=True, history='Cash2', date=self.september.date(),
             expenses=0, income=200
         )

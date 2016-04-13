@@ -1,7 +1,8 @@
-#coding: utf-8
-from django.conf.urls import patterns, url, include
+# coding: utf-8
+from django.conf.urls import patterns, url
 
-urlpatterns = patterns('estofadora.item.views',
+urlpatterns = patterns(
+    'estofadora.item.views',
     url(r'^add/$', 'add', name='add'),
     url(r'^(?P<pk>\d+)/editar/', 'edit', name='edit'),
     url(r'^listar/$', 'list', name='list'),
