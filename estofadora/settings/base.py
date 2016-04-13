@@ -18,7 +18,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'sw=o-z2wh&!z40pmr8whsii++ud^1etdz&)f*@2)t@bgpzb2qg'
 
-#For tests
+# For tests
 PASSWORD_HASHERS = (
     'django.contrib.auth.hashers.MD5PasswordHasher',
 )
@@ -43,11 +43,11 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
-    #'opbeat.contrib.django',
+
+    # 'opbeat.contrib.django',
     'rest_framework',
 
-    #My apps
+    # My apps
     'estofadora.core',
     'estofadora.client',
     'estofadora.login',
@@ -59,7 +59,7 @@ INSTALLED_APPS = (
 
 
 MIDDLEWARE_CLASSES = (
-    #'opbeat.contrib.django.middleware.OpbeatAPMMiddleware',
+    # 'opbeat.contrib.django.middleware.OpbeatAPMMiddleware',
 
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
