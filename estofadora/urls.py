@@ -18,7 +18,6 @@ urlpatterns = patterns(
     ),
     url(r'^contas/', include('estofadora.bills.urls', namespace='bills')),
     url(r'^admin/', include(admin.site.urls)),
-    # url(r'^api/', include('estofadora.api.urls', namespace='api')),
 )
 
 
