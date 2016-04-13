@@ -26,8 +26,23 @@ class HomeViewTest(TestBase):
     def test_get_logout(self):
         self._test_get_logout(self.url)
 
-    def test_content_empty(self):
+    def test_boards_content_empty(self):
         self.assertContains(self.response, '"announcement-heading">0<', 4)
+
+    def test_boards_content_when_not_empty(self):
+        client = create_client(commit=True)
+
+        item1 = create_item(client=client, commit=True)
+        create_picture(item=item1)
+
+        create_item(client=client, commit=True)
+        create_bill(commit=True)
+
+        self.response = self.client.get(self.url)
+        # one client, one picture and one bill
+        self.assertContains(self.response, '"announcement-heading">1<', 3)
+        # two items
+        self.assertContains(self.response, '"announcement-heading">2<', 1)
 
     def test_week_delivery_content_when_empty(self):
         self.assertContains(self.response, 'Nenhuma entrega para essa semana.')
@@ -36,20 +51,27 @@ class HomeViewTest(TestBase):
         client = create_client(commit=True)
 
         today = datetime.datetime.now()
-        item1 = create_item(client=client, delivery_date=today, commit=True)
 
-        item2 = create_item(client=client, name='Puff', commit=True)
-        picture = create_picture(item=item1)
-        bill = create_bill(commit=True)
+        item1 = create_item(client=client, delivery_date=today, commit=True)
+        item2 = create_item(
+            client=client, delivery_date=today, concluded=True, commit=True
+        )
+        item3 = create_item(client=client, name='Puff', commit=True)
 
         self.response = self.client.get(self.url)
-        # one client, one picture and one bill
-        self.assertContains(self.response, '"announcement-heading">1<', 3)
-        # two items
-        self.assertContains(self.response, '"announcement-heading">2<', 1)
 
+        # Item1 should appear and its status is concluded False
         self.assertContains(self.response, item1.name)
         self.assertContains(self.response, item1.client.name)
+        self.assertContains(self.response, 'Pendente')
+
+        # Item2 should appear and its status is concluded True
+        self.assertContains(self.response, item2.name)
+        self.assertContains(self.response, item2.client.name)
+        self.assertContains(self.response, 'Entregue')
+
+        # Item3 must not appear
+        self.assertNotContains(self.response, item3.name)
 
     def test_week_bills_content_when_empty(self):
         self.assertContains(self.response, 'Nenhuma conta para essa semana.')
@@ -57,16 +79,25 @@ class HomeViewTest(TestBase):
     def test_week_bills_content_when_not_empty(self):
         today = datetime.datetime.now()
         bill1 = create_bill(value=11, date_to_pay=today, commit=True)
-        bill2 = create_bill(name='Luz', value=33, commit=True)
+        bill2 = create_bill(
+            name='Net', date_to_pay=today, value=44, is_paid=True, commit=True
+        )
+        bill3 = create_bill(name='Luz', value=33, commit=True)
 
-        # Bill2 belong this week number
+        # Bill1 belong this week number
         self.response = self.client.get(self.url)
         self.assertContains(self.response, bill1.name)
         self.assertContains(self.response, bill1.value)
+        self.assertContains(self.response, 'Pendente')
 
-        # Bill2 don't belong this week number.
-        self.assertNotContains(self.response, bill2.name)
-        self.assertNotContains(self.response, bill2.value)
+        # Bill2 belong this week number too
+        self.assertContains(self.response, bill2.name)
+        self.assertContains(self.response, bill2.value)
+        self.assertContains(self.response, 'Pago')
+
+        # Bill3 does not belong this week.
+        self.assertNotContains(self.response, bill3.name)
+        self.assertNotContains(self.response, bill3.value)
 
 
 class SiteViewTest(TestBase):

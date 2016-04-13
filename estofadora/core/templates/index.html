@@ -113,6 +113,7 @@
                         <th>Cliente</th>
                         <th>Item</th>
                         <th>Data de entrega</th>
+                        <th>Estado</th>
                         <td>Detalhes</td>
                     </tr>
                 </thead>
@@ -122,6 +123,11 @@
                             <td>{{item.client.name}}</td>
                             <td>{{item.name}}</td>
                             <td>{{item.delivery_date}}</td>
+                            {% if item.concluded %}
+                                <td><span class="label label-success">Entregue</span></td>
+                            {% else %}
+                                <td><span class="label label-danger">Pendente</span></td>
+                            {% endif %}
                             <th><p class="text-center"><a href="{% url 'item:edit' item.pk %}"><i class="fa fa-info-circle fa-2x"></i></a></p>
                             </th>
                         </tr>
@@ -153,6 +159,7 @@
                         <th>Nome</th>
                         <th>Valor</th>
                         <th>Data de pagamento</th>
+                        <th>Estado</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -161,6 +168,11 @@
                             <td>{{bill.name}}</td>
                             <td>{{bill.value}}</td>
                             <td>{{bill.date_to_pay}}</td>
+                            {% if bill.is_paid %}
+                                <td><span class="label label-success">Pago</span></td>
+                            {% else %}
+                                <td><span class="label label-danger">Pendente</span></td>
+                            {% endif %}
                         </tr>
                         
                     {% endfor %}
