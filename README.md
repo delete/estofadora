@@ -8,6 +8,7 @@ So i tried to keep as simple as possible.
 
 Feel free to contribute and if you have any quention, open an issue and we'll discust.
 
+> As the product was made for an brazilian, the whole system is in Portuguese.
 
 ## Python version
 
@@ -18,7 +19,7 @@ Feel free to contribute and if you have any quention, open an issue and we'll di
 * Install pip -> https://pip.pypa.io/en/latest/installing.html
 * Install virtualenv -> https://virtualenv.pypa.io/en/latest/installation.html
 * Create a folder with virtualenv:
- ```sh
+```sh
 $ virtualenv folder
 ```
 * Activate the virtual enviroment:
