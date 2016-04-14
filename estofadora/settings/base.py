@@ -68,26 +68,11 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-OPBEAT = {
-    'ORGANIZATION_ID': '6409f61f82ab4ee58bf78923b1645a29',
-    'APP_ID': '8ee0dafc3e',
-    'SECRET_TOKEN': 'bbedc0141783b774e7ba5061d7a8ed6328bc148e',
-}
 
 ROOT_URLCONF = 'estofadora.urls'
 
 WSGI_APPLICATION = 'estofadora.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/1.7/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'banco.db'),
-#     }
-# }
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
