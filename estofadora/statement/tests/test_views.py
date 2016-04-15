@@ -128,8 +128,83 @@ class CashInvalidPostTest(TestBase):
 
 
 class CashSearchPostTest(TestBase):
-    # TODO
-    pass
+
+    def setUp(self):
+        self.login()
+
+        october = datetime.datetime(2015, 8, 10).date()
+
+        september = datetime.datetime(2015, 9, 10).date()
+
+        august = datetime.datetime(2015, 10, 10).date()
+
+        self.cash1 = create_cash(
+            commit=True, history='Cash1', date=september,
+            expenses=100, income=100
+        )
+        self.cash2 = create_cash(
+            commit=True, history='Cash2', date=september,
+            expenses=200, income=200
+        )
+        self.cash3 = create_cash(
+            commit=True, history='Cash3', date=october,
+            expenses=180, income=300
+        )
+        self.cash4 = create_cash(
+            commit=True, history='Cash4', date=august,
+            expenses=50, income=500
+        )
+
+        data = {
+            'search_date': [september],
+            'search_form': ['']
+        }
+
+        self.response = self.client.post(
+            reverse('statement:cash'), data, follow=True
+        )
+
+    def test_data_after_post(self):
+        'The response must have the data of cash1 and cash2, only'
+        self.assertContains(self.response, self.cash1.history)
+        self.assertContains(self.response, self.cash1.income)
+        self.assertContains(self.response, self.cash1.expenses)
+
+        self.assertContains(self.response, self.cash2.history)
+        self.assertContains(self.response, self.cash2.income)
+        self.assertContains(self.response, self.cash2.expenses)
+
+        self.assertNotContains(self.response, self.cash3.history)
+        self.assertNotContains(self.response, self.cash3.income)
+        self.assertNotContains(self.response, self.cash3.expenses)
+
+        self.assertNotContains(self.response, self.cash4.history)
+        self.assertNotContains(self.response, self.cash4.income)
+        self.assertNotContains(self.response, self.cash4.expenses)
+
+        # Test if balance before is right (500 from august)
+        self.assertContains(self.response, 'Valor total anterior: R$ 120,00')
+
+        # Test if atual balance is right (100 -100 + 200 -200 +300 - 180 = 120)
+        self.assertContains(self.response, 'Valor total de hoje: R$ 120,00')
+
+    def test_in_another_date(self):
+        'If there are not registries, must return a warning message'
+
+        today = datetime.datetime.now().date()
+
+        data = {
+            'search_date': [today],
+            'search_form': ['']
+        }
+
+        self.response = self.client.post(
+            reverse('statement:cash'), data, follow=True
+        )
+
+        self.assertContains(
+            self.response, 'Nenhum registro encontrado na data:'
+        )
 
 
 class DeleteViewTest(TestBase):
