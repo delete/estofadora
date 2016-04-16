@@ -20,4 +20,7 @@ class Contact(models.Model):
         verbose_name_plural = "Contacts"
 
     def __str__(self):
-        pass
+        return '{0} - {1}'.format(self.name, self.email)
+
+    def __unicode__(self):
+        return '{0} - {1}'.format(self.name, self.email)
