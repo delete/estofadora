@@ -74,8 +74,15 @@ $ python manage.py test
 #### Items Page
 ![Items page](screenshots/items.jpg "Items page")
 
+#### Images from an item
+![Items page](screenshots/items.jpg "Items page")
+
 #### Reports daily, monthly and annually
-![Reports](screenshots/charts.jpg "Reports")
+
+You can add some photos of the item to show how it was before and after the work, for example.
+If the image was marked (the checkbox), it will appear on the portfolio page on the website, automatically.
+
+![Item images](screenshots/item-images.jpg "Item images")
 
 ## Meta
 
