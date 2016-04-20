@@ -3,12 +3,12 @@
 > Manage bills, income, expenses and clients.
 
 
-This project was made for my grandfather's business (who does not have so much contact with tech), which is an upholsterer. 
+This project was made for my grandfather's business (who does not have so much contact with tech), who is an upholsterer. 
 So i tried to keep as simple as possible.
 
-Feel free to contribute and if you have any quention, open an issue and we'll discuss.
+Feel free to contribute and if you have any quention, open an issue and we'll talk about it.
 
-> As the product was made for an brazilian, the whole system is in Portuguese.
+> As the product was made for an brazilian, the whole system is in portuguese (but the code is in english).
 
 ## Python version
 
