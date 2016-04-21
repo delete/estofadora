@@ -4,7 +4,7 @@
 
 
 This project was made for my grandfather's business (who does not have so much contact with tech), who is an upholsterer. 
-So i tried to keep as simple as possible.
+So I tried to keep as simple as possible.
 
 Feel free to contribute and if you have any quention, open an issue and we'll talk about it.
 
@@ -57,7 +57,7 @@ $ python manage.py runserver
 
 ## Development setup
 
-The project is covered by unit tests, you can run them doing:
+The project is covered by unit tests, you can run them by doing:
 
 ```sh
 $ python manage.py test
