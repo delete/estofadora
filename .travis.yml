@@ -4,6 +4,6 @@ python:
 install:
  - pip install -r requirements/development.txt
 env:
-  DJANGO_SETTINGS_MODULE=development
+  DJANGO_SETTINGS_MODULE=production
 script:
  - python manage.py test
