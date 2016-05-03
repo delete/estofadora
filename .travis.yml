@@ -1,7 +1,9 @@
 language: python
- +python:
- +  - "3.5"
- +install:
- +  - pip install -r requirements/base.txt
- +script:
- +  - python manage.py test
+python:
+ - "3.5"
+install:
+ - pip install -r requirements/base.txt
+script:
+ - python manage.py test
+env:
+  DJANGO_SETTINGS_MODULE=development
