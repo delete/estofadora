@@ -1,5 +1,7 @@
 # Estofadora Manager
 
+[![Build Status](https://travis-ci.org/delete/estofadora.svg?branch=master)](https://travis-ci.org/delete/estofadora)
+
 > Manage bills, income, expenses and clients.
 
 
