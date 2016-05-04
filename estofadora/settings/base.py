@@ -8,23 +8,14 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.7/ref/settings/
 """
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-import os
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+from unipath import Path
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
+# Get .../estofadora/estofadora
+BASE_DIR = Path(__file__).ancestor(2)
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'sw=o-z2wh&!z40pmr8whsii++ud^1etdz&)f*@2)t@bgpzb2qg'
 
-# For tests
-PASSWORD_HASHERS = (
-    'django.contrib.auth.hashers.MD5PasswordHasher',
-)
-
-PATH_TO_IMAGE_TEST = os.path.join(
-    BASE_DIR, 'core', 'static', 'img') + '/test.jpg'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -94,9 +85,10 @@ USE_TZ = False
 STATIC_URL = '/static/'
 STATIC_ROOT = 'staticfiles'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = BASE_DIR.child('media')
 MEDIA_URL = '/media/'
 
+PATH_TO_IMAGE_TEST = BASE_DIR.child('core', 'static', 'img', 'test.jpg')
 
 # Auth
 LOGIN_URL = 'login:login'
