@@ -7,6 +7,12 @@ DEBUG = True
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'banco.db'),
+        'NAME': BASE_DIR.child('banco.db'),
     }
 }
+
+# For tests
+PASSWORD_HASHERS = (
+    'django.contrib.auth.hashers.MD5PasswordHasher',
+)
+
