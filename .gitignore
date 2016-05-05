@@ -69,3 +69,6 @@ target/
 *.db
 
 local_settings.py
+
+# Python decouple
+*.env
