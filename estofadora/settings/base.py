@@ -8,14 +8,14 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.7/ref/settings/
 """
 
+from decouple import config
 from unipath import Path
 
 # Get .../estofadora/estofadora
 BASE_DIR = Path(__file__).ancestor(2)
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'sw=o-z2wh&!z40pmr8whsii++ud^1etdz&)f*@2)t@bgpzb2qg'
-
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
