@@ -2,6 +2,7 @@
 from .base import *
 
 DEBUG = False
+SECRET_KEY = config('SECRET_KEY')
 
 # OPBEAT
 ORGANIZATION_ID = config('ORGANIZATION_ID')

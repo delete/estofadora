@@ -2,6 +2,7 @@
 from .base import *
 
 DEBUG = True
+SECRET_KEY = 'SECRET_TO_DEV'
 
 # Database
 DATABASES = {
@@ -15,6 +16,3 @@ DATABASES = {
 PASSWORD_HASHERS = (
     'django.contrib.auth.hashers.MD5PasswordHasher',
 )
-
-
-SECRET_KEY = 'SECRET_TO_DEV'
