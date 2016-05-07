@@ -1,5 +1,5 @@
 # coding: utf-8
-from estofadora.settings.base import PATH_TO_IMAGE_TEST
+from estofadora.settings.development import PATH_TO_IMAGE_TEST
 
 from . import (
     TestCase, make_validated_item_form, ItemForm,

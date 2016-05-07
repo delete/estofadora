@@ -4,6 +4,9 @@ from .base import *
 DEBUG = True
 SECRET_KEY = 'SECRET_TO_DEV'
 
+# Global variables
+PATH_TO_IMAGE_TEST = BASE_DIR.child('core', 'static', 'img', 'test.jpg')
+
 # Database
 DATABASES = {
     'default': {

@@ -86,8 +86,6 @@ STATIC_ROOT = 'staticfiles'
 MEDIA_ROOT = BASE_DIR.child('media')
 MEDIA_URL = '/media/'
 
-PATH_TO_IMAGE_TEST = BASE_DIR.child('core', 'static', 'img', 'test.jpg')
-
 # Auth
 LOGIN_URL = 'login:login'
 LOGOUT_URL = 'login:logout'
