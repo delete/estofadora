@@ -5,15 +5,17 @@ DEBUG = False
 SECRET_KEY = config('SECRET_KEY')
 
 # OPBEAT
-ORGANIZATION_ID = config('ORGANIZATION_ID')
-APP_ID = config('APP_ID')
-SECRET_TOKEN = config('SECRET_TOKEN')
+# Uncomment with you want to use
 
-OPBEAT = {
-    'ORGANIZATION_ID': ORGANIZATION_ID,
-    'APP_ID': APP_ID,
-    'SECRET_TOKEN': SECRET_TOKEN,
-}
+# ORGANIZATION_ID = config('ORGANIZATION_ID')
+# APP_ID = config('APP_ID')
+# SECRET_TOKEN = config('SECRET_TOKEN')
+
+# OPBEAT = {
+#     'ORGANIZATION_ID': ORGANIZATION_ID,
+#     'APP_ID': APP_ID,
+#     'SECRET_TOKEN': SECRET_TOKEN,
+# }
 
 # DATABASE
 NAME = config('NAME')

@@ -57,6 +57,24 @@ $ python manage.py runserver
 * Access the site: `http://127.0.0.1:8000/`
 * Access the admin page: `http://127.0.0.1:8000/login`
 
+## Production setup
+
+### .env file exemplo
+
+Create an `.env` file on `settings` directory with these variables:
+```sh
+SECRET_KEY=ARANDOMSECRETKEY
+#OPBEAT
+ORGANIZATION_ID=JUSTIFYOUAREUSING
+APP_ID=JUSTIFYOUAREUSING
+SECRET_TOKEN=JUSTIFYOUAREUSING
+#DATABASE
+NAME=DATABASENAME
+USER=DATABASEUSER
+PASSWORD=DATABASEPASS
+HOST=DATABASEHOST
+PORT=DATABASEPORT
+```
 ## Development setup
 
 The project is covered by unit tests, you can run them by doing:
