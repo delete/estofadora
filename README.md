@@ -59,7 +59,7 @@ $ python manage.py runserver
 
 ## Production setup
 
-### .env file exemple
+### .env file example
 
 Create an `.env` file on `settings` directory with these variables:
 ```sh
