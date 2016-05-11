@@ -38,6 +38,11 @@ pip install -r requirements.txt
 
 ## Usage example
 
+* Create an .env file on settings directory with SECRET_KEY:
+```sh
+SECRET_KEY=MY_SUPER_SECRET_KEY
+```
+
 * Create and configure the database:
 ```sh
 $ python manage.py makemigrations
