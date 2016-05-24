@@ -64,6 +64,8 @@ $ python manage.py runserver
 
 ## Production setup
 
+* You can setup the whole production server with this script: [django_server_setup](https://github.com/delete/django_server_setup)
+
 ### .env file example
 
 Create an `.env` file on `settings` directory with these variables:
