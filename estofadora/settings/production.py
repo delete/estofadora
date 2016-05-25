@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from .base import *
 
-STATIC_ROOT = Path(__file__).ancestor(3).child('static')
+STATIC_ROOT = BASE_DIR.parent.child('static')
 DEBUG = False
 SECRET_KEY = config('SECRET_KEY')
 ALLOWED_HOSTS = config(
