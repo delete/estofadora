@@ -5,10 +5,8 @@ from django.db import IntegrityError, transaction
 
 class Cash(models.Model):
 
-    date = models.DateField('Dia', null=False, blank=False)
-    history = models.CharField(
-        'Histórico', max_length=100, null=False, blank=False
-    )
+    date = models.DateField('Dia')
+    history = models.CharField('Histórico', max_length=100)
     income = models.DecimalField(
         'Entrada', max_digits=20, decimal_places=2, default=0.0
     )

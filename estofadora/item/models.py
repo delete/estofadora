@@ -10,11 +10,11 @@ from estofadora.client.models import Client
 class Item(models.Model):
 
     client = models.ForeignKey(
-        Client, blank=False, null=False, related_name='client'
+        Client, related_name='client'
     )
 
-    name = models.CharField('Nome', max_length=256, blank=False, null=False)
-    description = models.TextField('', blank=False, null=False)
+    name = models.CharField('Nome', max_length=256)
+    description = models.TextField('')
     concluded = models.BooleanField('Concluido', default=False)
     arrived_date = models.DateTimeField('Chegou', auto_now_add=True)
     delivery_date = models.DateTimeField('Entrega')
@@ -59,7 +59,7 @@ class Picture(models.Model):
     )
 
     item = models.ForeignKey(
-        Item, blank=False, null=False, related_name='pictures'
+        Item, related_name='pictures'
     )
     created_at = models.DateField('Criado em', auto_now_add=True)
     public = models.BooleanField('Publico', default=False)
@@ -68,7 +68,7 @@ class Picture(models.Model):
     )
     image = models.ImageField(
         upload_to=image_path, verbose_name="Imagem",
-        null=False, blank=False
+
     )
 
     class Meta:

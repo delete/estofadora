@@ -6,8 +6,8 @@ from estofadora.statement.models import Cash
 
 class Bill(models.Model):
 
-    date_to_pay = models.DateField('Dia', null=False, blank=False)
-    name = models.CharField('Nome', max_length=200, null=False, blank=False)
+    date_to_pay = models.DateField('Dia')
+    name = models.CharField('Nome', max_length=200)
     value = models.DecimalField(
         'Valor', max_digits=20, decimal_places=2, default=0.0
     )
