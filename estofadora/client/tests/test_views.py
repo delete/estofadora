@@ -343,7 +343,7 @@ class ListItemsViewTest(TestBase):
         received = self.response.context['received']
         self.assertEqual(received, 1500,00)
 
-        owing = self.response.context['owing']
+        owing = self.response.context['is_in_the_red']
         self.assertTrue(owing)
 
     def test_html(self):

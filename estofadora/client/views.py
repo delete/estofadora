@@ -86,8 +86,8 @@ def list_items(request, pk):
     context['received'] = sum(item.total_paid for item in items)
 
     if context['received'] < context['total']:
-        context['owing'] = True
+        context['is_in_the_red'] = True
     else:
-        context['owing'] = False
+        context['is_in_the_red'] = False
 
     return render(request, 'client/list_items.html', context)
