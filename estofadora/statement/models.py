@@ -37,6 +37,10 @@ class Cash(models.Model):
         super(Cash, self).save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
+        '''
+            If an item was removed, must reduce its value on
+            the total.
+        '''
         obj = Balance.objects.get(date=self.date)
         obj.value -= self.total
 
@@ -66,12 +70,13 @@ class Cash(models.Model):
     @staticmethod
     def list_years():
         '''
-            Return a list of years that there are objects cash saved.
+            Returns a list of years that there are objects cash saved.
         '''
         cashs = Cash.objects.all()
         years = [c.date.year for c in cashs]
 
         dicio = {}
+        # Remove the repeated years.
         for year in years:
             dicio[year] = 1
 
@@ -84,8 +89,7 @@ class Cash(models.Model):
             'date__month': month,
             'date__year': year,
         }
-        filters.update(filters)
-
+        # Select all values that are not None.
         filter_by = {
             key: value for key, value in filters.items() if value is not None
         }
@@ -99,8 +103,7 @@ class Cash(models.Model):
             'date__month': month,
             'date__year': year,
         }
-        filters.update(filters)
-
+        # Select all values that are not None.
         filter_by = {
             key: value for key, value in filters.items() if value is not None
         }
@@ -115,21 +118,25 @@ class Cash(models.Model):
 
     @staticmethod
     def create_balance(content, total_before):
-        """
+        '''
+            Returns a list that each item has the total balance value.
+
             Create a new temporary field (balance) that will save the amount of
-            balance before plus the atual item total. Example:
+            balance of item. Example:
 
             ITEM  TOTAL  BALANCE
             item0 -1000  -1000    (item0.total + total from the day before)
             item1 +500   -500     (item1.total + item0.balance)
             item2 +600   100      (item2.total + item1.balance)
             etc...
-            """
+            '''
         last_element = len(content) - 1
         balance = 0
 
         for index, item in enumerate(content):
             if index == 0:
+                # If is the first on, sum the value with the value
+                # from the year before.
                 item.balance = item.total + total_before
             else:
                 item.balance = content[index - 1].balance + (item.total)
@@ -155,6 +162,10 @@ class Balance(models.Model):
 
     @staticmethod
     def total_balance_before(date):
+        '''
+            Returns the total value until the date
+            that was given.
+        '''
         items = Balance.objects.filter(date__lt=date)
 
         total = sum(i.value for i in items)
@@ -163,6 +174,10 @@ class Balance(models.Model):
 
     @staticmethod
     def balance_from_month(year, month):
+        '''
+            Returns the total value from the year and month that
+            was given.
+        '''
         items = Balance.objects.filter(date__year=year, date__month=month)
 
         total = sum(i.value for i in items)
