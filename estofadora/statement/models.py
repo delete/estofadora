@@ -16,6 +16,39 @@ class Cash(models.Model):
         'Saida', max_digits=20, decimal_places=2, default=0.0
     )
 
+    class Meta:
+        ordering = ['date']
+        verbose_name = ('Cash')
+        verbose_name_plural = ('Cash')
+
+    def save(self, *args, **kwargs):
+        # Need instance balance obj to store the total value
+        try:
+            # If exists will raise IntegrityError.
+            with transaction.atomic():
+                obj = Balance(date=self.date, value=self.total)
+                obj.save()
+
+        except IntegrityError:
+            # Get the balance and update
+            obj = Balance.objects.get(date=self.date)
+            obj.value += self.total
+            obj.save()
+
+        # Call the "real" save() method.
+        super(Cash, self).save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        obj = Balance.objects.get(date=self.date)
+        obj.value -= self.total
+
+        if obj.value == float(0):
+            obj.delete()
+        else:
+            obj.save()
+
+        super(Cash, self).delete(*args, **kwargs)
+
     @property
     def total(self):
         '''
@@ -75,15 +108,11 @@ class Cash(models.Model):
         }
 
         incomes = sum(
-                item.income for item in Cash.objects.filter(
-                    **filter_by
-                )
-            )
+            item.income for item in Cash.objects.filter(**filter_by)
+        )
         expenses = sum(
-                item.expenses for item in Cash.objects.filter(
-                    **filter_by
-                )
-            )
+            item.expenses for item in Cash.objects.filter(**filter_by)
+        )
         return incomes - expenses
 
     @staticmethod
@@ -105,46 +134,13 @@ class Cash(models.Model):
             if index == 0:
                 item.balance = item.total + total_before
             else:
-                item.balance = content[index-1].balance + (item.total)
+                item.balance = content[index - 1].balance + (item.total)
 
             # The last one has the total
             if index == last_element:
                 balance = item.balance
 
         return content, balance
-
-    def save(self, *args, **kwargs):
-        # Need instance balance obj to store the total value
-        try:
-            # If exists will raise IntegrityError.
-            with transaction.atomic():
-                obj = Balance(date=self.date, value=self.total)
-                obj.save()
-
-        except IntegrityError:
-            # Get the balance and update
-            obj = Balance.objects.get(date=self.date)
-            obj.value += self.total
-            obj.save()
-
-        # Call the "real" save() method.
-        super(Cash, self).save(*args, **kwargs)
-
-    def delete(self, *args, **kwargs):
-        obj = Balance.objects.get(date=self.date)
-        obj.value -= self.total
-
-        if obj.value == float(0):
-            obj.delete()
-        else:
-            obj.save()
-
-        super(Cash, self).delete(*args, **kwargs)
-
-    class Meta:
-        ordering = ['date']
-        verbose_name = ('Cash')
-        verbose_name_plural = ('Cash')
 
 
 class Balance(models.Model):
@@ -153,6 +149,11 @@ class Balance(models.Model):
     value = models.DecimalField(
         'Valor', max_digits=20, decimal_places=2, default=0.0
     )
+
+    class Meta:
+        ordering = ['date']
+        verbose_name = ('Balance')
+        verbose_name_plural = ('Balance')
 
     @staticmethod
     def total_balance_before(date):
@@ -169,8 +170,3 @@ class Balance(models.Model):
         total = sum(i.value for i in items)
 
         return total
-
-    class Meta:
-        ordering = ['date']
-        verbose_name = ('Balance')
-        verbose_name_plural = ('Balance')

@@ -13,6 +13,17 @@ class Bill(models.Model):
     )
     is_paid = models.BooleanField(u'Está paga?', default=False)
 
+    class Meta:
+        ordering = ['date_to_pay']
+        verbose_name = ('Conta')
+        verbose_name_plural = ('Contas')
+
+    def __str__(self):
+        return self.name
+
+    def __unicode__(self):
+        return self.name
+
     def save(self, *args, **kwargs):
         data = {
             'date': self.date_to_pay,
@@ -24,14 +35,3 @@ class Bill(models.Model):
 
         # Call the "real" save() method.
         super(Bill, self).save(*args, **kwargs)
-
-    class Meta:
-        ordering = ['date_to_pay']
-        verbose_name = ('Conta')
-        verbose_name_plural = ('Contas')
-
-    def __str__(self):
-        return self.name
-
-    def __unicode__(self):
-        return self.name

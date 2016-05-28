@@ -45,7 +45,9 @@ class Item(models.Model):
 def image_path(data, filename):
     "Returns the filepath where the image is store"
     extension = data.image.path[data.image.path.find('.'):]
-    return os.path.join('items/images/{0}/{0}{1}'.format(data.item.name, extension))
+    return os.path.join(
+        'items/images/{0}/{0}{1}'.format(data.item.name, extension)
+    )
 
 
 class Picture(models.Model):
