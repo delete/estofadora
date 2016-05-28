@@ -235,9 +235,7 @@ class ListViewTest(TestBase):
         self.login()
         self.item1 = create_item(commit=True)
 
-        self.client2 = create_client(
-            commit=True, name='Andre', email='a@email.com'
-        )
+        self.client2 = create_client(name='Andre', email='a@email.com')
         self.item2 = create_item(client=self.client2, commit=True, name='Box')
         self.item3 = create_item(
             client=self.client2, commit=True, name='Chair'
@@ -287,9 +285,7 @@ class DeleteViewTest(TestBase):
         self.login()
         self.item1 = create_item(commit=True)
 
-        self.client2 = create_client(
-            commit=True, name='Andre', email='a@email.com'
-        )
+        self.client2 = create_client(name='Andre', email='a@email.com')
         self.item2 = create_item(client=self.client2, commit=True)
 
         self.picture1 = create_picture(self.item2)

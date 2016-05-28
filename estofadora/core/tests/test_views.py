@@ -30,7 +30,7 @@ class HomeViewTest(TestBase):
         self.assertContains(self.response, '"announcement-heading">0<', 4)
 
     def test_boards_content_when_not_empty(self):
-        client = create_client(commit=True)
+        client = create_client()
 
         item1 = create_item(client=client, commit=True)
         create_picture(item=item1)
@@ -48,7 +48,7 @@ class HomeViewTest(TestBase):
         self.assertContains(self.response, 'Nenhuma entrega para essa semana.')
 
     def test_week_delivery_content_when_not_empty(self):
-        client = create_client(commit=True)
+        client = create_client()
 
         today = datetime.datetime.now()
 

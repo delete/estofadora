@@ -41,7 +41,7 @@ class TestBase(TestCase):
 
 def create_item(commit=False, client=None, **kwargs):
     if not client:
-        client = create_client(commit=True)
+        client = create_client()
 
     data = {
         'client': client,
@@ -60,7 +60,7 @@ def create_item(commit=False, client=None, **kwargs):
 
 def make_validated_item_form(client=None, commit=True, **kwargs):
     if not client:
-        client = create_client(commit=True)
+        client = create_client()
     data = {
         'client': client.pk,
         'name': 'Sofa',
@@ -80,7 +80,7 @@ def make_validated_item_form(client=None, commit=True, **kwargs):
 
 def make_validated_item_picture_form(client=None, commit=True, **kwargs):
     if not client:
-        client = create_client(commit=True)
+        client = create_client()
     data = {
         'client': client.pk,
         'name': 'Sofa',

@@ -32,7 +32,7 @@ class TestBase(TestCase):
         self.assertEqual(self.response.status_code, 302)
 
 
-def create_client(commit=False, **kwargs):
+def create_client(commit=True, **kwargs):
     data = {
         'name': 'Fellipe',
         'email': 'email@email.com',

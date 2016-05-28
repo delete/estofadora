@@ -7,7 +7,7 @@ from . import TestCase, ModelClient, create_client
 class ClientModelTest(TestCase):
 
     def setUp(self):
-        self.client = create_client(commit=True)
+        self.client = create_client()
 
     def tearDown(self):
         ModelClient.objects.all().delete()
@@ -17,7 +17,7 @@ class ClientModelTest(TestCase):
 
     def test_duplicate_email(self):
         with transaction.atomic():
-            data = create_client(name='Andre')
+            data = create_client(name='Andre', commit=False)
             c = ModelClient(**data)
             self.assertRaises(IntegrityError, c.save)
 

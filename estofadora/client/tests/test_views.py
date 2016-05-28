@@ -42,7 +42,7 @@ class AddPostTest(TestBase):
 
     def setUp(self):
         self.login()
-        data = create_client()
+        data = create_client(commit=False)
         self.response = self.client.post(
                 reverse('client:add'), data, follow=True
             )
@@ -69,19 +69,19 @@ class AddInvalidPostTest(TestBase):
         self.url = reverse('client:add')
 
     def test_post_name_required(self):
-        data = create_client(name='')
+        data = create_client(name='', commit=False)
         self._test_if_got_errors(data)
 
     def test_post_adress_required(self):
-        data = create_client(adress='')
+        data = create_client(adress='', commit=False)
         self._test_if_got_errors(data)
 
     def test_post_telephone1_required(self):
-        data = create_client(telephone1='')
+        data = create_client(telephone1='', commit=False)
         self._test_if_got_errors(data)
 
     def test_post_wrong_email(self):
-        data = create_client(email='a')
+        data = create_client(email='a', commit=False)
         self._test_if_got_errors(data)
 
     def _test_if_got_errors(self, data):
@@ -93,7 +93,7 @@ class EditViewTest(AddViewTest):
 
     def setUp(self):
         self.login()
-        self.cli = create_client(commit=True)
+        self.cli = create_client()
         self.url = reverse('client:edit', args=[self.cli.pk])
         self.response = self.client.get(self.url)
 
@@ -108,7 +108,7 @@ class EditPostTest(TestBase):
 
     def setUp(self):
         self.login()
-        self.cli = create_client(commit=True)
+        self.cli = create_client()
         self.url = reverse('client:edit', args=[self.cli.pk])
         self.response = self.client.get(self.url)
 
@@ -167,7 +167,7 @@ class EditInvalidPostTest(TestBase):
 
     def setUp(self):
         self.login()
-        self.cli = create_client(commit=True)
+        self.cli = create_client()
         self.url = reverse('client:edit', args=[self.cli.pk])
         self.response = self.client.get(self.url)
 
@@ -208,10 +208,8 @@ class ListViewTest(TestBase):
 
     def setUp(self):
         self.login()
-        self.client1 = create_client(commit=True)
-        self.client2 = create_client(
-            commit=True, name='Andre', email='a@email.com'
-        )
+        self.client1 = create_client()
+        self.client2 = create_client(name='Andre', email='a@email.com')
 
         self.url = reverse('client:list')
         self.response = self.client.get(self.url)
@@ -254,10 +252,8 @@ class DeleteViewTest(TestBase):
 
     def setUp(self):
         self.login()
-        self.client1 = create_client(commit=True)
-        self.client2 = create_client(
-            commit=True, name='Andre', email='a@email.com'
-        )
+        self.client1 = create_client()
+        self.client2 = create_client(name='Andre', email='a@email.com')
 
         # Creating data to client 1
         self.item1 = create_item(client=self.client1, commit=True)
@@ -311,7 +307,7 @@ class ListItemsViewTest(TestBase):
 
     def setUp(self):
         self.login()
-        self.client1 = create_client(commit=True)
+        self.client1 = create_client()
 
         # creating items to the client
         self.item1 = create_item(client=self.client1, commit=True)
