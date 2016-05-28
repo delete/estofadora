@@ -15,6 +15,9 @@ MONTHS = [
 
 
 def last_day_of(year, month):
+    '''
+        Retun the last day of the year/month given.
+    '''
     import calendar
     from datetime import datetime
 
@@ -23,6 +26,9 @@ def last_day_of(year, month):
 
 
 def month_before_of(year, month):
+    '''
+        Retun the before month of the year/month given.
+    '''
     # Get the month before
     month = month - 1
     if month == 0:

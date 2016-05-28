@@ -25,6 +25,10 @@ class Bill(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
+        '''
+            When a BIll is created, a Cash object is created
+            too.
+        '''
         data = {
             'date': self.date_to_pay,
             'history': self.name,

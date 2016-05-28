@@ -41,9 +41,9 @@ class ItemForm(forms.ModelForm):
 class ItemPictureForm(ItemForm):
 
     files = MultiFileField(
-            label="Imagens", min_num=0, max_num=10, max_file_size=1024*1024*5,
-            required=False
-        )
+        label="Imagens", min_num=0, max_num=10,
+        max_file_size=(1024 * 1024 * 5), required=False
+    )
 
     def save(self, commit=True):
         instance = super(ItemPictureForm, self).save(commit)
@@ -57,8 +57,8 @@ class ItemPictureForm(ItemForm):
 class PictureForm(forms.Form):
 
     files = MultiFileField(
-            label="Imagens", min_num=0, max_num=10, max_file_size=1024*1024*5
-        )
+        label="Imagens", min_num=0, max_num=10, max_file_size=(1024 * 1024 * 5)
+    )
 
     def save(self, instance, commit=True):
 

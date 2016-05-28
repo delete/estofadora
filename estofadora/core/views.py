@@ -19,15 +19,19 @@ def home(request):
     # Every week has a number, get the atual number.
     this_week = datetime.datetime.now().isocalendar()[1]
 
-    # Get all items and separate the items which the week number matchs
+    # Get all items and separate them which the week number matchs
     items = Item.objects.all().order_by('delivery_date')
 
-    items_to_delivery = [i for i in items if i.delivery_date.isocalendar()[1] == this_week]
+    items_to_delivery = [
+        i for i in items if i.delivery_date.isocalendar()[1] == this_week
+    ]
 
-    # Gell all bills and separate the bills which the week number matchs
+    # Gell all bills and separate them which the week number matchs
     bills = Bill.objects.all().order_by('date_to_pay')
 
-    week_bills = [b for b in bills if b.date_to_pay.isocalendar()[1] == this_week]
+    week_bills = [
+        b for b in bills if b.date_to_pay.isocalendar()[1] == this_week
+    ]
 
     context['items'] = items_to_delivery
     context['bills'] = week_bills

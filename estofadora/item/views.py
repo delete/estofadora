@@ -39,8 +39,8 @@ def edit(request, pk):
             form.save()
             messages.success(request, 'Item alterado com sucesso!')
             return redirect(
-                    reverse('client:list_items', args=[item.client.pk])
-                )
+                reverse('client:list_items', args=[item.client.pk])
+            )
     else:
         form = ItemForm(instance=item)
 
@@ -82,7 +82,7 @@ def image_list(request, pk):
 
     if request.method == 'POST':
 
-        # Adding a new image
+        # Form to add a new image
         if 'add-form' in request.POST:
             picture_form = PictureForm(request.POST, request.FILES)
 
@@ -91,12 +91,12 @@ def image_list(request, pk):
                 messages.success(request, 'Imagem enviada com sucesso!')
                 return redirect(reverse('item:image_list', args=[item.pk]))
 
-        # Changing image' states
+        # Form to change image's state
         else:
             checked_ids = request.POST.getlist('checks[]')
             selected_states = request.POST.getlist('selects[]')
 
-            # Create a list because will be need to remove itens
+            # Create a list because will be needed to remove the checked itens.
             all_pictures = [p for p in pictures]
 
             all_pictures = removeCheckedPictureFromAllPictures(

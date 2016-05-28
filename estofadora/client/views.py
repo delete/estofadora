@@ -54,8 +54,8 @@ def list(request):
     if request.method == 'POST':
         client_name = request.POST.get('name')
         clients = Client.objects.filter(
-                    name__icontains=client_name
-                ).order_by('name')
+            name__icontains=client_name
+        ).order_by('name')
 
     else:
         clients = Client.objects.all().order_by('name')

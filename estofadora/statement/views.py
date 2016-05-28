@@ -29,6 +29,7 @@ def cash(request):
 
         if 'search_form' in request.POST:
             date = request.POST.get('search_date')
+            # Format the date to 21/12/2015 or 2015-12-21
             try:
                 date = datetime.strptime(date, '%d/%m/%Y').date()
             except ValueError:
@@ -96,6 +97,7 @@ def cash_month(request):
     year = date.year
     month = date.month
 
+    # If a date was not given, filter by the atual date.
     content = Cash.filter_by_date(month=month, year=year)
     total_value = Cash.total_value_by_date(month=month, year=year)
 
@@ -107,9 +109,9 @@ def cash_month(request):
         total_value = Cash.total_value_by_date(month=month, year=year)
 
     y, m = month_before_of(year, month)
-    last_day_month_before = last_day_of(y, m)
+    last_day_of_month_before = last_day_of(y, m)
 
-    total_before = Balance.total_balance_before(last_day_month_before)
+    total_before = Balance.total_balance_before(last_day_of_month_before)
 
     content, total_value = Cash.create_balance(content, total_before)
 
@@ -126,6 +128,7 @@ def cash_month(request):
 @login_required
 def cash_annual(request):
     context = {}
+    # If an year was not given, use the atual year.
     year = datetime.now().date().year
 
     if request.method == 'POST':
@@ -134,12 +137,14 @@ def cash_annual(request):
     balances = []
     month = 1
     while month < 13:
+        # Get the total balance from January to December.
         balance = Balance.balance_from_month(year=year, month=month)
         balances.append(float(balance))
         month += 1
 
     total_value = Cash.total_value_by_date(year=year)
 
+    # Get the previous year to sum the total of it.
     january = 1
     y, m = month_before_of(year, january)
     last_day_year_before = last_day_of(y, m)
