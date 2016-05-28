@@ -5,7 +5,7 @@ from . import TestCase, create_bill, Cash
 class BillModelTest(TestCase):
 
     def setUp(self):
-        self.bill = create_bill(commit=True)
+        self.bill = create_bill()
 
     def test_if_bill_is_not_paid(self):
         'Bill must not be paid'

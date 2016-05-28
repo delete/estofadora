@@ -55,8 +55,8 @@ class ListViewTest(TestBase):
     def setUp(self):
         self.login()
 
-        self.bill1 = create_bill(is_paid=True, commit=True)
-        self.bill2 = create_bill(name='Client2', commit=True)
+        self.bill1 = create_bill(is_paid=True)
+        self.bill2 = create_bill(name='Client2')
 
         self.url = reverse('bills:list')
         self.response = self.client.get(self.url)
@@ -91,8 +91,8 @@ class DeleteViewTest(TestBase):
     def setUp(self):
         self.login()
 
-        self.bill1 = create_bill(is_paid=True, commit=True)
-        self.bill2 = create_bill(name='Client2', commit=True)
+        self.bill1 = create_bill(is_paid=True)
+        self.bill2 = create_bill(name='Client2')
 
         # Must have 2 bills before post.
         self.assertEqual(len(Bill.objects.all()), 2)
@@ -121,7 +121,7 @@ class MarkAsPaidViewTest(TestBase):
     def setUp(self):
         self.login()
 
-        self.bill1 = create_bill(commit=True)
+        self.bill1 = create_bill()
 
         # Must be False before post
         self.assertFalse(self.bill1.is_paid)

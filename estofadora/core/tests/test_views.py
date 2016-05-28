@@ -36,7 +36,7 @@ class HomeViewTest(TestBase):
         create_picture(item=item1)
 
         create_item(client=client, commit=True)
-        create_bill(commit=True)
+        create_bill()
 
         self.response = self.client.get(self.url)
         # one client, one picture and one bill
@@ -78,11 +78,11 @@ class HomeViewTest(TestBase):
 
     def test_week_bills_content_when_not_empty(self):
         today = datetime.datetime.now()
-        bill1 = create_bill(value=11, date_to_pay=today, commit=True)
+        bill1 = create_bill(value=11, date_to_pay=today)
         bill2 = create_bill(
-            name='Net', date_to_pay=today, value=44, is_paid=True, commit=True
+            name='Net', date_to_pay=today, value=44, is_paid=True
         )
-        bill3 = create_bill(name='Luz', value=33, commit=True)
+        bill3 = create_bill(name='Luz', value=33)
 
         # Bill1 belong this week number
         self.response = self.client.get(self.url)

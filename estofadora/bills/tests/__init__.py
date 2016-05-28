@@ -49,7 +49,7 @@ def make_validated_form(commit=True, **kwargs):
         return data
 
 
-def create_bill(commit=False, **kwargs):
+def create_bill(commit=True, **kwargs):
     data = {
         'date_to_pay': '2015-10-17',
         'name': 'Client',
