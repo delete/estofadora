@@ -182,12 +182,12 @@ class BalanceModelTest(TestCase):
         daythree = datetime.datetime(2015, 12, 3)
         anotherday = datetime.datetime(2016, 1, 1)
 
-        self.b1 = create_balance(date=dayone, value=100, commit=True)
-        self.b2 = create_balance(date=daytwo, value=200, commit=True)
-        self.b3 = create_balance(date=daythree, value=-100, commit=True)
+        self.b1 = create_balance(date=dayone, value=100)
+        self.b2 = create_balance(date=daytwo, value=200)
+        self.b3 = create_balance(date=daythree, value=-100)
 
         # This balance should not count
-        self.b11 = create_balance(date=anotherday, value=-1000, commit=True)
+        self.b11 = create_balance(date=anotherday, value=-1000)
 
     def tearDown(self):
         Cash.objects.all().delete()
