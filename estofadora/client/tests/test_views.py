@@ -338,10 +338,10 @@ class ListItemsViewTest(TestBase):
         self.assertEqual(amount, 3)
 
         total = self.response.context['total']
-        self.assertEqual(total, 3000,00)
+        self.assertEqual(total, 3000.00)
 
         received = self.response.context['received']
-        self.assertEqual(received, 1500,00)
+        self.assertEqual(received, 1500.00)
 
         owing = self.response.context['is_in_the_red']
         self.assertTrue(owing)

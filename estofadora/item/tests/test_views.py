@@ -180,7 +180,9 @@ class EditPostTest(TestBase):
         self._post_and_test_response()
 
         expected_date = '19/01/2020 22:00:00'
-        saved_date = Item.objects.first().delivery_date.strftime("%d/%m/%Y %H:%M:%S")
+        saved_date = Item.objects.first().delivery_date.strftime(
+            "%d/%m/%Y %H:%M:%S"
+        )
 
         self.assertEqual(saved_date, expected_date)
 
