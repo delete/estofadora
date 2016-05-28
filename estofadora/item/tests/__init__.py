@@ -39,7 +39,7 @@ class TestBase(TestCase):
         self.assertEqual(self.response.status_code, 302)
 
 
-def create_item(commit=False, client=None, **kwargs):
+def create_item(commit=True, client=None, **kwargs):
     if not client:
         client = create_client()
 

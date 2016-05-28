@@ -7,7 +7,7 @@ from . import TestBase, Item, create_item, create_picture, Picture
 class ItemModelTest(TestBase):
 
     def setUp(self):
-        self.item = create_item(commit=True)
+        self.item = create_item()
         self.picture1 = create_picture(self.item, public=True)
         self.picture2 = create_picture(self.item)
 
@@ -30,7 +30,7 @@ class ItemModelTest(TestBase):
 class PictureModelTest(TestBase):
 
     def setUp(self):
-        self.item = create_item(commit=True)
+        self.item = create_item()
         self.picture = create_picture(self.item)
 
     def test_if_created(self):

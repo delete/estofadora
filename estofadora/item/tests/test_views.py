@@ -115,7 +115,7 @@ class EditViewTest(AddViewTest):
 
     def setUp(self):
         self.login()
-        self.item = create_item(commit=True)
+        self.item = create_item()
         self.url = reverse('item:edit', args=[self.item.pk])
         self.response = self.client.get(self.url)
 
@@ -137,7 +137,7 @@ class EditPostTest(TestBase):
 
     def setUp(self):
         self.login()
-        self.item = create_item(commit=True)
+        self.item = create_item()
         self.url = reverse('item:edit', args=[self.item.pk])
         self.response = self.client.get(self.url)
 
@@ -202,7 +202,7 @@ class EditInvalidPostTest(TestBase):
 
     def setUp(self):
         self.login()
-        self.item = create_item(commit=True)
+        self.item = create_item()
         self.url = reverse('item:edit', args=[self.item.pk])
         self.response = self.client.get(self.url)
 
@@ -233,15 +233,15 @@ class ListViewTest(TestBase):
 
     def setUp(self):
         self.login()
-        self.item1 = create_item(commit=True)
+        self.item1 = create_item()
 
         self.client2 = create_client(name='Andre', email='a@email.com')
-        self.item2 = create_item(client=self.client2, commit=True, name='Box')
+        self.item2 = create_item(client=self.client2, name='Box')
         self.item3 = create_item(
-            client=self.client2, commit=True, name='Chair'
+            client=self.client2, name='Chair'
         )
         self.item4 = create_item(
-            client=self.client2, commit=True, name='Table'
+            client=self.client2, name='Table'
         )
 
         self.url = reverse('item:list')
@@ -283,10 +283,10 @@ class DeleteViewTest(TestBase):
 
     def setUp(self):
         self.login()
-        self.item1 = create_item(commit=True)
+        self.item1 = create_item()
 
         self.client2 = create_client(name='Andre', email='a@email.com')
-        self.item2 = create_item(client=self.client2, commit=True)
+        self.item2 = create_item(client=self.client2)
 
         self.picture1 = create_picture(self.item2)
         self.picture2 = create_picture(self.item2)
@@ -321,7 +321,7 @@ class ImageListViewTest(TestBase):
 
     def setUp(self):
         self.login()
-        self.item1 = create_item(commit=True)
+        self.item1 = create_item()
         self.picture1 = create_picture(self.item1, public=True)
         self.picture2 = create_picture(self.item1)
 
@@ -368,7 +368,7 @@ class ImageListViewPostWithImageTest(TestBase):
 
     def setUp(self):
         self.login()
-        self.item1 = create_item(commit=True)
+        self.item1 = create_item()
 
         self.url = reverse('item:image_list', args=[self.item1.pk])
 
@@ -402,7 +402,7 @@ class ImageListViewPostChangeStatesTest(TestBase):
 
     def setUp(self):
         self.login()
-        self.item = create_item(commit=True)
+        self.item = create_item()
         self.picture1 = create_picture(self.item, public=True)
         self.picture2 = create_picture(self.item, state='after')
         self.picture3 = create_picture(self.item)
@@ -469,7 +469,7 @@ class ImageDeleteViewTest(TestBase):
 
     def setUp(self):
         self.login()
-        self.item1 = create_item(commit=True)
+        self.item1 = create_item()
 
         self.picture1 = create_picture(self.item1)
         self.picture2 = create_picture(self.item1)

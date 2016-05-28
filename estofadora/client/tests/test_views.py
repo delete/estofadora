@@ -256,12 +256,12 @@ class DeleteViewTest(TestBase):
         self.client2 = create_client(name='Andre', email='a@email.com')
 
         # Creating data to client 1
-        self.item1 = create_item(client=self.client1, commit=True)
+        self.item1 = create_item(client=self.client1)
         self.picture1 = create_picture(self.item1)
         self.picture2 = create_picture(self.item1)
 
         # Creating data to client 2
-        self.item2 = create_item(client=self.client2, commit=True)
+        self.item2 = create_item(client=self.client2)
         self.picture3 = create_picture(self.item2)
         self.picture4 = create_picture(self.item2)
 
@@ -310,12 +310,12 @@ class ListItemsViewTest(TestBase):
         self.client1 = create_client()
 
         # creating items to the client
-        self.item1 = create_item(client=self.client1, commit=True)
+        self.item1 = create_item(client=self.client1)
         self.item2 = create_item(
-            client=self.client1, commit=True, name='Chair'
+            client=self.client1, name='Chair'
         )
         self.item3 = create_item(
-            client=self.client1, commit=True, name='Table'
+            client=self.client1, name='Table'
         )
 
         self.url = reverse('client:list_items', args=[self.client1.pk])

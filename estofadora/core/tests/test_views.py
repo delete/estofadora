@@ -32,10 +32,10 @@ class HomeViewTest(TestBase):
     def test_boards_content_when_not_empty(self):
         client = create_client()
 
-        item1 = create_item(client=client, commit=True)
+        item1 = create_item(client=client)
         create_picture(item=item1)
 
-        create_item(client=client, commit=True)
+        create_item(client=client)
         create_bill()
 
         self.response = self.client.get(self.url)
@@ -52,11 +52,11 @@ class HomeViewTest(TestBase):
 
         today = datetime.datetime.now()
 
-        item1 = create_item(client=client, delivery_date=today, commit=True)
+        item1 = create_item(client=client, delivery_date=today)
         item2 = create_item(
-            client=client, delivery_date=today, concluded=True, commit=True
+            client=client, delivery_date=today, concluded=True
         )
-        item3 = create_item(client=client, name='Puff', commit=True)
+        item3 = create_item(client=client, name='Puff')
 
         self.response = self.client.get(self.url)
 
@@ -103,7 +103,7 @@ class HomeViewTest(TestBase):
 class SiteViewTest(TestBase):
 
     def setUp(self):
-        self.item = create_item(commit=True)
+        self.item = create_item()
         self.picture1 = create_picture(self.item, public=True, state='after')
         self.picture2 = create_picture(self.item, public=True, state='after')
         self.picture3 = create_picture(self.item, public=True, state='after')
@@ -135,7 +135,7 @@ class SiteViewTest(TestBase):
 class PortfolioViewTest(TestBase):
 
     def setUp(self):
-        self.item = create_item(commit=True)
+        self.item = create_item()
         self.picture1 = create_picture(self.item, public=True)
         self.picture2 = create_picture(self.item, public=True)
         self.picture3 = create_picture(self.item, public=False)
