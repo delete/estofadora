@@ -56,11 +56,11 @@ class CashViewTest(TestBase):
         today = datetime.datetime.now().date()
         fiveDaysBefore = today - timedelta(days=5)
 
-        cash1 = create_cash(commit=True, date=today)
+        cash1 = create_cash(date=today)
         cash2 = create_cash(
-                commit=True, history='Rent',
-                date=fiveDaysBefore, expenses=100, income=0
-            )
+            history='Rent',
+            date=fiveDaysBefore, expenses=100, income=0
+        )
 
         self.response = self.client.get(self.url)
 
@@ -139,19 +139,19 @@ class CashSearchPostTest(TestBase):
         august = datetime.datetime(2015, 10, 10).date()
 
         self.cash1 = create_cash(
-            commit=True, history='Cash1', date=september,
+            history='Cash1', date=september,
             expenses=100, income=100
         )
         self.cash2 = create_cash(
-            commit=True, history='Cash2', date=september,
+            history='Cash2', date=september,
             expenses=200, income=200
         )
         self.cash3 = create_cash(
-            commit=True, history='Cash3', date=october,
+            history='Cash3', date=october,
             expenses=180, income=300
         )
         self.cash4 = create_cash(
-            commit=True, history='Cash4', date=august,
+            history='Cash4', date=august,
             expenses=50, income=500
         )
 
@@ -212,8 +212,8 @@ class DeleteViewTest(TestBase):
     def setUp(self):
         self.login()
 
-        self.cash1 = create_cash(commit=True)
-        self.cash2 = create_cash(commit=True)
+        self.cash1 = create_cash()
+        self.cash2 = create_cash()
 
         self.response = self.client.post(
             reverse('statement:delete', args=[self.cash1.pk]), follow=True
@@ -238,7 +238,7 @@ class EditViewTest(TestBase):
 
     def setUp(self):
         self.login()
-        self.cash = create_cash(commit=True)
+        self.cash = create_cash()
         self.url = reverse('statement:edit', args=[self.cash.pk])
         self.response = self.client.get(self.url)
 
@@ -266,7 +266,7 @@ class EditPostTest(TestBase):
 
     def setUp(self):
         self.login()
-        self.cash = create_cash(commit=True)
+        self.cash = create_cash()
         self.url = reverse('statement:edit', args=[self.cash.pk])
         self.response = self.client.get(self.url)
 
@@ -324,7 +324,7 @@ class EditInvalidPostTest(TestBase):
 
     def setUp(self):
         self.login()
-        self.cash = create_cash(commit=True)
+        self.cash = create_cash()
         self.url = reverse('statement:edit', args=[self.cash.pk])
         self.response = self.client.get(self.url)
 
@@ -412,19 +412,19 @@ class CashMonthSeachPostTest(TestBase):
         august = datetime.datetime(2015, 10, 10).date()
 
         self.cash1 = create_cash(
-            commit=True, history='Cash1', date=september,
+            history='Cash1', date=september,
             expenses=100, income=100
         )
         self.cash2 = create_cash(
-            commit=True, history='Cash2', date=september,
+            history='Cash2', date=september,
             expenses=200, income=200
         )
         self.cash3 = create_cash(
-            commit=True, history='Cash3', date=october,
+            history='Cash3', date=october,
             expenses=180, income=300
         )
         self.cash4 = create_cash(
-            commit=True, history='Cash4', date=august,
+            history='Cash4', date=august,
             expenses=0, income=500
         )
 
@@ -517,20 +517,19 @@ class CashAnnualSeachPostTest(TestBase):
         january = datetime.datetime(2016, 1, 5).date()
 
         self.cash1 = create_cash(
-            commit=True, history='Cash1', date=september,
+            history='Cash1', date=september,
             expenses=100, income=100
         )
         self.cash2 = create_cash(
-            commit=True, history='Cash2', date=september,
+            history='Cash2', date=september,
             expenses=160, income=200
         )
         self.cash3 = create_cash(
-            commit=True, history='Cash3', date=october,
+            history='Cash3', date=october,
             expenses=150, income=300
         )
-
         self.cash4 = create_cash(
-            commit=True, history='Cash4', date=january,
+            history='Cash4', date=january,
             expenses=0, income=500
         )
 

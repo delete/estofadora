@@ -48,7 +48,7 @@ def make_validated_form(commit=True, **kwargs):
         return data
 
 
-def create_cash(commit=False, **kwargs):
+def create_cash(commit=True, **kwargs):
     data = {
         'date': '2015-10-17',
         'history': 'Client',
@@ -62,7 +62,7 @@ def create_cash(commit=False, **kwargs):
     return data
 
 
-def create_balance(commit=False, **kwargs):
+def create_balance(commit=True, **kwargs):
     data = {
         'date': '2015-10-17',
         'value': 500,

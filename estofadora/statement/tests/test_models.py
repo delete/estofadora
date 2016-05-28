@@ -12,20 +12,20 @@ class CashModelTest(TestCase):
         self.october = datetime.datetime(2014, 10, 10)
 
         self.cash1 = create_cash(
-            commit=True, history='Cash1', date=self.september.date(),
+            history='Cash1', date=self.september.date(),
             expenses=100, income=50
         )
         self.cash2 = create_cash(
-            commit=True, history='Cash2', date=self.september.date(),
+            history='Cash2', date=self.september.date(),
             expenses=200, income=100
         )
         self.cash3 = create_cash(
-            commit=True, history='Cash3', date=self.october.date(),
+            history='Cash3', date=self.october.date(),
             expenses=300, income=150
         )
 
         self.cash4 = create_cash(
-            commit=True, history='Cash4', date=self.october.date(),
+            history='Cash4', date=self.october.date(),
             expenses=400, income=200
         )
 
@@ -128,12 +128,12 @@ class CashModelTest(TestCase):
 
     def test_if_balance_was_created(self):
         create_cash(
-            commit=True, history='Cash1', date=self.september.date(),
+            history='Cash1', date=self.september.date(),
             expenses=100, income=50
         )
 
         create_cash(
-            commit=True, history='Cash2', date=self.september.date(),
+            history='Cash2', date=self.september.date(),
             expenses=0, income=200
         )
 
@@ -144,7 +144,7 @@ class CashModelTest(TestCase):
         Balance.objects.all().delete()
 
         cash1 = create_cash(
-            commit=True, history='Cash1', date=self.september.date(),
+            history='Cash1', date=self.september.date(),
             expenses=100, income=50
         )
 
@@ -157,12 +157,12 @@ class CashModelTest(TestCase):
         Balance.objects.all().delete()
 
         cash1 = create_cash(
-            commit=True, history='Cash1', date=self.september.date(),
+            history='Cash1', date=self.september.date(),
             expenses=100, income=50
         )
 
         cash2 = create_cash(
-            commit=True, history='Cash1', date=self.september.date(),
+            history='Cash1', date=self.september.date(),
             expenses=0, income=200
         )
 
