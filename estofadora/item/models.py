@@ -38,9 +38,6 @@ class Item(models.Model):
     def __str__(self):
         return self.name
 
-    def __unicode__(self):
-        return self.name
-
 
 def image_path(data, filename):
     "Returns the filepath where the image is store"

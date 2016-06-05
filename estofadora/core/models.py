@@ -21,6 +21,3 @@ class Contact(models.Model):
 
     def __str__(self):
         return '{0} - {1}'.format(self.name, self.email)
-
-    def __unicode__(self):
-        return '{0} - {1}'.format(self.name, self.email)

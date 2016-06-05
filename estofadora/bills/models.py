@@ -21,9 +21,6 @@ class Bill(models.Model):
     def __str__(self):
         return self.name
 
-    def __unicode__(self):
-        return self.name
-
     def save(self, *args, **kwargs):
         '''
             When a BIll is created, a Cash object is created
