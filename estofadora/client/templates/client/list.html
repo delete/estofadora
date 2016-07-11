@@ -1,56 +1,73 @@
 {% extends "base.html" %}
 
+{% block title %}Clientes{% endblock title %}
+
+{% block content-header-title %}
+Clientes
+{% endblock content-header-title %}
+
+{% block content-header-subtitle %}
+<small>Meus clientes</small>
+{% endblock content-header-subtitle %}
+
+{% block content-header-breadcrumb %}
+<li class="active">Clientes</li>
+{% endblock content-header-breadcrumb %}
+
 {% block content %}
-<div class="panel panel-default">
-	<div class="panel-body">
-		<h3><p class="text-center">Clientes</p></h3>
-	</div>
+
+<div class="col-xs-12">
+	  <div class="box">
+	    <div class="box-header">
+	      <h3 class="box-title">Meus clientes</h3>
+		    
+		      <div class="box-tools">
+			      <form method="POST">
+		      		{% csrf_token %}
+			        <div class="input-group input-group-sm" style="width: 150px;">
+			          <input type="text" name="name" class="form-control pull-right" placeholder="Nome do cliente">
+
+			          <div class="input-group-btn">
+			            <button type="submit" name="search" class="btn btn-default"><i class="fa fa-search"></i></button>
+			          </div>
+			        </div>
+			        </form>
+		      </div>
+			  
+	    </div>
+	    <!-- /.box-header -->
+	    <div class="box-body table-responsive no-padding">
+	      <table class="table table-hover">
+	      {% if clients %}
+	        <thead>
+		        <tr>
+		          <th>#</th>
+		          <th>Nome</th>
+		          <th>Email</th>
+		          <th>Telefone 1</th>
+							<td>Editar</td>
+							<td>Itens</td>
+		        </tr>
+		      </thead>
+		      <tbody>
+		      	{% for client in clients %}	
+			        <tr>
+			          <td>{{forloop.counter}}</td>
+			          <td>{{client.name}}</td>
+			          <td>{{client.email}}</td>
+								<td>{{client.telephone1}}</td>
+								<th><a href="{% url 'client:edit' client.pk %}"><i class="fa fa-pencil"></a></i></th>
+								<th><a href="{% url 'client:list_items' client.pk %}"><i class="fa fa-list"></a></i></th>
+			        </tr>
+			       {% endfor %}
+	        </tbody>
+	      {% else %}
+			  	<div class="alert alert-warning text-center" role="alert">Nenhum cliente encontrado.</div>
+				{% endif %}
+	       </table>
+	    </div>
+	    <!-- /.box-body -->
+	  </div>
+  <!-- /.box -->
 </div>
-
-<div class="well well-sm">
-	<a class="btn btn-primary form-control" 
-		href="{% url 'client:add' %}" role="button">
-		<i class="fa fa-plus-circle"></i>
-		Cadastrar cliente</a>
-</div>
-
-<div>
-    <form method="POST">
-        {% csrf_token %}
-        <div class="form-inline">
-            <input class="form-control" type="text" name="name" placeholder='Nome do cliente'>
-            <span>
-                <button class="btn btn-default form-control" type="submit" name="seach" id="search-btn">Pesquisar</button>
-            </span>
-        </div>
-    </form>
-</div>
-
-{% if clients %}
-	<table class="table table-striped">
-		<thead>
-			<tr>
-				<th>Nome</th>
-				<th>Email</th>
-				<th>Telefone 1</th>
-				<td>Editar</td>
-				<td>Itens</td>
-			</tr>
-		</thead>
-		<tbody>
-			{% for client in clients %}		
-				<tr>
-					<td>{{client.name}}</td>
-					<td>{{client.email}}</td>
-					<td>{{client.telephone1}}</td>
-					<th><a href="{% url 'client:edit' client.pk %}"><i class="fa fa-pencil"></a></i></th>
-					<th><a href="{% url 'client:list_items' client.pk %}"><i class="fa fa-list"></a></i></th>
-				</tr>
-			{% endfor %}
-		</tbody>
-	</table>
-{% else %}
-<div class="alert alert-warning text-center" role="alert">Nenhum cliente encontrado.</div>
-{% endif %}
-
 {% endblock %}
