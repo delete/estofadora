@@ -11,41 +11,42 @@ Cadastrar cliente
 {% endblock content-header-subtitle %}
 
 {% block content-header-breadcrumb %}
-<li class="active">Clientes</li>
-<li class="active">Cadastrar novo cliente</li>
+<li><a href="{% url 'client:list' %}">Clientes</a></li>
+<li class="active">Cadastrar</li>
 {% endblock content-header-breadcrumb %}
 
 {% block content %}
+<div class="row">
+	<div class="col-xs-12">
+		<div class="box box-primary">
+			<div class="box-header">
+			  <h3 class="box-title">Novo cliente</h3>
+			</div>
+			<!-- /.box-header -->
+			<form role="form" method="POST">
+			  <div class="box-body" style="display: block;">
+						{% csrf_token %}
+		  	    {{ form.non_field_errors}}
 
-<div class="col-xs-12">
-	<div class="box box-primary">
-		<div class="box-header">
-		  <h3 class="box-title">Novo cliente</h3>
+				    {% for field in form %}
+					    <div class="form-group">
+						    {{ field.label_tag }}
+						    {{ field }}
+						    {{ field.errors }}
+					    </div>
+				    {% endfor %}
+			  </div>
+			  <!-- /.box-body -->
+			  <div class="box-footer">
+			    <button type="submit" class="btn btn-primary">
+			    	<i class="fa fa-plus-circle"></i> Submit
+			    </button>
+			  	<a class="btn btn-default pull-right" href="{% url 'client:list'%}" role="button">
+						<i class="fa fa-minus-circle"></i> Cancelar
+					</a>
+			  </div>
+			</form>
 		</div>
-		<!-- /.box-header -->
-		<!-- form start -->
-		<form role="form" method="POST">
-		  <div class="box-body">
-					{% csrf_token %}
-	  	    {{ form.non_field_errors}}
-			    {% for field in form %}
-				    <div class="form-group">
-					    {{ field.label_tag }}
-					    {{ field }}
-					    {{ field.errors }}
-				    </div>
-			    {% endfor %}
-		  </div>
-		  <!-- /.box-body -->
-		  <div class="box-footer">
-		    <button type="submit" class="btn btn-primary">
-		    	<i class="fa fa-plus-circle"></i> Submit
-		    </button>
-		  	<a class="btn btn-default pull-right" href="{% url 'client:list'%}" role="button">
-					<i class="fa fa-minus-circle"></i> Cancelar
-				</a>
-		  </div>
-		</form>
 	</div>
 </div>
 {% endblock %}
