@@ -47,95 +47,25 @@
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
           <!-- Messages: style can be found in dropdown.less-->
-          <li class="dropdown messages-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          <li>
+            <a href="{% url 'core:contactMessages' %}">
               <i class="fa fa-envelope-o"></i>
               <span class="label label-success">{% get_mensagens %}</span>
             </a>
-            <ul class="dropdown-menu">
-              <li class="header">Você tem {% get_mensagens %} mensage{{ get_mensagens|pluralize:"m,ns" }} </li>
-              <li>
-                <!-- inner menu: contains the actual data -->
-                <ul class="menu">
-                  <li><!-- start message -->
-                    <a href="#">
-                      <div class="pull-left">
-                        <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        Support Team
-                        <small><i class="fa fa-clock-o"></i> 5 mins</small>
-                      </h4>
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li>
-                  <!-- end message -->
-                  <li>
-                    <a href="#">
-                      <div class="pull-left">
-                        <img src="dist/img/user3-128x128.jpg" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        AdminLTE Design Team
-                        <small><i class="fa fa-clock-o"></i> 2 hours</small>
-                      </h4>
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div class="pull-left">
-                        <img src="dist/img/user4-128x128.jpg" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        Developers
-                        <small><i class="fa fa-clock-o"></i> Today</small>
-                      </h4>
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div class="pull-left">
-                        <img src="dist/img/user3-128x128.jpg" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        Sales Department
-                        <small><i class="fa fa-clock-o"></i> Yesterday</small>
-                      </h4>
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div class="pull-left">
-                        <img src="dist/img/user4-128x128.jpg" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        Reviewers
-                        <small><i class="fa fa-clock-o"></i> 2 days</small>
-                      </h4>
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="footer"><a href="#">Ver todas as mensagens</a></li>
-            </ul>
-          </li>          
+          </li>
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <img src="dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+              <!--<img src="dist/img/user2-160x160.jpg" class="user-image" alt="User Image">-->
               <span class="hidden-xs">{{ user.first_name }}</span>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
               <li class="user-header">
-                <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                <!--<img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">-->
                 <p>
                   {{ user.first_name }}
-                  <small>{{ user.last_login}} </small>
+                  <small><strong>Último acesso:</strong> {{ user.last_login}} </small>
                 </p>
               </li>
               <!-- Menu Footer-->
@@ -160,7 +90,7 @@
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu">
         <li {% if section == "dashboard" %}class="selected"{% endif %}>
-          <a href="{%url 'core:home' %}"><i class="fa fa-external-link"></i> <span>Início</span></a><
+          <a href="{%url 'core:home' %}"><i class="fa fa-home"></i> <span>Início</span></a><
         /li>
         <li class="header">CADASTRAR</li>
         <li {% if section == "client_add" %}class="selected"{% endif %}>
@@ -193,6 +123,7 @@
           <a href="{% url 'statement:cash_annual' %}  "><i class="fa fa-area-chart"></i> <span>Caixa anual</span></a>
         </li>
         <li class="header">ATALHOS</li>
+        <li><a href="{%url 'core:contactMessages' %}"><i class="fa fa-envelope-o"></i> <span>Mensages</span></a></li>
         <li><a href="{%url 'core:site' %}"><i class="fa fa-external-link"></i> <span>Site</span></a></li>
       </ul>
     </section>
@@ -211,7 +142,7 @@
         {% endblock content-header-subtitle %}
       </h1>
       <ol class="breadcrumb">
-        <li><a href="{% url 'core:home' %}"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="{% url 'core:home' %}"><i class="fa fa-home"></i> Home</a></li>
         {% block content-header-breadcrumb %}
         {% endblock content-header-breadcrumb %}
       </ol>

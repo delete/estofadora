@@ -237,7 +237,7 @@ class ContactMessagesViewTest(TestBase):
         Contact.objects.all().delete()
 
         self.response = self.client.get(self.url)
-        self.assertContains(self.response, 'Nenhuma mensagem!')
+        self.assertContains(self.response, 'Nenhuma mensagem enviada.')
 
 
 class DeleteMensagemViewTest(TestBase):
