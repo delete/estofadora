@@ -1,5 +1,5 @@
 # coding: utf-8
-from . import TestCase, create_bill, Cash
+from . import TestCase, create_bill, Cash, Bill
 
 
 class BillModelTest(TestCase):
@@ -21,3 +21,13 @@ class BillModelTest(TestCase):
         self.assertEqual(self.bill.date_to_pay, cash.date.isoformat())
         # Income is save with zero as default
         self.assertEqual(0, cash.income)
+
+    def test_if_was_deleted(self):
+        # Create another bill
+        create_bill(name='water')
+
+        # Delete bill created on setUp
+        self.bill.delete()
+
+        self.assertEqual(len(Bill.objects.all()), 1)
+        self.assertEqual(len(Cash.objects.all()), 1)

@@ -5,6 +5,9 @@ from estofadora.statement.models import Cash
 
 
 class Bill(models.Model):
+    '''
+        Class that model bills to pay. Like: water, internet, telephone, ...
+    '''
 
     date_to_pay = models.DateField('Dia')
     name = models.CharField('Nome', max_length=200)
@@ -36,3 +39,14 @@ class Bill(models.Model):
 
         # Call the "real" save() method.
         super(Bill, self).save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        '''
+            When a Bill is deleted, a related Cash object must be
+            deleted too.
+        '''
+        cash = Cash.objects.get(date=self.date_to_pay, history=self.name)
+        cash.delete()
+
+        # Call the "real" delete() method.
+        super(Bill, self).delete(*args, **kwargs)
