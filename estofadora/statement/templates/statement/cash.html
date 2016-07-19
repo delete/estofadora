@@ -1,134 +1,162 @@
 {% extends "base.html" %}
 
 {% block extra_js %} 
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	<script src="http://malsup.github.com/jquery.form.js"></script>
 {% endblock %}	
 
-{% block content %}
-<div class="panel panel-default">
-	<div class="panel-body">
-        <h3>
-        	<p class="text-center">Caixa diário</p>
-        	<p class="text-center">
-        		<small>Listagem e cadastro de receitas e despesas diárias.</small>
-        	</p>
-        </h3>
-	</div>
-</div>
+{% block title %}Caixa diário{% endblock title %}
 
-<div class="well well-sm">
-	<form method="POST" role="form">
-        {% csrf_token %}
-        <div class="form-inline">
+{% block content-header-title %}
+Caixa diário
+{% endblock content-header-title %}
+
+{% block content-header-subtitle %}
+<small>Receitas e despesas diarias.</small>
+{% endblock content-header-subtitle %}
+
+{% block content-header-breadcrumb %}
+<li class="active">Caixa</li>
+<li class="active">Diário</li>
+{% endblock content-header-breadcrumb %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box box-primary">
+      <div class="box-header with-border">
+        <h3 class="box-title">Valor anterior</h3>
+
+        <div class="box-tools pull-right">
+          <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+          </button>
+        </div>
+        <!-- /.box-tools -->
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body" style="display: block;">
+        <div class="pull-left">
+          {% if total_before > 0 %}
+					<p class="text-right text-success">
+					{% else %}
+					<p class="text-right text-danger">
+					{% endif %}
+						Valor total anterior: R$ {{ total_before }}
+					</p>
+        </div>
+      </div>
+      <!-- /.box-body -->
+    </div>
+  </div>
+
+  <div class="col-xs-12">
+    <div class="box box-primary">
+      <div class="box-header">
+        <h3 class="box-title">Receitas e despesas</h3>
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body table-responsive">
+        <form method="POST" role="form" class="search-form">
+          {% csrf_token %}
+          <div class="form-inline">
             <input class="form-control" type="date" name="search_date" placeholder='Data para listar'>
             <span>
-                <button class="btn btn-default form-control" type="submit" 
-                	name="search_form" id="search-btn">
-                	<i class="fa fa-search"></i>
-                	Listar
-                </button>
+              <button class="btn btn-default form-control" type="submit" 
+                name="search_form" id="search-btn">
+                <i class="fa fa-search"></i>
+                Listar
+              </button>
             </span>
+          </div>
+        </form>
+       	{% if content %}
+          <table class="table table-striped">
+					    <thead>
+					        <tr>
+					            <th>Data</th>
+					            <th>Histórico</th>
+					            <th>Entrada</th>
+					            <th>Saida</th>
+					            <th>Saldo</th>
+					        </tr>
+					    </thead>
+					    <tbody>
+					        {% for item in content %}
+					            <tr>
+					                <td>{{item.date}}</td>
+					                <td>{{item.history}}</td>
+					                <td>{{item.income}}</td>
+					                <td>{{item.expenses }}</td>
+					                <td>{{item.balance }}</td>
+					                <th>
+					                	<a href="{% url 'statement:delete' item.pk %}"
+					                		title="remover item">
+					                		<i class="fa fa-trash-o"></i>
+					                	</a>
+					                </th>
+					            </tr>
+					        {% endfor %}
+					    </tbody>
+					</table>
+        {% else %}
+          <div class="alert alert-warning text-center" role="alert">
+            Nenhum registro encontrado na data: {{ choose_date }}!
+          </div>
+        {% endif %}
+      </div>
+      <!-- /.box-body -->
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        {% if total_value > 0 %}
+        <p class="text-right text-success">
+        {% else %}
+        <p class="text-right text-danger">
+        {% endif %}
+            Valor total de hoje: R$ {{ total_value }}
+        </p>
+      </div>
+    </div>
+    <!-- /.box -->
+  </div>
+
+  <div class="col-xs-12">
+    <div class="box box-primary">
+      <div class="box-header with-border">
+        <h3 class="box-title">Nova receita/despesa</h3>
+
+        <div class="box-tools pull-right">
+          <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+          </button>
         </div>
-    </form>
+        <!-- /.box-tools -->
+      </div>
+      <!-- /.box-header -->
+    	<form  method="POST" role="form">
+      	<div class="box-body" style="display: block;">
+					{% csrf_token %}
+			    {{ form.non_field_errors}}
+
+			    {% for field in form %}
+				    <div class="form-group">
+					    {{ field.label_tag }}
+					    {{ field }}
+					    {{ field.errors }}
+				    </div>
+			    {% endfor %}
+			  </div>
+			  <div class="box-footer">
+			    <button class="btn btn-primary" 
+			    	type="submit" name="post_form">
+			    	<i class="fa fa-plus-circle"></i>
+			    	Inserir
+			    </button>
+			  </div>
+			</form>
+      </div>
+      <!-- /.box-body -->
+    </div>
+  </div>
 </div>
-
-<div class="well well-sm">
-	<div class="total_value">
-		{% if total_before > 0 %}
-		<p class="text-right text-success">
-		{% else %}
-		<p class="text-right text-danger">
-		{% endif %}
-			Valor total anterior: R$ {{ total_before }}
-		</p>
-	</div>
-</div>
-
-{% if content %}
-
-	<table class="table table-striped">
-	    <thead>
-	        <tr>
-	            <th>Data</th>
-	            <th>Histórico</th>
-	            <th>Entrada</th>
-	            <th>Saida</th>
-	            <th>Saldo</th>
-	        </tr>
-	    </thead>
-	    <tbody>
-	        {% for item in content %}
-	            <tr>
-	                <td>{{item.date}}</td>
-	                <td>{{item.history}}</td>
-	                <td>{{item.income}}</td>
-	                <td>{{item.expenses }}</td>
-	                <td>{{item.balance }}</td>
-	                <th>
-	                	<a href="{% url 'statement:delete' item.pk %}"
-	                		title="remover item">
-	                		<i class="fa fa-trash-o"></i>
-	                	</a>
-	                </th>
-	            </tr>
-	        {% endfor %}
-	    </tbody>
-	</table>
-
-	<div class="total_value">
-		{% if total_value > 0 %}
-		<p class="text-right text-success">
-		{% else %}
-		<p class="text-right text-danger">
-		{% endif %}
-			Valor total de hoje: R$ {{ total_value }}
-		</p>
-	</div>
-
-{% else %}
-	<div class="alert alert-warning" role="alert">
-		<p class="text-center">
-			Nenhum registro encontrado na data: {{ choose_date }}!
-		</p>
-		
-	</div>
-{% endif %}
-
-
-<hr>
-
-<div class="marketing">
-	<form  method="POST" role="form">
-		{% csrf_token %}
-
-	    {{ form.non_field_errors}}
-
-	    {% for field in form %}
-		    <div class="form-group">
-			    {{ field.label_tag }}
-			    {{ field }}
-			    {{ field.errors }}
-		    </div>
-	    {% endfor %}
-
-	    <button class="btn btn-primary form-control" 
-	    	type="submit" name="post_form">
-	    	<i class="fa fa-plus-circle"></i>
-	    	Inserir
-	    </button>
-
-	</form>
-</div>
-
-<!-- Modal --> 
-<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-dialog"> 
-		<div class="modal-content"> 
-			
-		</div><!-- /.modal-content --> 
-	</div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-	
 
 {% endblock %}
