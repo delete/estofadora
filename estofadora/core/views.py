@@ -35,6 +35,7 @@ def home(request):
 
     context['items'] = items_to_delivery
     context['bills'] = week_bills
+    context['section'] = 'home'
     return render(request, 'index.html', context)
 
 
@@ -82,6 +83,7 @@ def contactMessages(request):
     contactMessages = Contact.objects.all().order_by('-created_at')
 
     context['contactMessages'] = contactMessages
+    context['section'] = 'messages'
     return render(request, 'contactMessages.html', context)
 
 

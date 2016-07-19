@@ -23,6 +23,7 @@ def new(request):
         form = BillForm()
 
     context['form'] = form
+    context['section'] = 'bill_new'
     return render(request, 'bills/new.html', context)
 
 
@@ -32,6 +33,7 @@ def list(request):
     bills = Bill.objects.all()
 
     context['bills'] = bills
+    context['section'] = 'bills'
     return render(request, 'bills/list.html', context)
 
 

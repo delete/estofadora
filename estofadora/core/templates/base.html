@@ -89,41 +89,45 @@
     <section class="sidebar">
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu">
-        <li {% if section == "dashboard" %}class="selected"{% endif %}>
+        <li {% if section == "home" %}class="active"{% endif %}>
           <a href="{%url 'core:home' %}"><i class="fa fa-home"></i> <span>Início</span></a><
         /li>
         <li class="header">CADASTRAR</li>
-        <li {% if section == "client_add" %}class="selected"{% endif %}>
+        <li {% if section == "client_add" %}class="active"{% endif %}>
           <a href="{% url 'client:add' %}"><i class="fa fa-user"></i> <span>Cliente</span></a>
         </li>
-        <li {% if section == "item_add" %}class="selected"{% endif %}>
+        <li {% if section == "item_add" %}class="active"{% endif %}>
           <a href="{% url 'item:add' %}"><i class="fa fa-cube"></i> <span>Peça</span></a>
         </li>
-        <li {% if section == "bill_add" %}class="selected"{% endif %}>
+        <li {% if section == "bill_new" %}class="active"{% endif %}>
           <a href="{% url 'bills:new' %}"><i class="fa fa-money"></i> <span>Conta</span></a>
         </li>
         <li class="header">LISTAR</li>
-        <li {% if section == "clients" %}class="selected"{% endif %}>
+        <li {% if section == "clients" %}class="active"{% endif %}>
           <a href="{% url 'client:list' %}"><i class="fa fa-users"></i> <span>Clientes</span></a>
         </li>
-        <li {% if section == "items" %}class="selected"{% endif %}>
+        <li {% if section == "items" %}class="active"{% endif %}>
           <a href="{% url 'item:list' %}"><i class="fa fa-cubes"></i> <span>Peças</span></a>
         </li>
-        <li {% if section == "bills" %}class="selected"{% endif %}>
+        <li {% if section == "bills" %}class="active"{% endif %}>
           <a href="{% url 'bills:list' %}"><i class="fa fa-money"></i> <span>Contas</span></a>
         </li>
         <li class="header">RELATÓRIOS</li>
-        <li {% if section == "cash" %}class="selected"{% endif %}>
+        <li {% if section == "cash" %}class="active"{% endif %}>
           <a href="{% url 'statement:cash' %}"><i class="fa fa-line-chart"></i> <span>Caixa diário</span></a>
         </li>
-        <li {% if section == "cash_month" %}class="selected"{% endif %}>
+        <li {% if section == "cash_month" %}class="active"{% endif %}>
           <a href="{% url 'statement:cash_month' %}"><i class="fa fa-bar-chart"></i> <span>Caixa mensal</span></a>
         </li>
-        <li {% if section == "cash_annual" %}class="selected"{% endif %}>
-          <a href="{% url 'statement:cash_annual' %}  "><i class="fa fa-area-chart"></i> <span>Caixa anual</span></a>
+        <li {% if section == "cash_annual" %}class="active"{% endif %}>
+          <a href="{% url 'statement:cash_annual' %} "><i class="fa fa-area-chart"></i> <span>Caixa anual</span></a>
         </li>
         <li class="header">ATALHOS</li>
-        <li><a href="{%url 'core:contactMessages' %}"><i class="fa fa-envelope-o"></i> <span>Mensages</span></a></li>
+        <li {% if section == "messages" %}class="active"{% endif %}>
+          <a href="{%url 'core:contactMessages' %}">
+            <i class="fa fa-envelope-o"></i> <span>Mensages</span>
+          </a>
+        </li>
         <li><a href="{%url 'core:site' %}"><i class="fa fa-external-link"></i> <span>Site</span></a></li>
       </ul>
     </section>
