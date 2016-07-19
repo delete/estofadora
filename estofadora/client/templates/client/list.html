@@ -16,62 +16,61 @@ Clientes
 
 {% block content %}
 
-<div class="col-xs-12">
-	  <div class="box box-primary">
-	    <div class="box-header">
-	      <h3 class="box-title">Meus clientes</h3>
-		    
-		      <div class="box-tools">
-			      <form method="POST">
-		      		{% csrf_token %}
-			        <div class="input-group input-group-sm" style="width: 150px;">
-			          <input type="text" name="name" class="form-control pull-right" placeholder="Nome do cliente">
-
-			          <div class="input-group-btn">
-			            <button type="submit" name="search" class="btn btn-default"><i class="fa fa-search"></i></button>
-			          </div>
-			        </div>
-			        </form>
-		      </div>
-			  
-	    </div>
-	    <!-- /.box-header -->
-	    <div class="box-body table-responsive no-padding">
-	      <table class="table table-hover">
-	      {% if clients %}
-	        <thead>
-		        <tr>
-		          <th>#</th>
-		          <th>Nome</th>
-		          <th>Email</th>
-		          <th>Telefone 1</th>
-							<td>Editar</td>
-							<td>Itens</td>
-		        </tr>
-		      </thead>
-		      <tbody>
-		      	{% for client in clients %}	
+<div class="row">
+	<div class="col-xs-12">
+		  <div class="box box-primary">
+		    <div class="box-header">
+		      <h3 class="box-title">Meus clientes</h3>
+		    </div>
+		    <!-- /.box-header -->
+		    <div class="box-body table-responsive">
+		    	<form method="POST" role="form">
+	      		{% csrf_token %}
+		        <div class="form-inline">
+		          <input type="text" name="name" class="form-control" placeholder="Nome da conta">
+	            <span>
+		            <button type="submit" name="search" class="btn btn-default form-control">
+		            	<i class="fa fa-search"></i>
+			          </button>
+	            </span>
+		        </div>
+	        </form>
+		      <table class="table table-hover">
+		      {% if clients %}
+		        <thead>
 			        <tr>
-			          <td>{{forloop.counter}}</td>
-			          <td>{{client.name}}</td>
-			          <td>{{client.email}}</td>
-								<td>{{client.telephone1}}</td>
-								<th>
-									<a href="{% url 'client:edit' client.pk %}"><i class="fa fa-pencil"></i></a>
-								</th>
-								<th>
-									<a href="{% url 'client:list_items' client.pk %}"><i class="fa fa-list"></i></a>
-								</th>
+			          <th>#</th>
+			          <th>Nome</th>
+			          <th>Email</th>
+			          <th>Telefone 1</th>
+								<td>Editar</td>
+								<td>Itens</td>
 			        </tr>
-			       {% endfor %}
-	        </tbody>
-	      {% else %}
-			  	<div class="alert alert-warning text-center" role="alert">Nenhum cliente encontrado.</div>
-				{% endif %}
-	       </table>
-	    </div>
-	    <!-- /.box-body -->
-	  </div>
-  <!-- /.box -->
+			      </thead>
+			      <tbody>
+			      	{% for client in clients %}	
+				        <tr>
+				          <td>{{forloop.counter}}</td>
+				          <td>{{client.name}}</td>
+				          <td>{{client.email}}</td>
+									<td>{{client.telephone1}}</td>
+									<th>
+										<a href="{% url 'client:edit' client.pk %}"><i class="fa fa-pencil"></i></a>
+									</th>
+									<th>
+										<a href="{% url 'client:list_items' client.pk %}"><i class="fa fa-list"></i></a>
+									</th>
+				        </tr>
+				       {% endfor %}
+		        </tbody>
+		      {% else %}
+				  	<div class="alert alert-warning text-center" role="alert">Nenhum cliente encontrado.</div>
+					{% endif %}
+		       </table>
+		    </div>
+		    <!-- /.box-body -->
+		  </div>
+	  <!-- /.box -->
+	</div>
 </div>
 {% endblock %}
