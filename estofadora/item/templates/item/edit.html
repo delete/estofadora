@@ -1,45 +1,58 @@
 {% extends "base.html" %}
 
+{% block title %}Editar {{ client.name }}{% endblock title %}
+
+{% block content-header-title %}
+Editar
+{% endblock content-header-title %}
+
+{% block content-header-subtitle %}
+<small>Editar peça</small>
+{% endblock content-header-subtitle %}
+
+{% block content-header-breadcrumb %}
+<li><a href="{% url 'item:list' %}">Peças</a></li>
+<li class="active">Editar</li>
+{% endblock content-header-breadcrumb %}
+
 {% block content %}
-<div class="panel panel-default">
-	<div class="panel-body">
-		<h3><p class="text-center">Editar Item</p></h3>
+
+<div class="row">
+	<div class="col-xs-12">
+		<div class="box box-primary">
+			<div class="box-header">
+			  <h3 class="box-title">Editando: {{ item.name }}</h3>
+			</div>
+			<a class="btn btn-danger btn-remove pull-right"e href="{% url 'item:delete' item.pk %}" role="button">
+				<i class="fa fa-trash"></i>
+				Remover
+			</a>
+			<!-- /.box-header -->
+			<form  method="POST" enctype="multipart/form-data" role="form">
+			  <div class="box-body" style="display: block;">
+						{% csrf_token %}
+		  	    {{ form.non_field_errors}}
+
+				    {% for field in form %}
+					    <div class="form-group">
+						    {{ field.label_tag }}
+						    {{ field }}
+						    {{ field.errors }}
+					    </div>
+				    {% endfor %}
+			  </div>
+			  <!-- /.box-body -->
+			  <div class="box-footer">
+			    <button type="submit" class="btn btn-primary">
+			    	<i class="fa fa-plus-circle"></i> Submit
+			    </button>
+			  	<a class="btn btn-default pull-right" href="{% url 'item:list'%}" role="button">
+						<i class="fa fa-minus-circle"></i> Cancelar
+					</a>
+			  </div>
+			</form>
+		</div>
 	</div>
 </div>
 
-<div class="marketing">
-	<a class="btn btn-danger pull-right" 
-		href="{% url 'item:delete' item.pk %}" role="button">
-		<i class="fa fa-trash"></i>
-		Remover</a>
-	<br>
-	<form  method="POST" enctype="multipart/form-data" role="form">
-	{% csrf_token %}
-
-	    {{ form.non_field_errors}}
-
-	    {% for field in form %}
-		    <div class="form-group">
-			    {{ field.label_tag }}
-			    {{ field }}
-			    {{ field.errors }}
-		    </div>
-	    {% endfor %}
-
-	    <div class="form-inline">
-		    <button class="btn btn-primary form-control" 
-		    	type="submit">
-		    	<i class="fa fa-floppy-o"></i>
-		    	Alterar</button>
-		    <div class="form-group">
-		    <a class="btn btn-default form-control" 
-				href="{% url 'client:list_items' item.client.pk %}" 
-				role="button">
-				<i class="fa fa-minus-circle"></i>
-				Cancelar
-			</a>
-	    </div>
-
-	</form>
-</div>
 {% endblock %}
