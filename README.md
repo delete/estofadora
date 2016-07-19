@@ -93,24 +93,39 @@ $ python manage.py test
 
 ## ScreenShots
 
-#### Dashboard Page
-![Dashboard page](screenshots/home.jpg "Dashboard page")
+#### Home Page
+![Home page](screenshots/home.png "Home page")
 
 #### Clients Page
-![Clients page](screenshots/clients.jpg "Clients page")
+![Clients page](screenshots/clients.png "Clients page")
+
+#### Add client Page
+![Add client page](screenshots/add_client.png "Add client page")
 
 #### Items Page
-![Items page](screenshots/items.jpg "Items page")
+![Items page](screenshots/items.png "Items page")
+
+#### Bills Page
+![Bills page](screenshots/bills.png "Bills page")
+
 
 #### Images from an item
 
 You can add some photos of the item to show how it was before and after the work, for example.
 If the image was marked (the checkbox), it will appear on the portfolio page on the website, automatically.
 
-![Item images](screenshots/item-images.jpg "Item images")
+![Item images](screenshots/item-images.png "Item images")
 
 #### Financial reports: daily, monthly and annually
-![Reports](screenshots/charts.jpg "Reports")
+![Daily report](screenshots/cash.png "Daily report")
+![Month report](screenshots/cash_month.png "Month report")
+![Annual report](screenshots/cash_annual.png "Annual report")
+
+#### Messages Page
+
+All messages sent form website contact form. Collapsed gray box are read messages.
+
+![Messages page](screenshots/messages.png "Messages page")
 
 ## Meta
 
