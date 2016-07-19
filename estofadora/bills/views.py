@@ -30,7 +30,16 @@ def new(request):
 @login_required
 def list(request):
     context = {}
-    bills = Bill.objects.all().order_by('-date_to_pay')
+
+    if request.method == 'POST':
+        bill_name = request.POST.get('name')
+        bills = Bill.objects.filter(
+            name__icontains=bill_name
+        ).order_by('-date_to_pay')
+        print(bills)
+
+    else:
+        bills = Bill.objects.all().order_by('-date_to_pay')
 
     context['bills'] = bills
     context['section'] = 'bills'

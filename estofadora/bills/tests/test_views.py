@@ -56,7 +56,7 @@ class ListViewTest(TestBase):
         self.login()
 
         self.bill1 = create_bill(is_paid=True)
-        self.bill2 = create_bill(name='Client2')
+        self.bill2 = create_bill(name='Internet')
 
         self.url = reverse('bills:list')
         self.response = self.client.get(self.url)
@@ -84,6 +84,16 @@ class ListViewTest(TestBase):
 
         self.response = self.client.get(self.url)
         self.assertContains(self.response, 'Nenhuma conta cadastrada.')
+
+    def test_post(self):
+        data = {'name': 'Internet'}
+        self.response = self.client.post(self.url, data)
+        self.assertContains(self.response, self.bill2.name)
+        self.assertContains(self.response, self.bill2.value)
+
+        # bill1 should not appear
+        self.assertNotContains(self.response, self.bill1.name)
+        self.assertNotContains(self.response, "Pago")
 
 
 class DeleteViewTest(TestBase):

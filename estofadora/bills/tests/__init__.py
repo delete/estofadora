@@ -36,7 +36,7 @@ class TestBase(TestCase):
 def make_validated_form(commit=True, **kwargs):
     data = {
         'date_to_pay': '2015-10-17',
-        'name': 'Client',
+        'name': 'Water',
         'value': 0,
         'is_paid': False
     }
@@ -52,7 +52,7 @@ def make_validated_form(commit=True, **kwargs):
 def create_bill(commit=True, **kwargs):
     data = {
         'date_to_pay': '2015-10-17',
-        'name': 'Client',
+        'name': 'Water',
         'value': 0,
         'is_paid': False
     }
