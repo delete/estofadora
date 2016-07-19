@@ -30,7 +30,7 @@ def new(request):
 @login_required
 def list(request):
     context = {}
-    bills = Bill.objects.all()
+    bills = Bill.objects.all().order_by('-date_to_pay')
 
     context['bills'] = bills
     context['section'] = 'bills'

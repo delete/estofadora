@@ -20,14 +20,14 @@ def home(request):
     this_week = datetime.datetime.now().isocalendar()[1]
 
     # Get all items and separate them which the week number matchs
-    items = Item.objects.all().order_by('delivery_date')
+    items = Item.objects.all().order_by('-delivery_date')
 
     items_to_delivery = [
         i for i in items if i.delivery_date.isocalendar()[1] == this_week
     ]
 
     # Gell all bills and separate them which the week number matchs
-    bills = Bill.objects.all().order_by('date_to_pay')
+    bills = Bill.objects.all().order_by('-date_to_pay')
 
     week_bills = [
         b for b in bills if b.date_to_pay.isocalendar()[1] == this_week
