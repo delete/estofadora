@@ -1,6 +1,6 @@
 # coding: utf-8
 
-from . import TestCase, make_validated_form, BillForm
+from . import TestCase, make_validated_form, BillForm, create_bill
 
 
 class BillFormTest(TestCase):
@@ -23,6 +23,12 @@ class BillFormTest(TestCase):
 
     def test_value_is_not_optional(self):
         form = make_validated_form(value='')
+        self.assertTrue(form.errors)
+
+    def test_same_name_and_date_error(self):
+        # Must have only one bill created with the same name and date.
+        create_bill()
+        form = make_validated_form()
         self.assertTrue(form.errors)
 
     def test_form(self):
