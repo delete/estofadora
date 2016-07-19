@@ -1,102 +1,135 @@
 {% extends "base.html" %}	
 
+{% block title %}Caixa mensal{% endblock title %}
+
+{% block content-header-title %}
+Caixa mensal
+{% endblock content-header-title %}
+
+{% block content-header-subtitle %}
+<small>Receitas e despesas mensais.</small>
+{% endblock content-header-subtitle %}
+
+{% block content-header-breadcrumb %}
+<li class="active">Caixa</li>
+<li class="active">Mensal</li>
+{% endblock content-header-breadcrumb %}
+
 {% block content %}
-<div class="panel panel-default">
-	<div class="panel-body">
-	        <h3>
-        	<p class="text-center">Caixa mensal</p>
-        	<p class="text-center">
-        		<small>Listagem de receitas e despesas mensais.</small>
-        	</p>
-        </h3>
+<div class="row">
+	<div class="col-xs-12">
+		<div class="box box-primary">
+		  <div class="box-header with-border">
+		    <h3 class="box-title">Valor anterior</h3>
+
+		    <div class="box-tools pull-right">
+		      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+		      </button>
+		    </div>
+		    <!-- /.box-tools -->
+		  </div>
+		  <!-- /.box-header -->
+		  <div class="box-body" style="display: block;">
+		    <div class="pull-left">
+				  {% if total_before > 0 %}
+					  <p class="text-right text-success">
+				  {% else %}
+				  	<p class="text-right text-danger">
+				  {% endif %}
+				  Valor total anterior: R$ {{ total_before }}
+					</p>
+				</div>
+		  </div>
+		  <!-- /.box-body -->
+		</div>
+	</div>
+	<div class="col-xs-12">
+		  <div class="box box-primary">
+		    <div class="box-header">
+		      <h3 class="box-title">Receitas e despesas</h3>
+		    </div>
+		    <!-- /.box-header -->
+		    <div class="box-body table-responsive">
+		    	{% if years %}
+						<form method="POST" role="form" class="search-form">
+					        {% csrf_token %}
+					        <div class="form-inline">
+			        	<select name="selectmonth" class="form-control">
+			        		{% for number, name in months %}
+				        		<option value="{{number}}"
+				        			{% if number == choose_month %}selected{% endif %}>
+											{{name}}
+										</option>
+			        		{% endfor %}
+								</select>
+			        	<select name="selectyear" class="form-control">
+			        		{% for year in years %}
+										<option value="{{year}}"
+											{% if year == choose_year %}selected{% endif %}>
+											{{year}}
+										</option> 
+				        		{% endfor %}
+								</select>
+			            <span>
+		                <button class="btn btn-default form-control" type="submit" 
+		                	name="search_form" id="search-btn">
+		                	<i class="fa fa-search"></i>
+		                	Listar
+		                </button>
+			            </span>
+			        </div>
+					  </form>
+				    <table class="table table-hover">
+				      {% if content %}
+				        <thead>
+					        <tr>
+					          <th>#</th>
+					          <th>Data</th>
+				            <th>Histórico</th>
+				            <th>Entrada</th>
+				            <th>Saida</th>
+				            <th>Saldo</th>
+					        </tr>
+					      </thead>
+					      <tbody>
+					      	{% for item in content %}
+				            <tr>
+				            	<td>{{forloop.counter}}</td>
+				              <td>{{item.date}}</td>
+				              <td>{{item.history}}</td>
+				              <td>{{item.income}}</td>
+				              <td>{{item.expenses }}</td>
+				              <td>{{item.balance }}</td>
+				            </tr>
+				        {% endfor %}
+				        </tbody>
+				      {% else %}
+						  	<div class="alert alert-warning text-center" role="alert">
+						  		Nenhum registro encontrado.
+						  	</div>
+							{% endif %}
+				   	</table>
+	      	{% else %}
+				  	<div class="alert alert-warning text-center" role="alert">
+				  		Nenhum registro encontrado.
+				  	</div>
+					{% endif %}
+		    </div>
+		    <!-- /.box-body -->
+		  </div>
+		  <div class="row">
+	     	<div class="col-sm-12">
+	     		{% if total_value > 0 %}
+						<p class="text-right text-success">
+					{% else %}
+						<p class="text-right text-danger">
+					{% endif %}
+					Valor total: R$ {{ total_value }}
+					</p>
+	     	</div>
+	   	</div>
+	  <!-- /.box -->
 	</div>
 </div>
-
-<div class="well well-sm">
-	<form method="POST" role="form">
-        {% csrf_token %}
-        <div class="form-inline">
-        	<select name="selectmonth" class="form-control">
-        		{% for number, name in months %}
-	        		<option value="{{number}}"
-	        			{% if number == choose_month %}selected{% endif %}>
-						{{name}}
-					</option>
-        		{% endfor %}
-			</select>
-        	<select name="selectyear" class="form-control">
-        		{% for year in years %}
-					<option value="{{year}}"
-						{% if year == choose_year %}selected{% endif %}>
-						{{year}}
-					</option> 
-        		{% endfor %}
-			</select>
-            <span>
-                <button class="btn btn-default form-control" type="submit" 
-                	name="search_form" id="search-btn">
-                	<i class="fa fa-search"></i>
-                	Listar
-                </button>
-            </span>
-        </div>
-    </form>
-</div>
-
-<div class="well well-sm">
-    <div class="total_value">
-        {% if total_before > 0 %}
-        <p class="text-right text-success">
-        {% else %}
-        <p class="text-right text-danger">
-        {% endif %}
-            Valor total anterior: R$ {{ total_before }}
-        </p>
-    </div>
-</div>
-
-{% if content %}
-
-	<table class="table table-striped">
-	    <thead>
-	        <tr>
-	            <th>Data</th>
-	            <th>Histórico</th>
-	            <th>Entrada</th>
-	            <th>Saida</th>
-                <th>Saldo</th>
-	        </tr>
-	    </thead>
-	    <tbody>
-	        {% for item in content %}
-	            <tr>
-	                <td>{{item.date}}</td>
-	                <td>{{item.history}}</td>
-	                <td>{{item.income}}</td>
-	                <td>{{item.expenses }}</td>
-                    <td>{{item.balance }}</td>
-	            </tr>
-	        {% endfor %}
-	    </tbody>
-	</table>
-
-	<div class="total_value">
-		{% if total_value > 0 %}
-		<p class="text-right text-success">
-		{% else %}
-		<p class="text-right text-danger">
-		{% endif %}
-			Valor total: R$ {{ total_value }}
-		</p>
-	</div>
-
-{% else %}
-	<div class="alert alert-warning" role="alert">
-		<p class="text-center">
-			Nenhum registro encontrado em: {{ choose_date|date:'F Y' }}!
-		</p>
-		
-	</div>
-{% endif %}
 
 {% endblock %}

@@ -1,190 +1,176 @@
 {% extends "base.html" %}
 {% load quantity_tags%}
 
+{% block title %}Início{% endblock title %}
+
+{% block content-header-title %}
+Início
+{% endblock content-header-title %}
+
+{% block content-header-subtitle %}
+<small>Painel de controle</small>
+{% endblock content-header-subtitle %}
+
+{% block content-header-breadcrumb %}
+<li class="active">Início</li>
+{% endblock content-header-breadcrumb %}
+
 {% block content %}
-<div class="splash">
-    <div class="pure-g-r">
-        <div class="pure-u-1">
-            <div class="l-box splash-text">
-                <h1 class="splash-head text-center">
-                    Área administrativa
-                </h1>
-                <h2 class="splash-subhead text-center">
-                    <small> Gerencie clientes, itens, contas e relatórios.</small>
-                </h2>
-            </div>
-        </div>
+<!-- Small boxes (Stat box) -->
+<div class="row">
+<div class="col-lg-3 col-xs-6">
+  <!-- small box -->
+  <div class="small-box bg-aqua">
+    <div class="inner">
+      <h3>{% get_clients %}</h3>
+      <p>Clientes</p>
     </div>
+    <div class="icon">
+      <i class="fa fa-users"></i>
+    </div>
+    <a href="{% url 'client:list' %}" class="small-box-footer">Ver todos <i class="fa fa-arrow-circle-right"></i></a>
+  </div>
 </div>
-<br>
+<!-- ./col -->
+<div class="col-lg-3 col-xs-6">
+  <!-- small box -->
+  <div class="small-box bg-green">
+    <div class="inner">
+      <h3>{% get_items %}</h3>
+      <p>Peças</p>
+    </div>
+    <div class="icon">
+      <i class="fa fa-cubes"></i>
+    </div>
+    <a href="{% url 'item:list' %}" class="small-box-footer">Ver todas <i class="fa fa-arrow-circle-right"></i></a>
+  </div>
+</div>
+<!-- ./col -->
+<div class="col-lg-3 col-xs-6">
+  <!-- small box -->
+  <div class="small-box bg-red">
+    <div class="inner">
+      <h3>{% get_bills %}</h3>
+      <p>Contas</p>
+    </div>
+    <div class="icon">
+      <i class="fa fa-money"></i>
+    </div>
+    <a href="{% url 'bills:list' %}" class="small-box-footer">Ver todas <i class="fa fa-arrow-circle-right"></i></a>
+  </div>
+</div>
+<!-- ./col -->
+<div class="col-lg-3 col-xs-6">
+  <!-- small box -->
+  <div class="small-box bg-yellow">
+    <div class="inner">
+      <h3>{% get_pictures %}</h3>
+      <p>Fotos</p>
+    </div>
+    <div class="icon">
+      <i class="fa fa-picture-o"></i>
+    </div>
+    <a href="#" class="small-box-footer">Ver todas <i class="fa fa-arrow-circle-right"></i></a>
+  </div>
+</div>
+<!-- ./col -->
+</div>
+<!-- /.row -->
+<!-- Main row -->
+<div class="row">
+	<div class="col-md-12">
+		<div class="box">
+			<div class="box-header">
+			  <h3 class="box-title"><i class="fa fa-truck"></i> Entregas da semana</h3>
+			</div>
+			<!-- /.box-header -->
+			<div class="box-body no-padding">
+				{% if items %}
+				  
+				  <table class="table table-striped">
+				  	<thead>
+				    	<tr>
+					      <th style="width: 10px">#</th>
+					      <th>Cliente</th>
+					      <th>Item</th>
+					      <th>Data da entrega</th>
+					      <th>Estado</th>
+				    	</tr>
+				    </thead>
+				    <tbody>
+				    	{% for item in items %}
+						    	<tr>
+						    		<td>{{forloop.counter}}.</td>
+							      <td>{{item.client.name}}</td>
+	                  <td>{{item.name}}</td>
+	                  <td>{{item.delivery_date}}</td>
+	                  {% if item.concluded %}
+	                    <td><span class="badge bg-green">Entregue</span></td>
+	                  {% else %}
+	                    <td><span class="badge bg-red">Pendente</span></td>
+	                  {% endif %}
+						    	</tr>
+					    {% endfor %}
+				    </tbody>
+				  </table>
+
+			  {% else %}
+			  	<div class="alert alert-warning" role="alert">
+			  		<p>Nenhuma entrega para essa semana.</p>
+			  	</div>
+			  {% endif %}
+			</div>
+			<!-- /.box-body -->
+		</div>
+	</div>
+</div>
 
 <div class="row">
-    <div class="col-lg-3">
-        <a href="{% url 'client:list' %}">
-            <div class="panel panel-warning">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-xs-6">
-                            <i class="fa fa-users fa-5x"></i>
-                        </div>
-                        <div class="col-xs-6 text-right">
-                            <p class="announcement-heading">{% get_clients %}</p>
-                            <p class="announcement-text"> Clientes</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </a>
-    </div>
-    
-    <div class="col-lg-3">
-        <a href="{% url 'item:list' %}">
-            <div class="panel panel-info">
-              <div class="panel-heading">
-                <div class="row">
-                  <div class="col-xs-6">
-                    <i class="fa fa-cubes fa-5x"></i>
-                  </div>
-                  <div class="col-xs-6 text-right">
-                    <p class="announcement-heading">{% get_items %}</p>
-                    <p class="announcement-text"> Itens</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-        </a>
-    </div>
+	<div class="col-md-12">
+		<div class="box">
+			<div class="box-header">
+			  <h3 class="box-title"><i class="fa fa-usd"></i> Contas da semana</h3>
+			</div>
+			<!-- /.box-header -->
+			<div class="box-body no-padding">
+				{% if bills %}
+				  
+				  <table class="table table-striped">
+				    <thead>
+					    <tr>
+					      <th style="width: 10px">#</th>
+					      <th>Nome</th>
+					      <th>Valor</th>
+					      <th>Pagamento</th>
+					      <th>Estado</th>
+					    </tr>
+					  </thead>
+				   	<tbody>
+				   		{% for bill in bills %} 
+						    <tr>
+						    	<td>{{forloop.counter}}.</td>
+						      <td>{{bill.name}}</td>
+	                <td>{{bill.value}}</td>
+	                <td>{{bill.date_to_pay}}</td>
+	                {% if bill.is_paid %}
+	                    <td><span class="badge bg-green">Pago</span></td>
+	                {% else %}
+	                    <td><span class="badge bg-red">Pendente</span></td>
+	                {% endif %}
+						    </tr>
+						   {% endfor %}
+					   </tbody>
+				  </table>
 
-    <div class="col-lg-3">
-        <a href="">
-            <div class="panel panel-success">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-xs-6">
-                            <i class="fa fa-file-image-o fa-5x"></i>
-                        </div>
-                        <div class="col-xs-6 text-right">
-                            <p class="announcement-heading">{% get_pictures %}</p>
-                            <p class="announcement-text"> Imagens</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </a>
-    </div>
-
-    <div class="col-lg-3">
-        <a href="{% url 'bills:list' %}">
-            <div class="panel panel-danger">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-xs-6">
-                            <i class="fa fa-money fa-5x"></i>
-                        </div>
-                        <div class="col-xs-6 text-right">
-                            <p class="announcement-heading">{% get_bills %}</p>
-                            <p class="announcement-text"> Contas</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </a>
-    </div>
-</div> <!-- #row -->
-
-<div class="well well-sm">
-    <p class="text-center">
-       <i class="fa fa-calendar"></i> Data de hoje: {% now "j F Y" %}
-    </p>
+			  {% else %}
+			  	<div class="alert alert-warning" role="alert">
+			  		<p>Nenhuma conta para essa semana.</p>
+			  	</div>
+			  {% endif %}
+			</div>
+			<!-- /.box-body -->
+		</div>
+	</div>
 </div>
-
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h3 class="panel-title">
-        <i class="fa fa-truck"></i> Entregas da semana</h3>
-    </div>
-    <div class="panel-body">
-        {% if items %}
-            
-
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Cliente</th>
-                        <th>Item</th>
-                        <th>Data de entrega</th>
-                        <th>Estado</th>
-                        <td>Detalhes</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for item in items %}   
-                        <tr>
-                            <td>{{item.client.name}}</td>
-                            <td>{{item.name}}</td>
-                            <td>{{item.delivery_date}}</td>
-                            {% if item.concluded %}
-                                <td><span class="label label-success">Entregue</span></td>
-                            {% else %}
-                                <td><span class="label label-danger">Pendente</span></td>
-                            {% endif %}
-                            <th><p class="text-center"><a href="{% url 'item:edit' item.pk %}"><i class="fa fa-info-circle fa-2x"></i></a></p>
-                            </th>
-                        </tr>
-                        
-                    {% endfor %}
-                </tbody>
-            </table>
-        
-        {% else %}
-            <div class="alert alert-warning" role="alert">
-                <p>Nenhuma entrega para essa semana.</p>
-            </div>   
-        {% endif %}
-    </div>
-</div>
-
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h3 class="panel-title">
-        <i class="fa fa-dollar"></i> Contas da semana</h3>
-    </div>
-    <div class="panel-body">
-        {% if bills %}
-            
-
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Nome</th>
-                        <th>Valor</th>
-                        <th>Data de pagamento</th>
-                        <th>Estado</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for bill in bills %}   
-                        <tr>
-                            <td>{{bill.name}}</td>
-                            <td>{{bill.value}}</td>
-                            <td>{{bill.date_to_pay}}</td>
-                            {% if bill.is_paid %}
-                                <td><span class="label label-success">Pago</span></td>
-                            {% else %}
-                                <td><span class="label label-danger">Pendente</span></td>
-                            {% endif %}
-                        </tr>
-                        
-                    {% endfor %}
-                </tbody>
-            </table>
-        
-        {% else %}
-            <div class="alert alert-warning" role="alert">
-                <p>Nenhuma conta para essa semana.</p>
-            </div>   
-        {% endif %}
-    </div>
-</div>
-
-{% endblock %}
+<!-- /.row (main row) -->
+{% endblock content %}

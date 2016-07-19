@@ -23,15 +23,17 @@ def new(request):
         form = BillForm()
 
     context['form'] = form
+    context['section'] = 'bill_new'
     return render(request, 'bills/new.html', context)
 
 
 @login_required
 def list(request):
     context = {}
-    bills = Bill.objects.all()
+    bills = Bill.objects.all().order_by('-date_to_pay')
 
     context['bills'] = bills
+    context['section'] = 'bills'
     return render(request, 'bills/list.html', context)
 
 

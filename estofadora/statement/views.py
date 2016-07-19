@@ -56,6 +56,7 @@ def cash(request):
     context['total_value'] = balance
     context['total_before'] = total_before
     context['choose_date'] = date
+    context['section'] = 'cash'
     return render(request, 'statement/cash.html', context)
 
 
@@ -122,6 +123,7 @@ def cash_month(request):
     context['choose_year'] = year
     context['months'] = MONTHS
     context['years'] = Cash.list_years()
+    context['section'] = 'cash_month'
     return render(request, 'statement/cash_month.html', context)
 
 
@@ -156,5 +158,6 @@ def cash_annual(request):
     context['choose_year'] = year
     context['balances'] = balances
     context['years'] = Cash.list_years()
+    context['section'] = 'cash_annual'
 
     return render(request, 'statement/cash_annual.html', context)

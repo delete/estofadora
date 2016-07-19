@@ -1,60 +1,90 @@
 {% extends "base.html" %}	
 {% load staticfiles %}
 
+{% block title %}Caixa anual{% endblock title %}
+
+{% block content-header-title %}
+Caixa anual
+{% endblock content-header-title %}
+
+{% block content-header-subtitle %}
+<small>Receitas e despesas anuais.</small>
+{% endblock content-header-subtitle %}
+
+{% block content-header-breadcrumb %}
+<li class="active">Caixa</li>
+<li class="active">Anual</li>
+{% endblock content-header-breadcrumb %}
+
 {% block content %}
-<div class="panel panel-default">
-	<div class="panel-body">
-	        <h3>
-        	<p class="text-center">Caixa anual</p>
-        	<p class="text-center">
-        		<small>Listagem de receitas e despesas anuais.</small>
-        	</p>
-        </h3>
-	</div>
-</div>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box box-primary">
+      <div class="box-header with-border">
+        <h3 class="box-title">Valor anterior</h3>
 
-<div class="well well-sm">
-	<form method="POST" role="form">
-        {% csrf_token %}
-        <div class="form-inline">
-        	<select name="selectyear" class="form-control">
-        		{% for year in years %}
-					<option value="{{year}}"
-						{% if year == choose_year %}selected{% endif %}>
-						{{year}}
-					</option> 
-        		{% endfor %}
-			</select>
-            <span>
-                <button class="btn btn-default form-control" type="submit" 
-                	name="search_form" id="search-btn">
-                	<i class="fa fa-search"></i>
-                	Listar
-                </button>
-            </span>
+        <div class="box-tools pull-right">
+          <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+          </button>
         </div>
-    </form>
-</div>
-
-{% if years %}
-    
-<div class="well well-sm">
-    <div class="total_value">
-        {% if total_before > 0 %}
-        <p class="text-right text-success">
-        {% else %}
-        <p class="text-right text-danger">
-        {% endif %}
-            Valor total de {{choose_year|add:"-1"}}: R$ {{ total_before }}
-        </p>
+        <!-- /.box-tools -->
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body" style="display: block;">
+        <div class="pull-left">
+          {% if total_before > 0 %}
+          <p class="text-right text-success">
+          {% else %}
+          <p class="text-right text-danger">
+          {% endif %}
+              Valor total de {{choose_year|add:"-1"}}: R$ {{ total_before }}
+          </p>
+        </div>
+      </div>
+      <!-- /.box-body -->
     </div>
-</div>
+  </div>
 
-<!-- Prepare a Dom with size (width and height) for ECharts -->
-<div id="mychart" style="height:600px"></div>
-
-<div class="well well-sm">
-    <div class="total_value">
+  <div class="col-xs-12">
+    <div class="box box-primary">
+      <div class="box-header">
+        <h3 class="box-title">Receitas e despesas</h3>
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body table-responsive">
+        {% if years %}
+          <form method="POST" role="form" class="search-form">
+                {% csrf_token %}
+                <div class="form-inline">
+              <select name="selectyear" class="form-control">
+                {% for year in years %}
+                  <option value="{{year}}"
+                    {% if year == choose_year %}selected{% endif %}>
+                    {{year}}
+                  </option> 
+                {% endfor %}
+              </select>
+              <span>
+                <button class="btn btn-default form-control" type="submit" 
+                  name="search_form" id="search-btn">
+                  <i class="fa fa-search"></i>
+                  Listar
+                </button>
+              </span>
+            </div>
+          </form>
+          <!-- Prepare a Dom with size (width and height) for ECharts -->
+          <div id="mychart" style="height:600px"></div>
+        {% else %}
+          <div class="alert alert-warning text-center" role="alert">
+            Nenhum registro encontrado.
+          </div>
+        {% endif %}
+      </div>
+      <!-- /.box-body -->
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
         {% if total_value > 0 %}
         <p class="text-right text-success">
         {% else %}
@@ -62,8 +92,12 @@
         {% endif %}
             Valor total de {{choose_year}}: R$ {{ total_value }}
         </p>
+      </div>
     </div>
+    <!-- /.box -->
+  </div>
 </div>
+
 
 <!-- ECharts import -->
 <script src="{% static "js/echarts.js" %}"></script>
@@ -117,13 +151,5 @@
         }
     );
 </script>
-{% else %}
-    <div class="alert alert-warning" role="alert">
-        <p class="text-center">
-            Nenhum registro encontrado.
-        </p>
-        
-    </div>
-{% endif %}
 
 {% endblock %}

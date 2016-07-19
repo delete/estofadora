@@ -1,35 +1,53 @@
 {% extends "base.html" %}
 
+{% block title %}Cadastrar contas{% endblock title %}
+
+{% block content-header-title %}
+Cadastrar conta
+{% endblock content-header-title %}
+
+{% block content-header-subtitle %}
+<small>Exemplo: Luz, água, telefone, ...</small>
+{% endblock content-header-subtitle %}
+
+{% block content-header-breadcrumb %}
+<li><a href="{% url 'bills:list' %}">Contas</a></li>
+<li class="active">Cadastrar</li>
+{% endblock content-header-breadcrumb %}
+
 {% block content %}
-<div class="panel panel-default">
-	<div class="panel-body">
-        <h3>
-        	<p class="text-center">Cadastrar contas a pagar</p>
-        	<p class="text-center">
-        		<small>Exemplo: Luz, água, telefone, ...</small>
-        	</p>
-        </h3>
+
+<div class="row">
+	<div class="col-xs-12">
+    <div class="box box-primary">
+      <div class="box-header">
+        <h3 class="box-title">Nova conta</h3>
+      </div>
+      <!-- /.box-header -->
+    	<form  method="POST" role="form">
+      	<div class="box-body" style="display: block;">
+					{% csrf_token %}
+			    {{ form.non_field_errors}}
+
+			    {% for field in form %}
+				    <div class="form-group">
+					    {{ field.label_tag }}
+					    {{ field }}
+					    {{ field.errors }}
+				    </div>
+			    {% endfor %}
+			  </div>
+			  <div class="box-footer">
+			    <button class="btn btn-primary" 
+			    	type="submit" name="post_form">
+			    	<i class="fa fa-plus-circle"></i>
+			    	Cadastrar
+			    </button>
+			  </div>
+			</form>
+      </div>
+      <!-- /.box-body -->
+    </div>
 	</div>
-</div>
-<div class="marketing">
-	<form  method="POST" enctype="multipart/form-data" role="form">
-		{% csrf_token %}
-
-	    {{ form.non_field_errors}}
-
-	    {% for field in form %}
-		    <div class="form-group">
-			    {{ field.label_tag }}
-			    {{ field }}
-			    {{ field.errors }}
-		    </div>
-	    {% endfor %}
-
-	    <button class="btn btn-primary form-control" type="submit">
-	    	<i class="fa fa-plus-circle"></i>
-	    	Cadastrar
-	    </button>
-
-	</form>
 </div>
 {% endblock %}

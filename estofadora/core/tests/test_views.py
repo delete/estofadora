@@ -27,7 +27,7 @@ class HomeViewTest(TestBase):
         self._test_get_logout(self.url)
 
     def test_boards_content_empty(self):
-        self.assertContains(self.response, '"announcement-heading">0<', 4)
+        self.assertContains(self.response, '<h3>0</h3>', 4)
 
     def test_boards_content_when_not_empty(self):
         client = create_client()
@@ -40,9 +40,9 @@ class HomeViewTest(TestBase):
 
         self.response = self.client.get(self.url)
         # one client, one picture and one bill
-        self.assertContains(self.response, '"announcement-heading">1<', 3)
+        self.assertContains(self.response, '<h3>1</h3>', 3)
         # two items
-        self.assertContains(self.response, '"announcement-heading">2<', 1)
+        self.assertContains(self.response, '<h3>2</h3>', 1)
 
     def test_week_delivery_content_when_empty(self):
         self.assertContains(self.response, 'Nenhuma entrega para essa semana.')
@@ -187,8 +187,8 @@ class ContactPostTest(TestBase):
     def setUp(self):
         data = create_contact(commit=False)
         self.response = self.client.post(
-                reverse('core:contact'), data, follow=True
-            )
+            reverse('core:contact'), data, follow=True
+        )
 
     def test_message(self):
         self.assertContains(
@@ -237,7 +237,7 @@ class ContactMessagesViewTest(TestBase):
         Contact.objects.all().delete()
 
         self.response = self.client.get(self.url)
-        self.assertContains(self.response, 'Nenhuma mensagem!')
+        self.assertContains(self.response, 'Nenhuma mensagem enviada.')
 
 
 class DeleteMensagemViewTest(TestBase):
@@ -253,8 +253,8 @@ class DeleteMensagemViewTest(TestBase):
         self.assertEqual(len(Contact.objects.all()), 2)
 
         self.url = reverse(
-                'core:deleteMessage', args=[self.contactMessage1.pk]
-            )
+            'core:deleteMessage', args=[self.contactMessage1.pk]
+        )
         self.response = self.client.post(self.url, follow=True)
 
     def test_get_logout(self):
@@ -286,8 +286,8 @@ class MarkAsReadMensagemViewTest(TestBase):
         self.assertFalse(self.contactMessage1.read)
 
         self.url = reverse(
-                'core:markMessageAsRead', args=[self.contactMessage1.pk]
-            )
+            'core:markMessageAsRead', args=[self.contactMessage1.pk]
+        )
         self.response = self.client.post(self.url, follow=True)
 
     def test_get_logout(self):

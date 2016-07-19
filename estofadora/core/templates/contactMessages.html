@@ -1,66 +1,84 @@
 {% extends "base.html" %}
 
+{% block title %}Mensages{% endblock title %}
+
+{% block content-header-title %}
+Mensages
+{% endblock content-header-title %}
+
+{% block content-header-subtitle %}
+<small>Mensagens enviadas através do site.</small>
+{% endblock content-header-subtitle %}
+
+{% block content-header-breadcrumb %}
+<li class="active">Mensages</li>
+{% endblock content-header-breadcrumb %}
+
 {% block content %}
-<div class="panel panel-default">
-    <div class="panel-body">
-        <h3>
-        	<p class="text-center">Mensagens</p>
-        	<p class="text-center">
-        		<small>Mensagens enviadas através do site.</small>
-        	</p>
-        </h3>
-    </div>
-</div>
+
 
 {% if contactMessages %}
     
-    {% for contact in contactMessages %}
+  {% for contact in contactMessages %}
 
-		{% if contact.read %}
-		<div class="panel panel-default">
-		{% else %}
-		<div class="panel panel-primary">
-		{% endif %}
+  	{% if contact.read %}
+  	<div class="box box-default box-solid collapsed-box">
+  	{% else %}
+  	<div class="box box-primary box-solid">
+  	{% endif %}
 
-			<div class="panel-heading">
-				{% if not contact.read %}
-                <a class="btn btn-success btn-xs" role="button" 
-                        href="{% url 'core:markMessageAsRead' contact.pk %}"
-                        title="Marcar mensagem como lida">
-                        <i class="fa fa-eye"></i>
-						Lido
-                </a> - 
-				{% endif %}
-                {{ contact.subject }} - <small>{{ contact.created_at }}</small>
-                <div class="pull-right">
-					<a class="btn btn-danger btn-xs" role="button" 
-	                        href="{% url 'core:deleteMessage' contact.pk %}"
-	                        title="Apagar mensagem">
-	                        <i class="fa fa-trash"></i>
-	                        Apagar 
-	                </a>
-				</div>
-			</div>
+  		<div class="box-header with-border">
+        <h3 class="box-title">
+          {{ contact.subject }}
+        </h3> - <small>{{ contact.created_at }}</small>
 
-			<div class="panel-body">
-				<p><strong>Nome:</strong> {{contact.name}}</p>
-				{% if contact.email %}
-					<p><strong>Email:</strong> {{contact.email}}</p>
-				{% endif %}
-				{% if contact.telephone %}
-					<p><strong>Telefone:</strong> {{contact.telephone}}</p>
-				{% endif %}
-				<p><strong>Mensagem:</strong> {{contact.description}}</p>
-			</div>
-			
-		</div>
+        <div class="box-tools pull-right">
+          {% if contact.read %}
+          <button type="button" class="btn btn-box-tool" data-widget="collapse">
+            <i class="fa fa-plus"></i>
+          </button>
+          {% else %}
+          <button type="button" class="btn btn-box-tool" data-widget="collapse">
+            <i class="fa fa-minus"></i>
+          </button>
+          {% endif %}
+                
+  		  </div>
+      </div>
+  		<div class="box-body">
+  			<p><strong>Nome:</strong> {{contact.name}}</p>
+  			{% if contact.email %}
+  				<p><strong>Email:</strong> {{contact.email}}</p>
+  			{% endif %}
+  			{% if contact.telephone %}
+  				<p><strong>Telefone:</strong> {{contact.telephone}}</p>
+  			{% endif %}
+  			<p><strong>Mensagem:</strong> {{contact.description}}</p>
+  		</div>
 
-    {% endfor %}
+      <div class="box-footer">
+        {% if not contact.read %}
+          <a class="btn btn-success btn-xs" role="button" 
+            href="{% url 'core:markMessageAsRead' contact.pk %}"
+            title="Marcar mensagem como lida">
+            <i class="fa fa-eye"></i>
+            Lido
+          </a>
+        {% endif %}
+        <a class="btn btn-danger btn-xs pull-right" role="button" 
+          href="{% url 'core:deleteMessage' contact.pk %}"
+          title="Apagar mensagem">
+          <i class="fa fa-trash"></i>
+          Apagar 
+        </a>
+      </div>
+  	</div>
+  {% endfor %}
 
 {% else %}
-<div class="alert alert-warning text-center" role="alert">
-	Nenhuma mensagem!
-</div>
+  <div class="alert alert-warning text-center" role="alert">
+  	Nenhuma mensagem enviada.
+  </div>
 {% endif %}
 
 {% endblock %}

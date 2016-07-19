@@ -24,6 +24,7 @@ def add(request):
         item_picture_form = ItemPictureForm()
 
     context['item_picture_form'] = item_picture_form
+    context['section'] = 'item_add'
     return render(request, 'item/add.html', context)
 
 
@@ -61,6 +62,7 @@ def list(request):
         items = Item.objects.all()
 
     context['items'] = items
+    context['section'] = 'items'
     return render(request, 'item/list.html', context)
 
 

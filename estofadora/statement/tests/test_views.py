@@ -132,27 +132,27 @@ class CashSearchPostTest(TestBase):
     def setUp(self):
         self.login()
 
-        october = datetime.datetime(2015, 8, 10).date()
+        august = datetime.datetime(2015, 8, 10).date()
 
         september = datetime.datetime(2015, 9, 10).date()
 
-        august = datetime.datetime(2015, 10, 10).date()
+        october = datetime.datetime(2015, 10, 10).date()
 
         self.cash1 = create_cash(
             history='Cash1', date=september,
-            expenses=100, income=100
+            expenses=100, income=150
         )
         self.cash2 = create_cash(
             history='Cash2', date=september,
-            expenses=200, income=200
+            expenses=200, income=250
         )
         self.cash3 = create_cash(
-            history='Cash3', date=october,
+            history='Cash3', date=august,
             expenses=180, income=300
         )
         self.cash4 = create_cash(
-            history='Cash4', date=august,
-            expenses=50, income=500
+            history='Cash4', date=october,
+            expenses=280, income=500
         )
 
         data = {
@@ -167,26 +167,26 @@ class CashSearchPostTest(TestBase):
     def test_data_after_post(self):
         'The response must have the data of cash1 and cash2, only'
         self.assertContains(self.response, self.cash1.history)
-        self.assertContains(self.response, self.cash1.income)
-        self.assertContains(self.response, self.cash1.expenses)
+        self.assertContains(self.response, self.cash1.income)  # 150
+        self.assertContains(self.response, self.cash1.expenses)  # 100
 
         self.assertContains(self.response, self.cash2.history)
-        self.assertContains(self.response, self.cash2.income)
-        self.assertContains(self.response, self.cash2.expenses)
+        self.assertContains(self.response, self.cash2.income)  # 250
+        self.assertContains(self.response, self.cash2.expenses)  # 200
 
         self.assertNotContains(self.response, self.cash3.history)
-        self.assertNotContains(self.response, self.cash3.income)
-        self.assertNotContains(self.response, self.cash3.expenses)
+        self.assertNotContains(self.response, self.cash3.income)  # 300
+        self.assertNotContains(self.response, self.cash3.expenses)  # 180
 
         self.assertNotContains(self.response, self.cash4.history)
-        self.assertNotContains(self.response, self.cash4.income)
-        self.assertNotContains(self.response, self.cash4.expenses)
+        self.assertNotContains(self.response, self.cash4.income)  # 500
+        self.assertNotContains(self.response, self.cash4.expenses)  # 280
 
-        # Test if balance before is right (500 from august)
+        # Test balance before september (500 - 280 from august)
         self.assertContains(self.response, 'Valor total anterior: R$ 120,00')
 
-        # Test if atual balance is right (100 -100 + 200 -200 +300 - 180 = 120)
-        self.assertContains(self.response, 'Valor total de hoje: R$ 120,00')
+        # Test atual balance ((150 - 100) + (250 - 200) + (120) = 220)
+        self.assertContains(self.response, 'Valor total de hoje: R$ 220,00')
 
     def test_in_another_date(self):
         'If there are not registries, must return a warning message'
@@ -380,15 +380,15 @@ class CashMonthViewTest(TestBase):
     def test_get_logout(self):
         self._test_get_logout(self.url)
 
-    def test_html(self):
+    def test_html_when_is_empty(self):
         # + csrf input
-        self.assertContains(self.response, '<input', 1)
-        self.assertContains(self.response, 'submit', 1)
-        self.assertContains(self.response, '<select', 2)
+        self.assertContains(self.response, '<input', 0)
+        self.assertContains(self.response, 'submit', 0)
+        self.assertContains(self.response, '<select', 0)
 
     def test_message_when_is_empty(self):
         'Must return a warning message when there are not any registry'
-        self.assertContains(self.response, 'Nenhum registro encontrado em:')
+        self.assertContains(self.response, 'Nenhum registro encontrado.')
 
     def test_date_in_context(self):
         'When was not choose a specific date, the default date is "today"'
@@ -457,6 +457,14 @@ class CashMonthSeachPostTest(TestBase):
         # Test if atual balance is right (100 -100 + 200 -200 +300 - 180 = 120)
         self.assertContains(self.response, 'Valor total: R$ 120,00')
 
+        self.test_inputs()
+
+    def test_inputs(self):
+        # + csrf input
+        self.assertContains(self.response, '<input', 1)
+        self.assertContains(self.response, 'submit', 1)
+        self.assertContains(self.response, '<select', 2)
+
     def test_in_another_date(self):
         'If there are not registries, must return a warning message'
 
@@ -469,7 +477,7 @@ class CashMonthSeachPostTest(TestBase):
             reverse('statement:cash_month'), data, follow=True
         )
 
-        self.assertContains(self.response, 'Nenhum registro encontrado em:')
+        self.assertContains(self.response, 'Nenhum registro encontrado.')
 
 
 class CashAnnualViewTest(TestBase):
@@ -490,11 +498,11 @@ class CashAnnualViewTest(TestBase):
     def test_get_logout(self):
         self._test_get_logout(self.url)
 
-    def test_html(self):
+    def test_html_when_is_empty(self):
         # + csrf input
-        self.assertContains(self.response, '<input', 1)
-        self.assertContains(self.response, '<select', 1)
-        self.assertContains(self.response, 'submit', 1)
+        self.assertContains(self.response, '<input', 0)
+        self.assertContains(self.response, '<select', 0)
+        self.assertContains(self.response, 'submit', 0)
 
     def test_message_when_is_empty(self):
         'Must return a warning message when there are not any registry'
@@ -547,6 +555,14 @@ class CashAnnualSeachPostTest(TestBase):
 
         # Test if atual balance is right (500 from january)
         self.assertContains(self.response, 'Valor total de 2016: R$ 500,00')
+
+        self.test_inputs()
+
+    def test_inputs(self):
+        # + csrf input
+        self.assertContains(self.response, '<input', 1)
+        self.assertContains(self.response, 'submit', 1)
+        self.assertContains(self.response, '<select', 1)
 
     def test_chart(self):
         self.assertContains(self.response, 'id="mychart"')

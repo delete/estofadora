@@ -25,6 +25,7 @@ def add(request):
         form = ClientForm()
 
     context['form'] = form
+    context['section'] = 'client_add'
     return render(request, 'client/add.html', context)
 
 
@@ -61,6 +62,7 @@ def list(request):
         clients = Client.objects.all().order_by('name')
 
     context['clients'] = clients
+    context['section'] = 'clients'
     return render(request, 'client/list.html', context)
 
 
