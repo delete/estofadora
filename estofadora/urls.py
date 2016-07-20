@@ -8,7 +8,6 @@ urlpatterns = patterns(
     # Examples:
     # url(r'^$', 'estofadora.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
-    url(r'^', include('estofadora.core.urls', namespace='core')),
     url(r'^cliente/', include('estofadora.client.urls', namespace='client')),
     url(r'^item/', include('estofadora.item.urls', namespace='item')),
     url(r'^login/', include('estofadora.login.urls', namespace='login')),
@@ -16,8 +15,9 @@ urlpatterns = patterns(
         r'^relatorios/',
         include('estofadora.statement.urls', namespace='statement')
     ),
-    url(r'^contas/', include('estofadora.bills.urls', namespace='bills')),
+    url(r'^conta/', include('estofadora.bills.urls', namespace='bills')),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^', include('estofadora.core.urls', namespace='core')),
 )
 
 
