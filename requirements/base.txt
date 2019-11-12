@@ -1,5 +1,5 @@
 Django==1.8.5
-Pillow==3.0.0
+Pillow==6.2.0
 dj-static==0.0.6
 django-multiupload==0.5
 python-decouple==3.0
