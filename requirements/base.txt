@@ -1,4 +1,4 @@
-Django==1.8.5
+Django==1.11.23
 Pillow==6.2.0
 dj-static==0.0.6
 django-multiupload==0.5
